@@ -1,0 +1,30 @@
+services:
+  tor:
+    build:
+      context: .
+      args:
+        TOR_VERSION: ${TOR_VERSION}
+        TOR_GID: ${TOR_GID}
+        TOR_UID: ${TOR_UID}
+    container_name: ${COMPOSE_PROJECT_NAME}_tor
+    expose:
+      - "9050"
+      - "9051"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f -x socks5h://localhost:9050 -s https://check.torproject.org/api/ip || exit 1"]
+      interval: 180s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    image: ${COMPOSE_PROJECT_NAME}/tor:${TOR_VERSION}
+    networks:
+      default:
+        ipv4_address: ${TOR_ADDRESS}
+    restart: unless-stopped
+    stop_grace_period: 60s
+    volumes:
+      - ./torrc:/etc/tor/torrc:ro
+      - tor-data:/var/lib/tor/
+  
+volumes:
+  tor-data:

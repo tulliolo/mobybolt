@@ -1,0 +1,21 @@
+services:
+  fulcrum:
+    build:
+      context: .
+      args:
+        FULCRUM_VERSION: ${FULCRUM_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_fulcrum
+    depends_on:
+      - bitcoin
+    expose:
+      - "50001:50001"
+    image: ${COMPOSE_PROJECT_NAME}/fulcrum:${FULCRUM_VERSION}
+    restart: unless-stopped
+    stop_grace_period: 3m
+    volumes:
+      - fulcrum-data:/home/fulcrum/.fulcrum/fulcrum_db/
+      - bitcoin-data:/data/bitcoin/:ro
+      - ./fulcrum.conf:/home/fulcrum/.fulcrum/fulcrum.conf:ro
+
+volumes:
+  fulcrum-data:

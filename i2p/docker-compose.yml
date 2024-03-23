@@ -1,0 +1,22 @@
+services:
+  i2p:
+    container_name: ${COMPOSE_PROJECT_NAME}_i2p
+    expose:
+      - "2827" 
+      - "4444"
+      - "4447"
+      - "7070"
+      - "7650"
+      - "7654"
+      - "7656"
+    image: purplei2p/i2pd:${I2P_VERSION}
+    networks:
+      default:
+        ipv4_address: ${I2P_ADDRESS}
+    restart: unless-stopped
+    stop_grace_period: 30s
+    volumes:
+      - i2p-data:/home/i2pd/data/
+  
+volumes:
+  i2p-data:

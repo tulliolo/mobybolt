@@ -1,0 +1,17 @@
+include:
+  ## BASE SERVICES
+  ################
+  - nginx/docker-compose.yml
+  - tor/docker-compose.yml
+  - i2p/docker-compose.yml
+  ## BITCOIN
+  ##########
+  - bitcoin/docker-compose.yml
+  - fulcrum/docker-compose.yml
+  - btcrpcexplorer/docker-compose.yml
+version: "${COMPOSE_PROJECT_VERSION}"
+
+networks:
+  default:
+    name: ${COMPOSE_PROJECT_NAME}_default
+    external: true

@@ -1,0 +1,23 @@
+services:
+  nginx:
+    build:
+      context: .
+      args:
+        VERSION: ${NGINX_VERSION}
+        NGINX_GID: ${NGINX_GID}
+        NGINX_UID: ${NGINX_UID}
+    container_name: ${COMPOSE_PROJECT_NAME}_nginx
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fk https://localhost || exit 1"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+    image: ${COMPOSE_PROJECT_NAME}/nginx:${NGINX_VERSION}
+    ports:
+      - "50002:50002" # fulcrum
+      - "4000:4000"   # btcrpcexplorer
+    restart: unless-stopped
+    volumes:
+      - ./etc/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./etc/sites-enabled/:/etc/nginx/sites-enabled/:ro
+      - ./etc/streams-enabled/:/etc/nginx/streams-enabled/:ro
