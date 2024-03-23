@@ -9,7 +9,7 @@ MobyBolt is inspired by other guides such as [RaspiBolt](https://raspibolt.org/)
 A Bitcoin and Lightning node is a complex ecosystem of applications, mainly interconnected with each other, each with its own requirements and dependencies.
 Managing and updating all these applications is certainly a delicate process.
 
-[Docker](https://www.docker.com/) (or containerization) in general comes in handy because it allows you to isolate each of these applications (along with its dependencies and everything else you need to run it), making troubleshooting, upgrading, and rollback much easier.
+[Docker](https://www.docker.com/) (or containerization) in general comes in handy because it allows you to isolate each of these applications (along with its dependencies and everything else you need to run it), making troubleshooting, upgrading and rollback much easier.
 
 Applications will run in **containers** isolated from each other, as if they were on different hosts, which is also good in terms of security. 
 
