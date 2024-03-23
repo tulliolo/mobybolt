@@ -3,7 +3,7 @@
 ## What is MobyBolt?
 MobyBolt is a guide for setting up a Dockerized Bitcoin and Lightning node on a personal computer from scratch, doing everything yourself. You will learn about Linux, Docker, Bitcoin, and Lightning. As a result, you'll have your very own Bitcoin node, built by you and no one else.
 
-Mobybolt is inspired by other guides such as [RaspiBolt](https://raspibolt.org/) and [MiniBolt](https://v2.minibolt.info/), adding Docker containerization to them.
+MobyBolt is inspired by other guides such as [RaspiBolt](https://raspibolt.org/) and [MiniBolt](https://v2.minibolt.info/), adding Docker containerization to them.
 
 ## Why Docker?
 A Bitcoin and Lightning node is a complex ecosystem of applications, mainly interconnected with each other, each with its own requirements and dependencies.
