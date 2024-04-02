@@ -18,7 +18,7 @@ Applications will run in **containers** isolated from each other, as if they wer
 In addition, Docker makes it much easier to migrate applications from one machine to another.
 
 ## How to build MobyBolt
-**You can follow the step-by-step instructions on the [Wiki](https://github.com/tulliolo/mobybolt/wiki) page.**
+❗ **You can follow the step-by-step instructions on the [Wiki](https://github.com/tulliolo/mobybolt/wiki) page.** ❗
 
 The guide will allow you to build your own node from scratch, but if you prefer you can refer to the [Releases](https://github.com/tulliolo/mobybolt/releases) page, where you will find an archive with all the docker and docker-compose files ready (configurations excluded).
 
