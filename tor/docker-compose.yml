@@ -10,6 +10,8 @@ services:
     expose:
       - "9050"
       - "9051"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     healthcheck:
       test: ["CMD-SHELL", "curl -f -x socks5h://localhost:9050 -s https://check.torproject.org/api/ip || exit 1"]
       interval: 180s
