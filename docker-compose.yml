@@ -9,7 +9,6 @@ include:
   - bitcoin/docker-compose.yml
   - fulcrum/docker-compose.yml
   - btcrpcexplorer/docker-compose.yml
-version: "${COMPOSE_PROJECT_VERSION}"
 
 networks:
   default:
