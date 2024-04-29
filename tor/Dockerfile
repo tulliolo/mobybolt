@@ -1,10 +1,5 @@
-# builder image
-FROM debian:stable-slim as builder
-
-ARG TOR_VERSION
-
-ENV TOR_KEYS="514102454D0A87DB0767A1EBBE6A0531C18A9179 B74417EDDF22AC9F9E90F49142E86A2A11F48D36 7A02B3521DC75C542BA015456AFEE6D49E92B601"
-ENV TOR_URL="https://dist.torproject.org"
+# base image
+FROM debian:stable-slim as base
 
 RUN set -eux && \
     # install dependencies
@@ -25,6 +20,15 @@ RUN set -eux && \
         shellcheck \
         zlib1g-dev && \
     rm -rf /var/lib/apt/lists/*
+
+
+# builder image
+FROM base as builder
+
+ARG TOR_VERSION
+
+ENV TOR_KEYS="514102454D0A87DB0767A1EBBE6A0531C18A9179 B74417EDDF22AC9F9E90F49142E86A2A11F48D36 7A02B3521DC75C542BA015456AFEE6D49E92B601"
+ENV TOR_URL="https://dist.torproject.org"
 
 # download source, checksum and signatures
 ADD $TOR_URL/tor-$TOR_VERSION.tar.gz $TOR_URL/tor-$TOR_VERSION.tar.gz.sha256sum $TOR_URL/tor-$TOR_VERSION.tar.gz.sha256sum.asc .
@@ -47,7 +51,7 @@ RUN set -eux && \
     make install
 
 
-#base image
+# result image
 FROM debian:stable-slim
 
 RUN set -eux && \

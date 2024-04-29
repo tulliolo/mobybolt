@@ -1,53 +1,65 @@
-# builder image
-FROM debian:stable-slim as builder
-
-ARG BITCOIN_VERSION
-
-ENV BITCOIN_KEYS="E777299FC265DD04793070EB944D35F9AC3DB76A D1DBF2C4B96F2DEBF4C16654410108112E7EA81F 152812300785C96444D3334D17565732E08E5E41 6B002C6EA3F91B1B0DF0C9BC8F617F1200A6D25C 4D1B3D5ECBA1A7E05371EEBE46800E30FC748A66" \
-    BITCOIN_URL="https://github.com/bitcoin/bitcoin.git"
+# base image
+FROM debian:stable-slim as base
 
 # install dependencies
 RUN set -eux && \
     apt update && \
     apt install -y \
-      automake \
-      autotools-dev \
-      bsdmainutils \
-      build-essential \
-      curl \
-      git \
-      libboost-dev \
-      libevent-dev \
-      libsqlite3-dev \
-      libtool \
-      libzmq3-dev \
-      pkg-config \
-      python3 && \
+        # build requirements
+        automake \
+        autotools-dev \
+        bsdmainutils \
+        build-essential \
+        ccache \
+        curl \
+        git \
+        libtool \
+        pkg-config \
+        python3 \
+        # dependencies
+        libboost-dev \
+        libevent-dev \
+        libsqlite3-dev \
+        libzmq3-dev && \    
     rm -rf /var/lib/apt/lists/*
 
-# copy patches
-COPY patches/* /patches/
+
+# builder image
+FROM base as builder
+
+ARG BITCOIN_VERSION
+
+ENV BITCOIN_URL="https://github.com/bitcoin/bitcoin.git" \
+    BITCOIN_KEYS_URL="https://api.github.com/repositories/355107265/contents/builder-keys"
 
 RUN set -eux && \
-    # import keys
-    gpg --keyserver hkps://keys.openpgp.org --recv-keys $BITCOIN_KEYS && \
     # clone repository
-    git clone $BITCOIN_URL
+    git clone --branch "v$BITCOIN_VERSION" $BITCOIN_URL  && \
+    # imports automatically all signatures from the Bitcoin Core release attestations (Guix) repository
+    curl -s \
+        $BITCOIN_KEYS_URL |\
+        grep download_url |\
+        grep -oE "https://[a-zA-Z0-9./-]+" |\
+        while read url; do \
+            curl -s "$url" |\
+            gpg --import; \
+        done
+
+# copy patches
+COPY patches/ /patches/
 
 WORKDIR bitcoin
 
 RUN set -xe && \
     # verify signature
     git verify-tag "v$BITCOIN_VERSION" && \
-    # checkout version
-    git checkout "v$BITCOIN_VERSION" && \
     # build bdb 4.8
     make -C depends NO_BOOST=1 NO_LIBEVENT=1 NO_QT=1 NO_SQLITE=1 NO_NATPMP=1 NO_UPNP=1 NO_ZMQ=1 NO_USDT=1 && \
     # apply patches
     for patch in $( find /patches -type f ); do \
         git apply $patch; \
     done && \
-    # build bitcoin
+    # configure
     ./autogen.sh && \
     export BDB_PREFIX="$PWD/depends/$( ls depends | grep linux-gnu )" && \
     ./configure \
@@ -61,7 +73,9 @@ RUN set -xe && \
         --with-gui=no \
         --with-qrencode=no \
         --with-utils=yes && \
+    # build
     make -j$(nproc) && \
+    # install
     make install
 
 
@@ -76,9 +90,9 @@ COPY --from=builder /usr/local/lib/ /usr/local/lib/
 RUN set -eux && \
     apt update && \
     apt install -y \
-      libevent-dev \
-      libsqlite3-dev \
-      libzmq3-dev && \
+        libevent-dev \
+        libsqlite3-dev \
+        libzmq3-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # default uid for bitcoin user
@@ -97,8 +111,10 @@ RUN set -eux && \
 
 # setup dirs and permissions
 RUN set -eux && \
+    mkdir -m 0750 /home/bitcoin/.bitcoin && \
     mkdir -m 0700 /run/bitcoind && \
-    chown bitcoin /run/bitcoind
+    chown bitcoin /run/bitcoind && \
+    chown bitcoin:bitcoin /home/bitcoin/.bitcoin /run/bitcoind
 
 # setup entrypoint
 COPY --chmod=0755 ./docker-entrypoint.sh /usr/local/bin/

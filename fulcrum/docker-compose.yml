@@ -4,6 +4,8 @@ services:
       context: .
       args:
         FULCRUM_VERSION: ${FULCRUM_VERSION}
+        FULCRUM_GID: ${FULCRUM_GID}
+        FULCRUM_UID: ${FULCRUM_UID}
     container_name: ${COMPOSE_PROJECT_NAME}_fulcrum
     depends_on:
       - bitcoin
@@ -13,9 +15,9 @@ services:
     restart: unless-stopped
     stop_grace_period: 3m
     volumes:
-      - fulcrum-data:/home/fulcrum/.fulcrum/fulcrum_db/
+      - fulcrum-data:/home/fulcrum/db/
       - bitcoin-data:/data/bitcoin/:ro
-      - ./fulcrum.conf:/home/fulcrum/.fulcrum/fulcrum.conf:ro
+      - ./fulcrum.conf:/home/fulcrum/fulcrum.conf:ro
 
 volumes:
   fulcrum-data:

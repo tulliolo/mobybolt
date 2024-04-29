@@ -9,11 +9,11 @@ trap die_func TERM
 
 CMD=$@
 
-CONF_FILE="/home/fulcrum/fulcrum.conf"
+CONF_FILE=/home/electrs/electrs.conf
 
 if [[ $# -eq 0 ]]; then
   # missing parameters, run fulcrum
-  CMD="/usr/local/bin/Fulcrum $CONF_FILE"
+  CMD="/usr/local/bin/electrs --conf $CONF_FILE --skip-default-conf-files"
 fi
 
 exec $CMD

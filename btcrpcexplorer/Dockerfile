@@ -1,11 +1,5 @@
-# builder image
-FROM node:lts as builder
-
-ARG BTCEXP_VERSION
-
-ENV BTCEXP_GIT_URL="https://github.com/janoside/btc-rpc-explorer.git" \
-    BTCEXP_SIG_URL="https://github.com/janoside.gpg"
-    
+# base image
+FROM node:lts as base
 
 # install dependencies
 RUN set -eux && \
@@ -14,6 +8,15 @@ RUN set -eux && \
       curl \
       git && \
     rm -rf /var/lib/apt/lists/*
+
+
+# builder image
+FROM base as builder
+
+ARG BTCEXP_VERSION
+
+ENV BTCEXP_GIT_URL="https://github.com/janoside/btc-rpc-explorer.git" \
+    BTCEXP_SIG_URL="https://github.com/janoside.gpg"
 
 # import signatures and clone repository
 RUN set -eux && \
@@ -28,7 +31,8 @@ RUN set -eux && \
     # install btcrpcexplorer
     npm install
 
-# base image
+    
+# result image
 FROM node:lts
 
 # install dependencies

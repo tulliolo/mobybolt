@@ -1,4 +1,4 @@
-ARG VERSION='latest'
+ARG NGINX_VERSION='latest'
 
 # cert image
 FROM alpine as certimage
@@ -24,13 +24,17 @@ RUN set -eux && \
 
 
 # base image
-FROM nginx:$VERSION
+FROM nginx:$NGINX_VERSION as base
 
 # install dependencies
 RUN set -eux && \
     apt update && \
     apt install -y curl && \
     rm -rf /var/lib/apt/lists/*
+
+
+# result image
+FROM base
 
 ARG NGINX_GID=101
 ARG NGINX_UID=101

@@ -1,45 +1,60 @@
-# builder image
-FROM debian:stable-slim as builder
-
-ARG FULCRUM_VERSION
-ENV FULCRUM_URL="https://github.com/cculianu/Fulcrum/releases/download/v$FULCRUM_VERSION" \
-    FULCRUM_SIG_URL="https://raw.githubusercontent.com/Electron-Cash/keys-n-hashes/master/pubkeys/calinkey.txt"
+# base image
+FROM debian:stable-slim as base
 
 # install dependencies
 RUN set -eux && \
     apt update && \
     apt install -y \
-      gpg \
-      gpg-agent && \
+        build-essential \
+        curl \
+        git \
+        libbz2-dev \
+        libjemalloc-dev \
+        libzmq3-dev \
+        pkg-config \
+        qt5-qmake \
+        qtbase5-dev \
+        zlib1g-dev && \
     rm -rf /var/lib/apt/lists/*
 
-ADD "$FULCRUM_URL/Fulcrum-$FULCRUM_VERSION-x86_64-linux.tar.gz" \
-    "$FULCRUM_URL/Fulcrum-$FULCRUM_VERSION-shasums.txt.asc" \
-    "$FULCRUM_URL/Fulcrum-$FULCRUM_VERSION-shasums.txt" \
-    "$FULCRUM_SIG_URL" /tmp/
 
-WORKDIR /tmp/
+# builder image
+FROM base as builder
+
+ARG FULCRUM_VERSION
+
+ENV FULCRUM_URL="https://github.com/cculianu/Fulcrum.git"
+
+RUN set -eux && \
+    # download repository
+    git clone --branch "v$FULCRUM_VERSION" $FULCRUM_URL
+
+WORKDIR /Fulcrum
 
 # install fulcrum
 RUN set -eux && \
-    gpg --import calinkey.txt && \
-    gpg --verify "Fulcrum-$FULCRUM_VERSION-shasums.txt.asc" && \
-    grep 'x86_64-linux.tar.gz' "Fulcrum-$FULCRUM_VERSION-shasums.txt" | sha256sum --check && \
-    tar -xvf "Fulcrum-$FULCRUM_VERSION-x86_64-linux.tar.gz" && \
-    install -m 0755 -o root -g root -t /usr/local/bin "Fulcrum-$FULCRUM_VERSION-x86_64-linux/Fulcrum" "Fulcrum-$FULCRUM_VERSION-x86_64-linux/FulcrumAdmin" && \
-    Fulcrum --version
+    # verify signatures
+    git checkout "v$FULCRUM_VERSION" && \
+    # configure
+    qmake -makefile PREFIX=/usr/local Fulcrum.pro && \
+    # build
+    make -j$(nproc) && \
+    # install
+    make install
 
 
-# base image
+# result image
 FROM debian:stable-slim
+
 COPY --from=builder /usr/local/ /usr/local/
 
 # install dependencies
 RUN set -eux && \
     apt update && \
     apt install -y \
-      libssl-dev \
-      python3 && \
+        libjemalloc-dev \
+        libqt5network5 \
+        libzmq3-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # default uid for fulcrum user
@@ -51,19 +66,18 @@ ARG BITCOIN_GID=1100
 RUN set -xe && \
     # create fulcrum user
     addgroup --gid $FULCRUM_GID fulcrum && \
-    adduser --disabled-password --gecos "" --gid $FULCRUM_GID --uid $FULCRUM_UID fulcrum && \
+    adduser --disabled-password --comment "" --gid $FULCRUM_GID --uid $FULCRUM_UID fulcrum && \
     # create bitcoin group and add fulcrum user to bitcoin group
     addgroup --gid $BITCOIN_GID bitcoin && \
-    adduser fulcrum bitcoin
+    adduser fulcrum bitcoin && \
+    # setup dirs and permissions
+    mkdir -p /home/fulcrum/db/ /run/fulcrum/ && \
+    chmod 0700 /home/fulcrum/db/ /run/fulcrum/ && \
+    chown fulcrum:fulcrum /home/fulcrum/db/ /run/fulcrum/
 
 # setup entrypoint
 COPY --chmod=0755 docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
-
-# setup dirs and permissions
-RUN set -xe && \
-    mkdir -p /home/fulcrum/.fulcrum/fulcrum_db/ && chmod 0700 /home/fulcrum/.fulcrum/fulcrum_db/ && chown -R fulcrum:fulcrum /home/fulcrum/.fulcrum/ && \
-    mkdir /run/fulcrum/ && chmod 0700 /run/fulcrum/ && chown fulcrum:fulcrum /run/fulcrum/
 
 # switch user
 USER fulcrum
