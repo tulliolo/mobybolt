@@ -54,7 +54,8 @@ RUN set -eux && \
     apt install -y \
         libjemalloc-dev \
         libqt5network5 \
-        libzmq3-dev && \
+        libzmq3-dev \
+        python3 && \
     rm -rf /var/lib/apt/lists/*
 
 # default uid for fulcrum user
