@@ -15,7 +15,7 @@ RUN set -eux && \
     openssl \
       req -x509 \
       -nodes \
-      -subj "/CN=${DOMAIN_NAME}}" \
+      -subj "/CN=${DOMAIN_NAME}" \
       -addext "subjectAltName=DNS:${DOMAIN_NAME}" \
       -days ${DAYS_VALID} \
       -newkey rsa:4096 \
