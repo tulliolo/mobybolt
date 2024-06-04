@@ -72,7 +72,7 @@ ARG TOR_UID=102
 
 RUN set -eux && \
     addgroup --gid $TOR_GID tor && \
-    adduser --system --gecos "" --gid $TOR_GID --home /var/lib/tor/ --uid $TOR_UID tor && \
+    adduser --system --comment "" --gid $TOR_GID --home /var/lib/tor/ --uid $TOR_UID tor && \
     mkdir /etc/tor/ && \
     mkdir -m 0700 /run/tor/ && \
     chown -R tor:tor /etc/tor/ /run/tor/
