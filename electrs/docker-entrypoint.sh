@@ -12,7 +12,7 @@ CMD=$@
 CONF_FILE=/home/electrs/electrs.conf
 
 if [[ $# -eq 0 ]]; then
-  # missing parameters, run fulcrum
+  # missing parameters, run electrs
   CMD="/usr/local/bin/electrs --conf $CONF_FILE --skip-default-conf-files"
 fi
 
