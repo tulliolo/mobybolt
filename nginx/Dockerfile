@@ -1,7 +1,7 @@
 ARG NGINX_VERSION='latest'
 
 # cert image
-FROM alpine as certimage
+FROM alpine AS certimage
 
 ARG DOMAIN_NAME=localhost
 ARG DAYS_VALID=3650
@@ -24,7 +24,7 @@ RUN set -eux && \
 
 
 # base image
-FROM nginx:$NGINX_VERSION as base
+FROM nginx:$NGINX_VERSION AS base
 
 # install dependencies
 RUN set -eux && \

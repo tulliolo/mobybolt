@@ -1,5 +1,5 @@
 # base image
-FROM debian:stable-slim as base
+FROM debian:stable-slim AS base
 
 # install dependencies
 RUN set -eux && \
@@ -19,7 +19,7 @@ RUN set -eux && \
 
 
 # builder image
-FROM base as builder
+FROM base AS builder
 
 ARG FULCRUM_VERSION
 

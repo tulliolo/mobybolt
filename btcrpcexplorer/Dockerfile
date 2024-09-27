@@ -1,5 +1,5 @@
 # base image
-FROM node:lts as base
+FROM node:lts AS base
 
 # install dependencies
 RUN set -eux && \
@@ -11,7 +11,7 @@ RUN set -eux && \
 
 
 # builder image
-FROM base as builder
+FROM base AS builder
 
 ARG BTCEXP_VERSION
 
