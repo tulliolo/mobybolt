@@ -1,5 +1,0 @@
-**/*.env
-**/*.conf
-tor/torrc
-**/.secrets/
-docker-compose.yml
