@@ -1,0 +1,6 @@
+cast/tmp*
+Gemfile*
+.jekyll-cache
+.sass-cache
+_site
+*.xcf

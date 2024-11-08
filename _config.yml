@@ -1,0 +1,14 @@
+title: MobyBolt
+tagline: "Bitcoin & Lightning on a PC with Docker"
+description: "Build your own 'do-everything-yourself' Bitcoin full node. No need to trust anyone else."
+type: website
+remote_theme: just-the-docs/just-the-docs
+
+color_scheme: dark
+
+aux_links:
+  Issues / Knowledge Base: https://github.com/tulliolo/mobybolt/issues/
+  Contribute / Source on GitHub: https://github.com/tulliolo/mobybolt/
+
+# enable theme for local usage
+theme: "just-the-docs"
