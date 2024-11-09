@@ -95,6 +95,4 @@ Running into issues?
 
 ---
 
-{: refdef: style="text-align: right;"}
-Get started: [System >>](guide/system)
-{: refdef}
+[System >>](guide/system){: .float-right}
