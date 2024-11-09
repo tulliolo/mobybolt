@@ -66,10 +66,10 @@ You will need several passwords, and it's easiest to write them all down in the 
 
 ```console
 - [ A ] Master user password
-- [ B ] Bitcoin RPC password # optional
+- [ B ] Bitcoin RPC password  # optional
 - [ C ] LND wallet password
 - [ D ] ThunderHub password
-- [ E ] Cloud backup password
+- [ E ] Cloud backup password # optional
 ```
 
 {: refdef: style="text-align: center;"}
