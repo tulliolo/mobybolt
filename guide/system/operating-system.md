@@ -2,7 +2,7 @@
 layout: default
 title: Operating System
 parent: System
-nav_order: 21
+nav_order: 20
 ---
 
 <!-- markdownlint-disable MD014 MD022 MD025 MD033 MD040 -->
@@ -31,8 +31,6 @@ We use the latest stable [Debian](https://www.debian.org/) release (currently **
 ## Prepare the installation media
 
 From your regular PC, direct download Debian by going to the [official website](https://www.debian.org/) and clicking on the `Download` button.
-
----
 
 ### Prepare the installation media on Linux
 
@@ -70,8 +68,6 @@ $ sync
 ```
 
 Remove the pen drive.
-
----
 
 ### Prepare the installation media on Windows/MacOS
 
@@ -126,7 +122,7 @@ The following steps refer to an installation with Italian timezone and keyboard.
    2. leave the `Full name for the new user` field blank and hit `Enter/Continue`
    3. in `Username for your account` write `temp` and hit `Enter/Continue`
    4. write twice a simple temp password it in the proper fields and hit `Enter/Continue`
-   
+
       {: .note}
       > You can safely choose a simple password for the **temp** user, since this user will be replaced by the **admin** user (you can't use the username "admin" during installation)
 

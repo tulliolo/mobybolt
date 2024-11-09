@@ -2,7 +2,7 @@
 layout: default
 title: Preparations
 parent: System
-nav_order: 20
+nav_order: 10
 ---
 
 <!-- markdownlint-disable MD014 MD022 MD025 MD040 -->
