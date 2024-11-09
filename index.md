@@ -95,4 +95,4 @@ Running into issues?
 
 ---
 
-[System >>](guide/system){: .float-right}
+[Get Started >>](guide/system){: .float-right}

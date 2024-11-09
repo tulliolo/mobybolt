@@ -84,9 +84,7 @@ If you need inspiration for creating your passwords: the [xkcd: Password Strengt
 
 While the guide will show you how to secure your node, you will interact with it from your computer and mobile phone and use your home internet network. Before building your MobyBolt, it is recommended to secure your home network and devices. Follow Parts 1 and 2 of this ["How to Secure Your Home Network Against Threats"](https://restoreprivacy.com/secure-home-network/) tutorial by Heinrich Long, and try to implement as many points as possible (some might not apply to your router/device).
 
-<br /><br />
-
 ---
 
-[System](./){: .float-left}
+[<< System](./){: .float-left}
 [Operating system >>](operating-system){: .float-right}
