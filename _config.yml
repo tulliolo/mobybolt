@@ -13,4 +13,4 @@ aux_links:
     - https://github.com/tulliolo/mobybolt/
 
 # enable theme for local usage
-theme: "just-the-docs"
+#theme: "just-the-docs"
