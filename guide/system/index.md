@@ -11,11 +11,3 @@ has_children: true
 This guide builds on the easily available personal computer.
 
 In the following sections, we will start it up and prepare the operating system for your MobyBolt.
-
----
-
-<br/><br/>
-
-{: refdef: style="text-align: right;"}
-Next: [Preparations >>](preparations)
-{: refdef}
