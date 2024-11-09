@@ -12,5 +12,21 @@ aux_links:
   Contribute / Source on GitHub:
     - https://github.com/tulliolo/mobybolt/
 
+callouts:
+  important:
+    title: Important
+    color: red
+    opacity: 0.02
+
+  note:
+    title: Note
+    color: grey-lt
+    opacity: 0.02
+
+  warning:
+    title: Warning
+    color: yellow
+    opacity: 0.02
+
 # enable theme for local usage
 #theme: "just-the-docs"
