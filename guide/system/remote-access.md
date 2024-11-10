@@ -112,4 +112,4 @@ $ exit
 
 {: .d-flex .flex-justify-between }
 [<< Operating system](operating-system)
-[Configuration >>](configutation)
+[Configuration >>](configuration)
