@@ -236,5 +236,6 @@ You can now disconnect the keyboard and monitor and continue the installation re
 
 ---
 
-[<< Preparations](preparations){: .float-left}
-[Remote Access >>](remote-access){: .float-right}
+{: .d-flex .flex-justify-between }
+[<< Preparations](preparations)
+[Remote Access >>](remote-access)

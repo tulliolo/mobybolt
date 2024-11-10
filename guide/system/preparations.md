@@ -86,5 +86,6 @@ While the guide will show you how to secure your node, you will interact with it
 
 ---
 
-[<< System](./){: .float-left}
-[Operating system >>](operating-system){: .float-right}
+{: .d-flex .flex-justify-between }
+[<< System](./)
+[Operating system >>](operating-system)

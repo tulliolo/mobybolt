@@ -95,4 +95,5 @@ Running into issues?
 
 ---
 
-[Get Started >>](guide/system){: .float-right}
+{: .d-flex .flex-justify-end }
+[Get Started >>](guide/system)
