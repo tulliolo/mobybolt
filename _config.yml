@@ -4,7 +4,7 @@ tagline: "Bitcoin & Lightning on a personal computer with Docker"
 description: "Build your own 'do-everything-yourself' Bitcoin & Lightning full node with Docker. No need to trust anyone else."
 remote_theme: just-the-docs/just-the-docs
 
-color_scheme: mobybolt-dark
+color_scheme: dark
 
 aux_links:
   Issues / Knowledge Base:
