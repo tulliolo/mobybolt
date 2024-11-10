@@ -110,6 +110,53 @@ $ exit
 
 ---
 
+## The command line
+
+We will work on the command line of the PC, which may be new to you.
+Find some basic information below.
+It will help you navigate and interact with your PC.
+
+You enter commands and the PC answers by printing the results below your command.
+To clarify where a command begins, every command in this guide starts with the `$` sign. The system response is marked with the `>` character.
+
+Additional comments begin with `#` and must not be entered.
+
+In the following example, just enter `ls -la` and press the enter/return key:
+
+```sh
+$ ls -la
+> example system response
+# This is a comment, don't enter this on the command line
+```
+
+- **Auto-complete commands**:
+  You can use the `Tab` key for auto-completion when you enter commands, i.e., for commands, directories, or filenames.
+
+- **Command history**:
+  by pressing ⬆️ (arrow up) and ⬇️ (arrow down) on your keyboard, you can recall previously entered commands.
+
+- **Common Linux commands**:
+  For a very selective reference list of Linux commands, please refer to this [guide](https://www.geeksforgeeks.org/linux-commands-cheat-sheet/).
+
+- **Use admin privileges**:
+  Our regular user has no direct admin privileges.
+  If a command needs to edit the system configuration, we must use the `sudo` ("superuser do") command as a prefix.
+  Instead of editing a system file with `nano /etc/fstab`, we use `sudo nano /etc/fstab`.
+
+- **Using the Nano text editor**:
+  We use the Nano editor to create new text files or edit existing ones.
+  It's not complicated, but to save and exit is not intuitive.
+
+  - Save: hit `Ctrl-O` (for Output), confirm the filename, and hit the `Enter` key
+  - Exit: hit `Ctrl-X`
+
+- **Copy / Paste**:
+  If you are using Windows and the PuTTY SSH client, you can copy text from the shell by selecting it with your mouse (no need to click anything), and paste stuff at the cursor position with a right-click anywhere in the ssh window.
+
+  In other Terminal programs, copy/paste usually works with `Ctrl`-`Shift`-`C` and `Ctrl`-`Shift`-`V`.
+  
+---
+
 {: .d-flex .flex-justify-between }
 [<< Operating system](operating-system)
 [Configuration >>](configuration)

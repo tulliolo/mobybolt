@@ -47,7 +47,7 @@ You should get the following **recommended hardware**:
 - **Temporary monitor** screen or television
 - **Temporary keyboard** USB/PS2
 
-{: .warning }
+{: .important }
 It is **highly recommended** to have the **secondary storage for data** ([Docker objects](docker#overview) such as images, containers, networks and volumes with all the related data - e.g. timechain, Fulcrum database, etc...). This configuration will simplify portability and restore of all the Docker services in the event of a migration to a new PC, or operating system / primary disk issues.
 
 You might also want to get this **optional hardware**:

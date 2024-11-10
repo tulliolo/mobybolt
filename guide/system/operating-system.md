@@ -151,6 +151,7 @@ The following steps refer to an installation with Italian timezone and keyboard.
 10. In `Software selection` pick only `SSH server` and `standard system utilities`, uncheck all the other options, and hit `Enter/Continue`
 11. In `Finish the installation` hit `Enter/Continue` to reboot and remove the pen drive
 
+{: .text-center }
 ![debian-install_animated](../../images/system-os-debian_install.gif)
 
 Once rebooted, log in as **root** and follow the next instructions.

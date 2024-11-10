@@ -40,7 +40,6 @@ We will disable root access for security reasons.
 
   ```sh
   $ cat /etc/ssh/sshd_config | grep PermitRootLogin
-
   > PermitRootLogin no
   > # the setting of "PermitRootLogin prohibit-password".
   ```
@@ -57,7 +56,6 @@ We will disable root access for security reasons.
 
   ```sh
   $ sudo passwd -l root
-
   > passwd: password changed.
   ```
 
@@ -66,14 +64,13 @@ We will disable root access for security reasons.
   ```sh
   $ su -
   > Password: 
-
   > su: Authentication failure
   ```
   
   {: .note }
   From now on you will only have root access using **`sudo`** and **`Password [ A ]`**:
   
-  ```
+  ```sh
   $ sudo su -
   > [sudo] password for admin:
 
@@ -86,7 +83,7 @@ We will disable root access for security reasons.
 
 It is important to keep the system up-to-date with security patches and application updates. The "Advanced Packaging Tool" (apt) makes this easy. To update the operating system and all installed software packages, run the following commands:
 
-```
+```sh
 $ sudo apt update
 $ sudo apt full-upgrade
 ```
