@@ -89,8 +89,6 @@ Running into issues?
 * [Troubleshooting](guide/troubleshooting.md): first aid to debug your system
 * [FAQ](guide/faq.md): frequently asked questions and further reading
 
-<br/><br/>
-
 ---
 
 {: .d-flex .flex-justify-end }

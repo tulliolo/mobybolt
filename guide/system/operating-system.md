@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Operating System
+title: Operating system
 parent: System
 nav_order: 20
 ---
@@ -238,4 +238,4 @@ You can now disconnect the keyboard and monitor and continue the installation re
 
 {: .d-flex .flex-justify-between }
 [<< Preparations](preparations)
-[Remote Access >>](remote-access)
+[Remote access >>](remote-access)

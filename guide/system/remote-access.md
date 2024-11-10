@@ -48,7 +48,7 @@ You should now be able to reach your PC, either with the hostname `mobybolt.loca
 
 Now it's time to connect to the MobyBolt via Secure Shell (SSH) and get to work. For that, we need an SSH client.
 
-### Connection Details
+### Connection details
 
 | hostname | mobybolt.local (or IP address) |
 | port | 22 |

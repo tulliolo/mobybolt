@@ -28,7 +28,7 @@ From now on, all operations will be performed by [connecting in ssh](remote-acce
 
 We will disable root access for security reasons.
 
-### Disable Secure Shell root access
+### Disable SSH root access
 
 - Type the following command:
 
@@ -82,12 +82,6 @@ We will disable root access for security reasons.
 
 ---
 
-## Login with SSH keys (optional)
-
-You can start to access MobyBolt without a password by following the [SSH keys bonus guide](../bonus/system/login-with-ssh-keys)
-
----
-
 ## System update
 
 It is important to keep the system up-to-date with security patches and application updates. The "Advanced Packaging Tool" (apt) makes this easy. To update the operating system and all installed software packages, run the following commands:
@@ -104,4 +98,4 @@ Do this regularly every few months to get security-related updates.
 
 {: .d-flex .flex-justify-between }
 [<< Remote access](remote-access)
-[Security >>](security)
+[Docker >>](docker)
