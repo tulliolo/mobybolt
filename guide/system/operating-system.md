@@ -130,7 +130,11 @@ The following steps refer to an installation with Italian timezone and keyboard.
    1. pick `Guided - use entire disk` and hit `Enter/Continue`
    2. in `Select disk to partition` pick the smallest disk and hit `Enter/Continue`
    3. in `Partitioning scheme` pick `All files in one partition (recommended for new users)` and hit `Enter/Continue`
-   4. in the overwiew window, ⚠️ **only if you have a secondary storage for data** ⚠️: 
+   4. in the overwiew window:
+
+      {: .warning }
+      Follow this step only if you have a secondary storage for data.
+
       1. pick the largest disk and hit `Enter/Continue`
       2. in `Create new empty partition table for this device?` pick `Yes` and hit `Enter/Continue`
       3. in the overview window pick the `FREE SPACE` related to the secondary drive and hit `Enter/Continue`
@@ -152,7 +156,7 @@ The following steps refer to an installation with Italian timezone and keyboard.
 11. In `Finish the installation` hit `Enter/Continue` to reboot and remove the pen drive
 
 {: .text-center }
-![debian-install_animated](../../images/system-os-debian_install.gif)
+![debian-install_animated](../../images/system-os_debian_install.gif)
 
 Once rebooted, log in as **root** and follow the next instructions.
 
