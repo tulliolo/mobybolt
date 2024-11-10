@@ -16,17 +16,17 @@ callouts:
   important:
     title: Important
     color: red
-    opacity: 0.02
+    opacity: 0.05
 
   note:
     title: Note
     color: grey-lt
-    opacity: 0.02
+    opacity: 0.05
 
   warning:
     title: Warning
     color: yellow
-    opacity: 0.02
+    opacity: 0.05
 
 # enable theme for local usage
 #theme: "just-the-docs"
