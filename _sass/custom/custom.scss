@@ -14,8 +14,7 @@
         content: "MobyBolt";
         display: block;
         width: 70%;
-        font-size: 3em;
-        font-size: 5vw;
+        font-size: max(5vw, 3em);
         text-align: right;
     }
 }
