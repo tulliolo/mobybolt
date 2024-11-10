@@ -12,6 +12,9 @@
 
     &::after {
         content: "MobyBolt";
-        font-size: 6em;
+        display: block;
+        width: 70%;
+        font-size: 4em;
+        text-align: right;
     }
 }
