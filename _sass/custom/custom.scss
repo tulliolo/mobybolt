@@ -1,0 +1,17 @@
+.logo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+
+    img {
+        display: block;
+        flex-shrink: 0;
+        width: 30%;
+    }
+
+    &::after {
+        content: "MobyBolt";
+        font-size: 6em;
+    }
+}

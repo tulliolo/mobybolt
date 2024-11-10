@@ -4,11 +4,9 @@ layout: home
 nav_order: 1
 ---
 
-{: refdef: style="text-align: center;"}
-![MobyBolt Logo](images/mobybolt-logo.png){: width="30%" }
-{: refdef}
+{: .logo }
+![MobyBolt Logo](images/mobybolt-logo.png)
 
-<br />
 Build your own "do-everything-yourself" Bitcoin full node that will make you a sovereign peer in the Bitcoin and Lightning network.
 {: .fs-6 }
 
