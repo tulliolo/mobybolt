@@ -23,7 +23,7 @@ You are now on the command line of your own Bitcoin node. Let's start with the c
 
 ## Create a new connection
 
-We will use the primary user `admin` which we already configured in the Mobybolt PC (see [Configure the admin user](operating-system#configure-the-admin-user) section).
+We will use the primary user `admin` which we already configured in the MobyBolt PC (see [Configure the admin user](operating-system#configure-the-admin-user) section).
 
 - Log in again using SSH (see [Access with Secure Shell](remote-access#access-with-secure-shell) section), with user `admin` and your `password [A]`
 
@@ -335,7 +335,7 @@ If you find yourself locked out by mistake, you can connect a keyboard and scree
 
 ## fail2ban
 
-The SSH login to the Mobybolt PC must be specially protected.
+The SSH login to the MobyBolt PC must be specially protected.
 An additional measure is to install "fail2ban", which prevents an attacker from gaining access via brute force.
 It simply cuts off any remote system with five failed login attempts for ten minutes.
 
