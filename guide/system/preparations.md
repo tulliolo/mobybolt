@@ -35,7 +35,7 @@ You need the following **minimal hardware**:
 - **Temporary monitor** screen or television
 - **Temporary keyboard** USB/PS2
 
-{: .note}
+{: .note }
 If you want to start with a single storage, and then install the secondary storage later, you can follow this [bonus guide](../bonus/system/migrate-docker-data).
 
 You should get the following **recommended hardware**:
@@ -47,7 +47,7 @@ You should get the following **recommended hardware**:
 - **Temporary monitor** screen or television
 - **Temporary keyboard** USB/PS2
 
-{: .important}
+{: .warning }
 It is **highly recommended** to have the **secondary storage for data** ([Docker objects](docker#overview) such as images, containers, networks and volumes with all the related data - e.g. timechain, Fulcrum database, etc...). This configuration will simplify portability and restore of all the Docker services in the event of a migration to a new PC, or operating system / primary disk issues.
 
 You might also want to get this **optional hardware**:
@@ -55,7 +55,7 @@ You might also want to get this **optional hardware**:
 - **UPS** (uninterruptible power supply)
 - **Temporary mouse** USB/PS2 (for the installation phase)
 
-{: .warning}
+{: .warning }
 **UPS** is totally optional, but if you intend to implement the lightning node, please consider getting it.
 
 ---
@@ -72,9 +72,8 @@ You will need several passwords, and it's easiest to write them all down in the 
 - [ E ] Cloud backup password # optional
 ```
 
-{: refdef: style="text-align: center;"}
+{: .text-center }
 ![xkcd: Password Strength](../../images/system-preparations_xkcd.png)
-{: refdef}
 
 If you need inspiration for creating your passwords: the [xkcd: Password Strength](https://xkcd.com/936/) comic is funny and contains a lot of truth. Store a copy of your passwords somewhere safe (preferably in an open-source password manager like [KeePassXC](https://keepassxc.org/)), or whatever password manager you're already using, and keep your original notes out of sight once your system is up and running.
 
