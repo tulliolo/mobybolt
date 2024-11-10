@@ -6,8 +6,11 @@ parent: System
 ---
 <!-- markdownlint-disable MD014 MD022 MD025 MD033 MD040 -->
 
-# Configuration
+# Docker
 {: .no_toc }
+
+{: .text-center }
+![Docker logo](../../images/system-docker_logo.png){: width="20%" }
 
 It's finally time to install and configure [Docker](https://docs.docker.com/get-started/overview/){:target="_blank"} and [Docker Compose](https://docs.docker.com/compose/){:target="_blank"}.
 
