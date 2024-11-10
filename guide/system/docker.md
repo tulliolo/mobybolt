@@ -174,3 +174,9 @@ $ sudo apt-mark hold docker-ce docker-ce-cli
 # Install Portainer (optional)
 
 In this guide, all operations will be performed from the command line. If you prefer to have a web/graphical tool to manage Docker and (especially) to easily monitor the status of the containers, you can refer to the bonus guide on [Portainer](../bonus/system/portainer).
+
+---
+
+{: .d-flex .flex-justify-between }
+[<< Configuration](configuration)
+[Project setup >>](../mobybolt/setup/project-setup)

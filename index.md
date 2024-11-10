@@ -92,4 +92,4 @@ Running into issues?
 ---
 
 {: .d-flex .flex-justify-end }
-[Get Started >>](guide/system)
+[Get Started >>](guide/system/preparations)

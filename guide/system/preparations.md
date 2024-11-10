@@ -86,5 +86,5 @@ While the guide will show you how to secure your node, you will interact with it
 ---
 
 {: .d-flex .flex-justify-between }
-[<< System](./)
+[<< Home](../../)
 [Operating system >>](operating-system)
