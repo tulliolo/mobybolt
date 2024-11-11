@@ -339,9 +339,6 @@ The SSH login to the MobyBolt PC must be specially protected.
 An additional measure is to install "fail2ban", which prevents an attacker from gaining access via brute force.
 It simply cuts off any remote system with five failed login attempts for ten minutes.
 
-![fail2ban](../../images/system-configuration_fail2ban.png)
-*Me locking myself out by entering wrong passwords*
-
 - Install "fail2ban", which activates automatically
 
   ```sh
