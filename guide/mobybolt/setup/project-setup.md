@@ -22,7 +22,7 @@ We create the base directory structure and files.
 
 ---
 
-## Create the directories
+## Create the base files and directories
 
 Log in to your node as `admin` user via Secure Shell (SSH).
 
@@ -33,9 +33,7 @@ Create the base directory structure and access it:
    $ cd apps/mobybolt
    ```
 
----
-
-## Create the env file
+### Create the env file
 
 Create the base env file and populate it as follows:
 
@@ -54,9 +52,7 @@ NETWORK_FRONTEND_GATEWAY=172.16.21.129
 
 ```
 
----
-
-## Create the docker compose file
+### Create the docker compose file
 
 Create the base [docker compose file](https://docs.docker.com/compose/compose-file/compose-file-v3/){:target="_blank"} and populate it as follows:
 
@@ -84,9 +80,9 @@ networks:
 
 ```
 
-The `docker compose` command will automatically load all the environment variables contained in the `.env` file.
+- The `docker compose` command will automatically load all the environment variables contained in the `.env` file.
 
-The `docker compose` command will operate on the `docker-compose.yml` file located in the same directory where it is run. The `include` directive in the file `docker-compose.yml` will allow us to include the [YAML](https://yaml.org/){:target="_blank"} files of the Docker services that we will deploy later.
+- The `docker compose` command will operate on the `docker-compose.yml` file located in the same directory where it is run. The `include` directive in the file `docker-compose.yml` will allow us to include the [YAML](https://yaml.org/){:target="_blank"} files of the Docker services that we will deploy later.
 
 ---
 
@@ -100,15 +96,24 @@ The `docker compose` command will create two project networks with the following
 **frontend** | external | dynamic | 172.16.21.128-255 | 172.16.21.129 |
 
 - Docker relies on networks for internal container communication.
+
 - Containers that reside on the same network will be able to reach each other using either the IP address or the name of the service (e.g. `172.16.21.2` or `nginx`).
+
 - Containers attached to an `internal` network won't directly have external visibility, they can reach (or be reached from) the outside through another container, e.g. tor, attached to an `external` network.
+
 - Containers that need to reach the outside shall be in an `external` network and, if they need to be reached from the outside, they must publish a port via the `docker-compose.yml` file (Docker will automatically handle NAT, firewall, and port forwarding).
+
 - Containers will automatically receive a **dynamic IP address** for each network the are attached to, or they can specify a **static IP address** in the `docker-compose.yml` file.
 
-{: .note}
->A **static addressing** (generally not necessary, since services can be invoked by name) will be used for the **internal network**. In fact:
->- if you wanted to implement the (optional) configuration in Bitcoin Knots/Core to reject non-private networks, name resolution would be disabled and you could only reach the other containers via the IP address (which will therefore have to be static);
->- with a dynamic addressing, we could have problems with nginx and tor, which will be the only access points from the outside to all the services. If we wanted to temporarily disable a non-mandatory service (e.g. BTC RPC Explorer) nginx and tor would no longer be able to resolve its name and would fail.
+### Addressing policies
+
+A **dynamic addressing** will be used for the **frontend external network**.
+
+A **static addressing** (generally not necessary, since services can be invoked by name) will be used for the **backend internal network**. In fact:
+- if you wanted to implement the (optional) configuration in Bitcoin Knots/Core to reject non-private networks, name resolution would be disabled and you could only reach the other containers via the IP address (which will therefore have to be static);
+- with a dynamic addressing, we could have problems with nginx and tor, which will be the only access points from the outside to all the services. If we wanted to temporarily disable a non-mandatory service (e.g. BTC RPC Explorer) nginx and tor would no longer be able to resolve its name and would fail.
+
+### Connecting services to networks
 
 Below, a brief outline of how the services we will implement will be connected to the networks:
 
@@ -136,4 +141,4 @@ With this configuration we will ensure that:
 
 {: .d-flex .flex-justify-between}
 [<< Docker](../../system/docker)
-[Project backup >>](project-backup)
+[Reverse proxy (nginx) >>](reverse-proxy)
