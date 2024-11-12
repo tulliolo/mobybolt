@@ -8,14 +8,14 @@ grand_parent: MobyBolt
 <!-- markdownlint-disable MD014 MD022 MD025 MD033 MD040 -->
 
 # Project setup
-{: .no_toc }
+{: .no_toc}
 
 We create the base directory structure and files.
 
 ---
 
 ## Table of contents
-{: .no_toc .text-delta }
+{: .no_toc .text-delta}
 
 1. TOC
 {:toc}
@@ -64,7 +64,7 @@ Create the base [docker compose file](https://docs.docker.com/compose/compose-fi
 $ nano docker-compose.yml
 ```
 
-{: .warning }
+{: .warning}
 Be sure to follow the exact indentation below... YAML is very sensitive to this!
 
 ```yaml
@@ -105,7 +105,7 @@ The `docker compose` command will create two project networks with the following
 - Containers that need to reach the outside shall be in an `external` network and, if they need to be reached from the outside, they must publish a port via the `docker-compose.yml` file (Docker will automatically handle NAT, firewall, and port forwarding).
 - Containers will automatically receive a **dynamic IP address** for each network the are attached to, or they can specify a **static IP address** in the `docker-compose.yml` file.
 
-{: .note }
+{: .note}
 >A **static addressing** (generally not necessary, since services can be invoked by name) will be used for the **internal network**. In fact:
 >- if you wanted to implement the (optional) configuration in Bitcoin Knots/Core to reject non-private networks, name resolution would be disabled and you could only reach the other containers via the IP address (which will therefore have to be static);
 >- with a dynamic addressing, we could have problems with nginx and tor, which will be the only access points from the outside to all the services. If we wanted to temporarily disable a non-mandatory service (e.g. BTC RPC Explorer) nginx and tor would no longer be able to resolve its name and would fail.
@@ -128,12 +128,12 @@ With this configuration we will ensure that:
 
 <br/>
 
-{: .text-center }
+{: .text-center}
 **This is great for privacy!**
-{: .fs-6 }
+{: .fs-6}
 
 ---
 
-{: .d-flex .flex-justify-between }
+{: .d-flex .flex-justify-between}
 [<< Docker](../../system/docker)
 [Project backup >>](project-backup)

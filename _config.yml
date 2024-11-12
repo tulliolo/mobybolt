@@ -13,18 +13,28 @@ aux_links:
     - https://github.com/tulliolo/mobybolt/
 
 callouts:
+  hint:
+    title: 💡 Hint
+    color: grey-lt
+    opacity: 0.05
+
   important:
-    title: Important
+    title: "! Important"
     color: red
     opacity: 0.05
 
+  more:
+    title: 🔍 More
+    color: grey-lt
+    opacity: 0.05
+
   note:
-    title: Note
+    title: ℹ️ Note
     color: grey-lt
     opacity: 0.05
 
   warning:
-    title: Warning
+    title: ⚠️ Warning
     color: yellow
     opacity: 0.05
 

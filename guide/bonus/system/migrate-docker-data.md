@@ -8,20 +8,20 @@ grand_parent: Bonus Section
 <!-- markdownlint-disable MD014 MD022 MD025 MD033 MD040 -->
 
 # Migrate Docker data
-{: .no_toc }
+{: .no_toc}
 
 You can take advantage of this guide in the following situations:
 
 1. you have already installed MobyBolt on a single disk and want to migrate to the configuration with a separate storage for Docker data;
 2. you want to replace the disk for Docker data that is already on your system.
 
-{: .warning }
+{: .hint}
 If you are in case 2 and want to replace an internal drive, you can temporarily connect the new drive via USB3, complete the steps in this guide, and then replace the disk in the internal slot.
 
 ---
 
 ## Table of contents
-{: .no_toc .text-delta }
+{: .no_toc .text-delta}
 
 1. TOC
 {:toc}
@@ -65,17 +65,17 @@ $ sudo hdparm -t --direct /dev/<YOUR_DRIVE>
 > Timing O_DIRECT disk reads: 932 MB in  3.00 seconds = 310.23 MB/sec
 ```
 
-{: .warning }
+{: .warning}
 Remember to replace `<YOUR_DRIVE>` with your device, detected during the previous step.
 
-{: .note }
+{: .note}
 If the measured speeds are more than 150 MB/s, you're good but it is recommended more for a better experience.
 
 ---
 
 ## Create a new partition
 
-{: .warning }
+{: .warning}
 This will erase any data that may be on the disk!
 
 Type this command to use the `fdisk` utility and manage the secondary disk:
@@ -84,7 +84,7 @@ Type this command to use the `fdisk` utility and manage the secondary disk:
 $ sudo fdisk /dev/<YOUR_DRIVE>
 ```
 
-{: .warning }
+{: .warning}
 Remember to replace `<YOUR_DRIVE>` with your device, detected during the previous step.
 
 You will be in the fdisk prompt, where you'll need to follow the next steps:
@@ -95,7 +95,7 @@ You will be in the fdisk prompt, where you'll need to follow the next steps:
 
 3. Type `w` and `enter/return` key in order to save the configuration and exit.
 
-{: .note }
+{: .hint}
 If you have pre-existing partitions, you may encounter a message like: `Partition X contains a Y signature. Do you want to remove the signature? [Y]es/[N]o`. In this case, type `y` and press `enter/return` key until the prompt shows you: `The signature will be removed by a write command`.
 
 This will create a new partition called probably `sdb1`.
@@ -108,7 +108,7 @@ Finally, format the new partition to `Ext4` and obtain the `UUID`:
 $ sudo mkfs.ext4 /dev/<YOUR_PARTITION>
 ```
 
-{: .warning }
+{: .warning}
 Remember to replace `<YOUR_PARTITION>` with your partition, created during the previous step.
 
 The output will look similar to the following as an example:
@@ -135,7 +135,7 @@ If you have Docker data to migrate, you can follow the next steps:
    $ sudo mount -m /dev/<YOUR_PARTITION> /mnt
    ```
    
-   {: .warning }
+   {: .warning}
    Remember to replace `<YOUR_PARTITION>` with your partition, created during the previous step.
 
 2. Shutdown docker:
@@ -156,7 +156,7 @@ If you have Docker data to migrate, you can follow the next steps:
    $ sudo rsync -av /var/lib/docker/ /mnt/
    ```
 
-   {: .warning }
+   {: .warning}
    If you have a lot of data to transfer (e.g. blockchain) this can take a long time.
 
 ---
@@ -173,7 +173,7 @@ $ sudo nano /etc/fstab
 UUID=<your_UUID> /var/lib/docker ext4 defaults,noatime 0 2
 ```
 
-{: .warning }
+{: .warning}
 If you are replacing the disk, remove the line for the old disk in fstab (the one containing the `/var/lib/docker` mount point)
 
 ---

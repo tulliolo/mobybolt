@@ -7,14 +7,14 @@ parent: System
 <!-- markdownlint-disable MD014 MD022 MD025 MD033 MD040 -->
 
 # Remote access
-{: .no_toc }
+{: .no_toc}
 
 We connect to your MobyBolt PC by using the Secure Shell.
 
 ---
 
 ## Table of contents
-{: .no_toc .text-delta }
+{: .no_toc .text-delta}
 
 1. TOC
 {:toc}
@@ -25,9 +25,9 @@ We connect to your MobyBolt PC by using the Secure Shell.
 
 Your MobyBolt PC is starting and gets a new address from your home network. Give it a few minutes to come to life.
 
-- On your regular computer, open the Terminal (also known as "command line"). Here are a few links with additional details how to do that for [Windows](https://www.computerhope.com/issues/chusedos.htm), [MacOS](https://macpaw.com/how-to/use-terminal-on-mac) and [Linux](https://www.howtogeek.com/140679/beginner-geek-how-to-start-using-the-linux-terminal/).
+- On your regular computer, open the Terminal (also known as "command line"). Here are a few links with additional details how to do that for [Windows](https://www.computerhope.com/issues/chusedos.htm){: target="_blank"}, [MacOS](https://macpaw.com/how-to/use-terminal-on-mac){: target="_blank"} and [Linux](https://www.howtogeek.com/140679/beginner-geek-how-to-start-using-the-linux-terminal/){: target="_blank"}.
 
-- Try to ping the MobyBolt PC using the hostname `mobybolt.local` you configured [above](https://github.com/tulliolo/mobybolt/wiki/operating-system#install-avahi). Press Ctrl-C to interrupt.
+- Try to ping the MobyBolt PC using the hostname `mobybolt.local` you configured [here](operating-system#install-avahi). Press Ctrl-C to interrupt.
 
   ```sh
   $ ping mobybolt.local
@@ -38,7 +38,7 @@ Your MobyBolt PC is starting and gets a new address from your home network. Give
   > ...
   ```
 
-- If the ping command fails or does not return anything, you need to manually look for your IP. This is a common challenge: just follow the method suggested [here](https://github.com/tulliolo/mobybolt/wiki/operating-system#install-avahi).
+- If the ping command fails or does not return anything, you need to manually look for your IP. This is a common challenge: just follow the method suggested [here](operating-system#install-avahi).
 
 You should now be able to reach your PC, either with the hostname `mobybolt.local` or an IP address like `192.168.X.Y`.
 
@@ -90,7 +90,7 @@ $ ssh admin@192.168.122.58
 
 ### Access with Secure Shell in Windows
 
-Download and install [Putty](https://www.putty.org/).
+Download and install [Putty](https://www.putty.org/){: target="_blank"}.
 
 Start Putty. 
 
@@ -136,7 +136,7 @@ $ ls -la
   by pressing ⬆️ (arrow up) and ⬇️ (arrow down) on your keyboard, you can recall previously entered commands.
 
 - **Common Linux commands**:
-  For a very selective reference list of Linux commands, please refer to this [guide](https://www.geeksforgeeks.org/linux-commands-cheat-sheet/).
+  For a very selective reference list of Linux commands, please refer to this [guide](https://www.geeksforgeeks.org/linux-commands-cheat-sheet/){: target="_blank"}.
 
 - **Use admin privileges**:
   Our regular user has no direct admin privileges.
@@ -157,6 +157,6 @@ $ ls -la
   
 ---
 
-{: .d-flex .flex-justify-between }
+{: .d-flex .flex-justify-between}
 [<< Operating system](operating-system)
 [Configuration >>](configuration)

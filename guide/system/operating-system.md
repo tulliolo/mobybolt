@@ -8,14 +8,14 @@ nav_order: 20
 <!-- markdownlint-disable MD014 MD022 MD025 MD033 MD040 -->
 
 # Operating System
-{: .no_toc }
+{: .no_toc}
 
 We configure the personal computer and install the Linux operating system.
 
 ---
 
 ## Table of contents
-{: .no_toc .text-delta }
+{: .no_toc .text-delta}
 
 1. TOC
 {:toc}
@@ -24,13 +24,13 @@ We configure the personal computer and install the Linux operating system.
 
 ## Which operating system to use?
 
-We use the latest stable [Debian](https://www.debian.org/) release (currently **Debian 12 - Bookworm**), without a graphical user interface. This provides the best stability for the PC and makes the initial setup a breeze.
+We use the latest stable [Debian](https://www.debian.org/){: target="_blank"} release (currently **Debian 12 - Bookworm**), without a graphical user interface. This provides the best stability for the PC and makes the initial setup a breeze.
 
 ---
 
 ## Prepare the installation media
 
-From your regular PC, direct download Debian by going to the [official website](https://www.debian.org/) and clicking on the `Download` button.
+From your regular PC, direct download Debian by going to the [official website](https://www.debian.org/){: target="_blank"} and clicking on the `Download` button.
 
 ### Prepare the installation media on Linux
 
@@ -71,7 +71,7 @@ Remove the pen drive.
 
 ### Prepare the installation media on Windows/MacOS
 
-To flash the operating system .iso to the pen drive, we will use the [Balena Etcher](https://www.balena.io/etcher/) application. Go to the website and [download](https://etcher.balena.io/#download-etcher) the installer for your OS.
+To flash the operating system .iso to the pen drive, we will use the [Balena Etcher](https://www.balena.io/etcher/){: target="_blank"} application. Go to the website and [download](https://etcher.balena.io/#download-etcher){: target="_blank"} the installer for your OS.
 
 - Install the Balena Etcher
 - Start the Balena Etcher
@@ -132,7 +132,7 @@ The following steps refer to an installation with Italian timezone and keyboard.
    3. in `Partitioning scheme` pick `All files in one partition (recommended for new users)` and hit `Enter/Continue`
    4. in the overwiew window:
 
-      {: .warning }
+      {: .warning}
       Follow this step only if you have a secondary storage for data.
 
       1. pick the largest disk and hit `Enter/Continue`
@@ -155,7 +155,7 @@ The following steps refer to an installation with Italian timezone and keyboard.
 10. In `Software selection` pick only `SSH server` and `standard system utilities`, uncheck all the other options, and hit `Enter/Continue`
 11. In `Finish the installation` hit `Enter/Continue` to reboot and remove the pen drive
 
-{: .text-center }
+{: .text-center}
 ![debian-install_animated](../../images/system-os_debian_install.gif)
 
 Once rebooted, log in as **root** and follow the next instructions.
@@ -166,7 +166,8 @@ Once rebooted, log in as **root** and follow the next instructions.
 
 Avahi is a system which facilitates service discovery on a local network via the mDNS/DNS-SD protocol suite. By installing avahi, the node will be reachable on the local network as **`mobybolt.local`**, as well as with the IP address, which can then stay dynamic.
 
-💡 To check your current IP address, you can type the command `ip addr` and look for an interface name like `enp0s1` (wired) or `wlp2s0` (wifi). You should then see a line similar to `inet 192.168.X.Y`, which is your IP address.
+{: .hint}
+To check your current IP address, you can type the command `ip addr` and look for an interface name like `enp0s1` (wired) or `wlp2s0` (wifi). You should then see a line similar to `inet 192.168.X.Y`, which is your IP address.
 
 In the following **example** we detect the IP 192.168.122.58 associated with the wired interface enp1s0:
 
@@ -196,20 +197,20 @@ $ apt install -y avahi-daemon
 
 ## Configure the admin user
 
-* Remove the **temp** user (do not worry about the `userdel: temp mail spool (/var/mail/temp) not found` message):
+- Remove the **temp** user (do not worry about the `userdel: temp mail spool (/var/mail/temp) not found` message):
 
   ```sh
   $ userdel -rf temp
   > userdel: temp mail spool (/var/mail/temp) not found
   ```
 
-* Install **sudo**
+- Install **sudo**
 
   ```sh
   $ apt install -y sudo vim
   ```
 
-* Create the **admin** user with your `Password [ A ]`:
+- Create the **admin** user with your `Password [ A ]`:
 
   ```sh
   $ adduser --comment "" admin
@@ -225,13 +226,13 @@ $ apt install -y avahi-daemon
   > Adding user `admin' to group `users' ...
   ```
 
-* Add the **admin** user to some groups:
+- Add the **admin** user to some groups:
 
   ```sh
   $ usermod -a -G adm,audio,cdrom,dip,floppy,netdev,plugdev,sudo,users,video admin
   ```
 
-* Logout:
+- Logout:
 
   ```sh
   $ logout
@@ -241,6 +242,6 @@ You can now disconnect the keyboard and monitor and continue the installation re
 
 ---
 
-{: .d-flex .flex-justify-between }
+{: .d-flex .flex-justify-between}
 [<< Preparations](preparations)
 [Remote access >>](remote-access)

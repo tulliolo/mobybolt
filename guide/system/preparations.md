@@ -8,14 +8,14 @@ nav_order: 10
 <!-- markdownlint-disable MD014 MD022 MD025 MD040 -->
 
 # Preparations
-{: .no_toc }
+{: .no_toc}
 
 Let's get all the necessary hardware parts and prepare some passwords.
 
 ---
 
 ## Table of contents
-{: .no_toc .text-delta }
+{: .no_toc .text-delta}
 
 1. TOC
 {:toc}
@@ -25,7 +25,7 @@ Let's get all the necessary hardware parts and prepare some passwords.
 ## Hardware requirements
 
 This guide builds on the readily available personal computer. 
-Although using orchestrators such as [Docker Swarm](https://docs.docker.com/engine/swarm/) or [Kubernetes](https://kubernetes.io/it/) the same principles can be applied in a multihost environment, this scenario is considered out-of-scope.
+Although using orchestrators such as [Docker Swarm](https://docs.docker.com/engine/swarm/){: target="_blank"} or [Kubernetes](https://kubernetes.io/it/){: target="_blank"} the same principles can be applied in a multihost environment, this scenario is considered out-of-scope.
 
 You need the following **minimal hardware**:
 
@@ -35,7 +35,7 @@ You need the following **minimal hardware**:
 - **Temporary monitor** screen or television
 - **Temporary keyboard** USB/PS2
 
-{: .note }
+{: .hint}
 If you want to start with a single storage, and then install the secondary storage later, you can follow this [bonus guide](../bonus/system/migrate-docker-data).
 
 You should get the following **recommended hardware**:
@@ -47,7 +47,7 @@ You should get the following **recommended hardware**:
 - **Temporary monitor** screen or television
 - **Temporary keyboard** USB/PS2
 
-{: .important }
+{: .important}
 It is **highly recommended** to have the **secondary storage for data** ([Docker objects](docker#overview) such as images, containers, networks and volumes with all the related data - e.g. timechain, Fulcrum database, etc...). This configuration will simplify portability and restore of all the Docker services in the event of a migration to a new PC, or operating system / primary disk issues.
 
 You might also want to get this **optional hardware**:
@@ -55,7 +55,7 @@ You might also want to get this **optional hardware**:
 - **UPS** (uninterruptible power supply)
 - **Temporary mouse** USB/PS2 (for the installation phase)
 
-{: .warning }
+{: .warning}
 **UPS** is totally optional, but if you intend to implement the lightning node, please consider getting it.
 
 ---
@@ -72,19 +72,19 @@ You will need several passwords, and it's easiest to write them all down in the 
 - [ E ] Cloud backup password # optional
 ```
 
-{: .text-center }
+{: .text-center}
 ![xkcd: Password Strength](../../images/system-preparations_xkcd.png)
 
-If you need inspiration for creating your passwords: the [xkcd: Password Strength](https://xkcd.com/936/) comic is funny and contains a lot of truth. Store a copy of your passwords somewhere safe (preferably in an open-source password manager like [KeePassXC](https://keepassxc.org/)), or whatever password manager you're already using, and keep your original notes out of sight once your system is up and running.
+If you need inspiration for creating your passwords: the [xkcd: Password Strength](https://xkcd.com/936/){: target="_blank"} comic is funny and contains a lot of truth. Store a copy of your passwords somewhere safe (preferably in an open-source password manager like [KeePassXC](https://keepassxc.org/){: target="_blank"}), or whatever password manager you're already using, and keep your original notes out of sight once your system is up and running.
 
 ---
 
 ## Secure your home network and devices
 
-While the guide will show you how to secure your node, you will interact with it from your computer and mobile phone and use your home internet network. Before building your MobyBolt, it is recommended to secure your home network and devices. Follow Parts 1 and 2 of this ["How to Secure Your Home Network Against Threats"](https://restoreprivacy.com/secure-home-network/) tutorial by Heinrich Long, and try to implement as many points as possible (some might not apply to your router/device).
+While the guide will show you how to secure your node, you will interact with it from your computer and mobile phone and use your home internet network. Before building your MobyBolt, it is recommended to secure your home network and devices. Follow Parts 1 and 2 of this ["How to Secure Your Home Network Against Threats"](https://restoreprivacy.com/secure-home-network/){: target="_blank"} tutorial by Heinrich Long, and try to implement as many points as possible (some might not apply to your router/device).
 
 ---
 
-{: .d-flex .flex-justify-between }
+{: .d-flex .flex-justify-between}
 [<< Home](../../)
 [Operating system >>](operating-system)

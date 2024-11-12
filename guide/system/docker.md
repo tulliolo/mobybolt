@@ -7,17 +7,17 @@ parent: System
 <!-- markdownlint-disable MD014 MD022 MD025 MD033 MD040 -->
 
 # Docker
-{: .no_toc }
+{: .no_toc}
 
-{: .text-center }
-![Docker logo](../../images/system-docker_logo.png){: width="20%" }
+{: .text-center}
+![Docker logo](../../images/system-docker_logo.png){: width="20%"}
 
 It's finally time to install and configure [Docker](https://docs.docker.com/get-started/overview/){:target="_blank"} and [Docker Compose](https://docs.docker.com/compose/){:target="_blank"}.
 
 ---
 
 ## Table of contents
-{: .no_toc .text-delta }
+{: .no_toc .text-delta}
 
 1. TOC
 {:toc}
@@ -148,7 +148,7 @@ Now we can install Docker and Docker Compose by following the next steps:
 
 ## Disable updates (optional)
 
-:warning: When you perform a [system update](configuration#system-update), Docker will also be updated (if a new version is available). This will cause a restart of all running containers.
+When you perform a [system update](configuration#system-update), Docker will also be updated (if a new version is available). This will cause a restart of all running containers.
 
 To avoid this behavior, you can use the following command to disable the Docker upgrade and freeze the current version:
 
@@ -177,6 +177,6 @@ In this guide, all operations will be performed from the command line. If you pr
 
 ---
 
-{: .d-flex .flex-justify-between }
+{: .d-flex .flex-justify-between}
 [<< Configuration](configuration)
 [Project setup >>](../mobybolt/setup/project-setup)

@@ -7,14 +7,14 @@ parent: System
 <!-- markdownlint-disable MD014 MD022 MD025 MD033 MD040 -->
 
 # Configuration
-{: .no_toc }
+{: .no_toc}
 
 You are now on the command line of your own Bitcoin node. Let's start with the configuration.
 
 ---
 
 ## Table of contents
-{: .no_toc .text-delta }
+{: .no_toc .text-delta}
 
 1. TOC
 {:toc}
@@ -39,7 +39,7 @@ We will use the primary user `admin` which we already configured in the MobyBolt
 
 <br/>
 
-{: .note }
+{: .note}
 To change the system configuration and files that don't belong to user `admin`, you have to prefix commands with `sudo`.
 You will be prompted to enter your `Password [ A ]` from time to time for increased security.
 
@@ -54,7 +54,7 @@ $ sudo apt update
 $ sudo apt full-upgrade
 ```
 
-{: .important }
+{: .important}
 Do this regularly every few months to get security-related updates.
 
 ---
@@ -94,16 +94,16 @@ Performant drives are essential for your node. Let's check if your drives work w
 
   In the example below it is `sda`.
 
-- Measure the speed of your primary/system drive (where `<DRIVE_NAME>` is your device name, e.g. `sda`):
+- Measure the speed of your primary/system drive (where `<YOUR_DRIVE>` is your device name, e.g. `sda`):
 
   ```sh
-  $ sudo hdparm -t --direct /dev/<DRIVE_NAME>
+  $ sudo hdparm -t --direct /dev/<YOUR_DRIVE>
   > Timing O_DIRECT disk reads: 932 MB in  3.00 seconds = 310.23 MB/sec
   ```
 
 ### Check your secondary drive
 
-{: .warning }
+{: .warning}
 Follow this section only if you have a separate disk for data and you configured it in step 7.d of the [operating system installation](operating-system#install-debian). 
 
 - Identify your secondary/data drive:
@@ -112,16 +112,16 @@ Follow this section only if you have a separate disk for data and you configured
 
   In the example below it is `sdb`.
 
-- Measure the speed of your secondary/data drive (where `<DRIVE_NAME>` is your device name, e.g. `sdb`):
+- Measure the speed of your secondary/data drive (where `<YOUR_DRIVE>` is your device name, e.g. `sdb`):
 
   ```sh
-  $ sudo hdparm -t --direct /dev/<DRIVE_NAME>
+  $ sudo hdparm -t --direct /dev/<YOUR_DRIVE>
   > Timing O_DIRECT disk reads: 932 MB in  3.00 seconds = 310.23 MB/sec
   ```
 
 <br/>
 
-{: .note }
+{: .note}
 If the measured speeds are more than 150 MB/s, you're good but it is recommended more for a better experience.
 
 ---
@@ -168,11 +168,12 @@ After specifying your private key file in the PuTTY configuration, you’re all 
   $ ssh-copy-id admin@mobybolt.local
   ```
 
-  💡 If you are on MacOS and encounter an error, you might need install `ssh-copy-id` first by running the following command on your Mac’s command line:
-
-  ```sh
-  $ brew install ssh-copy-id
-  ```
+  {: .hint}
+  >If you are on MacOS and encounter an error, you might need install `ssh-copy-id` first by running the following command on your Mac’s command line:
+  >
+  >```sh
+  >$ brew install ssh-copy-id
+  >```
 
 ### Disable password login
 
@@ -208,7 +209,7 @@ After specifying your private key file in the PuTTY configuration, you’re all 
 
 You can no longer log in with a password. User `admin` is the only user that has the necessary SSH keys, no other user can log in remotely.
 
-{: .important }
+{: .important}
 Backup your SSH keys! You will need to attach a screen and keyboard to your MobyBolt PC if you lose them.
 
 ---
@@ -271,7 +272,7 @@ We will disable root access for security reasons.
 
 <br/>
 
-{: .note }
+{: .note}
 From now on you will only have root access using `sudo` and `Password [ A ]`:
 
 ---
@@ -284,7 +285,7 @@ Closing unnecessary ports can mitigate many potential system vulnerabilities.
 
 For now, only SSH and Avahi should be reachable from the outside.
 
-{: .note }
+{: .note}
 >We won't need to enable any other services in UFW, as Docker will directly configure its own firewall rules, bypassing those configured at the host level with UFW. In summary:
 >- UFW will take care of blocking or enabling the services installed on the host;
 >- Docker will take care of blocking or enabling the services installed via Docker.
@@ -293,7 +294,7 @@ For now, only SSH and Avahi should be reachable from the outside.
 
 - With user `admin`, configure and enable the firewall rules:
 
-  {: .note }
+  {: .hint}
   If you are seeing: `ERROR: Couldn't determine iptables version` you may need to reboot after installing `UFW`.
 
   ```sh
@@ -328,7 +329,7 @@ For now, only SSH and Avahi should be reachable from the outside.
 
 For more information, see: [UFW Essentials](https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands){:target="_blank"}
 
-{: .note }
+{: .hint}
 If you find yourself locked out by mistake, you can connect a keyboard and screen to your Pi to log in locally and fix these settings (especially for the SSH port 22).
 
 ---
@@ -351,6 +352,6 @@ For more information, see: [customize fail2ban configuration](https://linode.com
 
 ---
 
-{: .d-flex .flex-justify-between }
+{: .d-flex .flex-justify-between}
 [<< Remote access](remote-access)
 [Docker >>](docker)
