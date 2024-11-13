@@ -66,7 +66,7 @@ Performant drives are essential for your node. Let's check if your drives work w
 - Install the software to measure the performance of your drives:
 
   ```sh
-  $ sudo apt install hdparm
+  $ sudo apt install -y hdparm
   ```
 
 - List the names of connected block devices:
@@ -298,7 +298,7 @@ For now, only SSH and Avahi should be reachable from the outside.
   If you are seeing: `ERROR: Couldn't determine iptables version` you may need to reboot after installing `UFW`.
 
   ```sh
-  $ sudo apt install ufw
+  $ sudo apt install -y ufw
   $ sudo ufw default deny incoming
   $ sudo ufw default allow outgoing
   $ sudo ufw allow 22/tcp comment 'allow SSH'
@@ -343,11 +343,12 @@ It simply cuts off any remote system with five failed login attempts for ten min
 - Install "fail2ban", which activates automatically
 
   ```sh
-  $ sudo apt install fail2ban
+  $ sudo apt install -y fail2ban
   ```
 
 The initial configuration is fine, as it protects SSH by default.
 
+{: .more}
 For more information, see: [customize fail2ban configuration](https://linode.com/docs/security/using-fail2ban-for-security/){:target="_blank"}
 
 ---

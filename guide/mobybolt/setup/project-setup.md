@@ -61,7 +61,7 @@ $ nano docker-compose.yml
 ```
 
 {: .warning}
-Be sure to follow the exact indentation below... YAML is very sensitive to this!
+Be very careful to respect the indentation below, since yaml is very sensitive to this!
 
 ```yaml
 include:
