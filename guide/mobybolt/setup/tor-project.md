@@ -499,3 +499,9 @@ Follow the next steps to uninstall tor:
    ```sh
    $ rm -rf tor
    ```
+
+---
+
+{: .d-flex .flex-justify-between}
+[<< Reverse proxy](reverse-proxy)
+[I2P project >>](i2p-project)
