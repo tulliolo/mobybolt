@@ -75,8 +75,8 @@ If you like to learn about Linux, Docker, Bitcoin, and Lightning, then this guid
 We aim to keep the core of this guide well maintained and up-to-date:
 
 1. [System](guide/system): prepare the hardware and set up the operating system with docker
-1. [Mobybolt](guide/mobybolt/setup): prepare and manage the MobyBolt stack
-   1. [Base services](guide/mobybolt/base-services): install the base services
+1. [Mobybolt](guide/mobybolt): an overwiew of the MobyBolt stack
+   1. [Setup](guide/mobybolt/setup): prepare the stack and install the base services
    1. [Bitcoin](guide/mobybolt/bitcoin): sync your own Bitcoin full node, Electrum server, and Blockchain Explorer
    1. [Lightning](guide/mobybolt/lightning): run your own Lightning client with web-based node management
 
