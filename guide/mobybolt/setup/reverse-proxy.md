@@ -225,7 +225,8 @@ If the output reports an error, please review the [nginx configuration file](#co
 >Check for the presence of the image with the command:
 >
 >```sh
->$ docker images | grep nginx
+>$ docker images | grep "nginx\|TAG"
+>> REPOSITORY                          TAG                  IMAGE ID       CREATED           SIZE
 >> nginx                               latest               64ea9ecb52dd   37 seconds ago    192MB
 >```
 
@@ -259,20 +260,22 @@ $ docker compose logs nginx
 Check the container status:
 
 ```sh
-$ docker ps | grep nginx
-> bec6cf2a7403   nginx   "/docker-entrypoint.…"   5 minutes ago   Up 5 minutes (healthy)   mobybolt_nginx
+$ docker compose ps | grep "nginx\|NAME"
+> NAME              IMAGE     COMMAND                  SERVICE     CREATED         STATUS                   PORTS
+> mobybolt_nginx    nginx     "/docker-entrypoint.…"   nginx       5 minutes ago   Up 5 minutes (healthy)   80/tcp
 ```
 
 {: .warning}
->The output of the previous command must be `(healthy)`, or `(health: starting)`. Any other status is incorrect.
+>The `STATUS` of the previous command must be `(healthy)`, or `(health: starting)`. Any other status is incorrect.
 >
->If the container is in `(health: starting)` state, wait a few minutes and repeat the above command until the state changes to `(healthy)`. If this does not happen, the run has failed.
+>If the container is in `(health: starting)` status, wait a few minutes and repeat the above command until the status changes to `(healthy)`. If this does not happen, the run has failed.
 
 {: .note}
 >If not already present, docker will also create the mobybolt networks. You can check for it with the command:
 >
 >```sh
->$ docker network ls | grep mobybolt
+>$ docker network ls | grep "mobybolt\|NAME"
+> NETWORK ID     NAME                DRIVER    SCOPE
 > b73804f9dc97   mobybolt_backend    bridge    local
 > d1572b999173   mobybolt_frontend   bridge    local
 ```
