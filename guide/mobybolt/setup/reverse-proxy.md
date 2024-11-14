@@ -68,7 +68,7 @@ In this file, we have defined the static IP address that nginx will use on the b
 
 ### Configure nginx
 
-Create the `nging.conf` file and paste the following content:
+Create the `nging.conf` file and paste the following contents:
 
 ```sh
 $ nano nginx/nginx.conf
@@ -127,9 +127,9 @@ stream {
 }
 ```
 
-### Create the docker-compose file
+### Prepare the docker-compose file
 
-Let's create a nginx-specific docker-compose file and paste the following contents:
+Create a nginx-specific docker-compose file and paste the following contents:
 
 ```sh
 $ nano nginx/docker-compose.yml
@@ -162,7 +162,7 @@ Be very careful to respect the indentation above, since yaml is very sensitive t
 
 In this file:
 
-- we define a `healthcheck` for the container: every minute, docker will query the nginx service to check its status; after three failed attempts, the container will be marked `unhealthy`.
+- we define a `healthcheck` for the container: every minute, docker will query the nginx service to check its status; after three failed attempts, the container will be marked `unhealthy`;
 
 - we define the `image` to be used: the `nginx` (official) image will be downloaded from the [DockerHub](https://hub.docker.com/_/nginx){: target="_blank"} public repository;
 
@@ -174,7 +174,7 @@ In this file:
 
 ### Link the docker-compose file
 
-Edit the main docker-compose file and link the nginx-specific file to the `include` section:
+Edit the main docker-compose file and link the nginx-specific one to the `include` section:
 
 ```sh
 $ nano docker-compose.yml
