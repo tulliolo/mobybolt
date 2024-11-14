@@ -8,16 +8,27 @@ grand_parent: MobyBolt
 <!-- markdownlint-disable MD014 MD022 MD025 MD033 MD040 -->
 
 # Tor project
-{: .no_toc}
+{:.no_toc}
 
-{: .text-center}
-![tor logo](../../../images/mobybolt-setup-tor-project_logo.png){: width="30%"}
+{:.text-center}
+![tor logo](../../../images/mobybolt-setup-tor-project_logo.png){:width="30%"}
 
-We use Tor, a free software built by the [Tor Project](https://www.torproject.org/){: target="_blank"}. It allows you to anonymize internet traffic by routing it through a network of nodes, hiding your location and usage profile.
+Running your own Bitcoin and Lightning node at home makes you a direct, sovereign peer on the Bitcoin network.
+However, if not configured without privacy in mind, it also tells the world that there is someone with Bitcoin at that address.
+
+True, it's only your IP address that is revealed, but using services like [iplocation.net](https://www.iplocation.net){:target="_blank"}, your physical address can be determined quite accurately.
+Especially with Lightning, your IP address would be widely used.
+We need to make sure that you keep your privacy.
+
+We'll also make it easy to connect to your node from outside your home network as an added benefit.
+
+---
+
+We use Tor, a free software built by the [Tor Project](https://www.torproject.org/){:target="_blank"}. It allows you to anonymize internet traffic by routing it through a network of nodes, hiding your location and usage profile.
 
 It is called "Tor" for "The Onion Router": information is routed through many hops and encrypted multiple times. Each node decrypts only the layer of information addressed to it, learning only the previous and the next hop of the whole route. The data package is peeled like an onion until it reaches the final destination.
 
-The tor network also hosts hidden services, which can be reached via an "onion" address.
+The Tor network also hosts hidden services, which can be reached via an "onion" address.
 
 To follow this section, log in to your node as `admin` user via Secure Shell (SSH) and access the project's home:
 
@@ -28,7 +39,7 @@ $ cd $HOME/apps/mobybolt
 ---
 
 ## Table of contents
-{: .no_toc .text-delta}
+{:.no_toc .text-delta}
 
 1. TOC
 {:toc}
@@ -61,13 +72,13 @@ TOR_UID=102
 ```
 
 In this file:
-1. we define the `TOR_VERSION` (check the latest available version [here](https://www.torproject.org/download/tor/){: target="_blank"});
+1. we define the `TOR_VERSION` (check the latest available version [here](https://www.torproject.org/download/tor/){:target="_blank"});
 2. we define a static address for the container's backend network;
 3. we define the `uid` (user id) and `gid` (group id) of the tor user.
 
 ### Prepare the entrypoint
 
-Create the [entrypoint](https://docs.docker.com/reference/dockerfile/#entrypoint){: target="_blank"} (the script to run when the container starts) and populate it with the following contents:
+Create the [entrypoint](https://docs.docker.com/reference/dockerfile/#entrypoint){:target="_blank"} (the script to run when the container starts) and populate it with the following contents:
 
 ```sh
 $ nano tor/docker-entrypoint.sh
@@ -112,7 +123,7 @@ In this file:
 
 ### Prepare the Dockerfile
 
-Create the [Dockerfile](https://docs.docker.com/reference/dockerfile/){: target="_blank"} and populate it with the following contents:
+Create the [Dockerfile](https://docs.docker.com/reference/dockerfile/){:target="_blank"} and populate it with the following contents:
 
 ```sh
 $ nano tor/Dockerfile
@@ -250,10 +261,6 @@ PidFile /run/tor/tor.pid
 
 ```
 
-#### Configure SSH remote access through Tor (optional)
-
-If you want to log into your MobyBolt with SSH when you're away, you can easily do so by following this [bonus guide](../../bonus/system/configure-ssh-remote-access-through-tor).
-
 ### Prepare the docker-compose file
 
 Create a tor-specific docker-compose file and populate it with the following contents:
@@ -299,7 +306,7 @@ volumes:
 
 ```
 
-{: .warning}
+{:.warning}
 Be very careful to respect the indentation above, since yaml is very sensitive to this!
 
 In this file:
@@ -316,7 +323,7 @@ In this file:
 
 4. we define the `restart` policy `unless-stopped` for the container: this way, the container will always be automatically restarted, unless it has been stopped explicitly.
 
-5. we provide the container with the previously defined configuration ([bind mount](https://docs.docker.com/storage/bind-mounts/){: target="_blank"}) and with a [volume](https://docs.docker.com/storage/volumes/){: target="_blank"} named `mobybolt_tor-data` to store persistent data.
+5. we provide the container with the previously defined configuration ([bind mount](https://docs.docker.com/storage/bind-mounts/){:target="_blank"}) and with a [volume](https://docs.docker.com/storage/volumes/){:target="_blank"} named `mobybolt_tor-data` to store persistent data.
 
 ### Link the docker-compose File
 
@@ -334,7 +341,7 @@ include:
   - tor/docker-compose.yml
 ```
 
-{: .warning}
+{:.warning}
 Be very careful to respect the indentation above, since yaml is very sensitive to this!
 
 ### Test the docker-compose File
@@ -346,7 +353,7 @@ $ docker compose config --quiet && printf "OK\n" || printf "ERROR\n"
 > OK
 ```
 
-{: .hint}
+{:.hint}
 If the output is `ERROR`, check the error reported... Maybe some wrong indentation in the yaml files?
 
 ---
@@ -359,7 +366,7 @@ Let's build the tor image by typing:
 $ docker compose build tor
 ```
 
-{: .warning}
+{:.warning}
 This may take a long time.
 
 Check for a new image called `mobybolt/tor:0.4.8.13`:
@@ -401,12 +408,12 @@ $ docker compose ps | grep "tor\|NAME"
 > mobybolt_tor   mobybolt/tor:0.4.8.13   "docker-entrypoint.sh"   tor       About a minute ago   Up About a minute (health: starting)   9050-9051/tcp
 ```
 
-{: .warning}
+{:.warning}
 >The `STATUS` of the previous command must be `(healthy)`, or `(health: starting)`. Any other status is incorrect.
 >
 >If the container is in `(health: starting)` status, wait a few minutes and repeat the above command until the status changes to `(healthy)`. If this does not happen, the run has failed.
 
-{: .note}
+{:.note}
 >If not already present, docker will also create the `mobybolt_tor-data` volume. You can check for it with the command:
 >
 >```sh
@@ -417,9 +424,124 @@ $ docker compose ps | grep "tor\|NAME"
 
 ---
 
+## SSH remote access through Tor (optional)
+
+If you want to log into your MobyBolt with SSH when you're away, you can easily do so by adding a Tor hidden service.
+This makes "calling home" very easy, without the need to configure anything on your internet router.
+
+### SSH server
+
+- Add the following lines at the end of the `torrc` file:
+Save and exit
+
+  ```sh
+  $ nano tor/torrc
+  ```
+
+  ```conf
+  # Hidden Service SSH server
+  HiddenServiceDir /var/lib/tor/hidden_service_sshd/
+  HiddenServiceVersion 3
+  HiddenServicePoWDefensesEnabled 1
+  HiddenServicePort 22 host.docker.internal:22
+
+  ```
+
+- Check the new configuration:
+
+  ```sh
+  $ docker compose exec -it tor tor --verify-config
+  > ...
+  > Configuration was valid
+  ```
+
+- Restart Tor container:
+
+  ```sh
+  $ docker compose restart tor
+  >[+] Restarting 1/1
+  > ✔ Container mobybolt_tor  Started
+  ```
+
+- Look up your Tor connection address:
+  
+  ```sh  
+  $ docker compose exec -it tor cat /var/lib/tor/hidden_service_sshd/hostname
+  > abcdefg..............xyz.onion
+  ```
+  
+  {:.hint}
+  Save the Tor address in a secure location, e.g., your password manager.
+
+### SSH client
+
+You also need to have Tor installed on your regular computer where you start the SSH connection.
+Usage of SSH over Tor differs by client and operating system.
+
+A few examples:
+
+- **Windows**: configure PuTTY as described in this guide [Torifying PuTTY](https://gitlab.torproject.org/legacy/trac/-/wikis/doc/TorifyHOWTO/Putty){:target="_blank"} by the Tor Project.
+
+  {:.note}
+  If you are using PuTTy and fail to connect to your MobyBolt PC by setting port 9050 in the PuTTy proxy settings, try setting port 9150 instead. When Tor runs as an installed application instead of a background process it uses port 9150.
+
+- **Linux**: use `torify` or `torsocks`.
+  Both work similarly; just use whatever you have available:
+
+  ```sh
+  $ torify ssh admin@abcdefg..............xyz.onion
+  ```
+
+  ```sh
+  $ torsocks ssh admin@abcdefg..............xyz.onion
+  ```
+
+- **macOS**: Using `torify` or `torsocks` may not work due to Apple's *System Integrity Protection (SIP)* which will deny access to `/usr/bin/ssh`.
+
+  To work around this, first make sure Tor is installed and running on your Mac:
+
+  ```sh
+  $ brew install tor && brew services start tor
+  ```
+
+  You can SSH to your MobyBolt PC "out of the box" with the following proxy command:
+
+  ```sh
+  $ ssh -o "ProxyCommand nc -X 5 -x 127.0.0.1:9050 %h %p" admin@abcdefg..............xyz.onion
+  ```
+
+  For a more permanent solution, add these six lines below to your local SSH config file. Choose any HOSTNICKNAME you want, save and exit.
+
+  ```sh
+  $ sudo nano .ssh/config
+  ```
+
+  ```sh
+  Host HOSTNICKNAME
+    Hostname abcdefg..............xyz.onion
+    User admin
+    Port 22
+    CheckHostIP no
+    ProxyCommand /usr/bin/nc -x localhost:9050 %h %p
+  ```
+
+  Restart Tor
+
+  ```sh
+  $ brew services restart tor
+  ```
+
+  You should now be able to SSH to your MobyBolt PC with
+
+  ```sh
+  $ ssh HOSTNICKNAME
+  ```
+
+---
+
 ## Upgrade
 
-Check the [Tor Project](https://www.torproject.org/download/tor/){: target="_blank"} for a new version and change the `TOR_VERSION` value in the `.env` file.
+Check the [Tor Project](https://www.torproject.org/download/tor/){:target="_blank"} for a new version and change the `TOR_VERSION` value in the `.env` file.
 Then, redo the steps described in:
 
 1. [Build](#build)
@@ -491,7 +613,7 @@ Follow the next steps to uninstall tor:
    > mobybolt_tor-data
    ```
 
-   {: .warning}
+   {:.warning}
    This will delete all tor data, including hidden services that have already been configured.
 
 5. Remove files and directories (optional):
@@ -502,6 +624,6 @@ Follow the next steps to uninstall tor:
 
 ---
 
-{: .d-flex .flex-justify-between}
+{:.d-flex .flex-justify-between}
 [<< Reverse proxy](reverse-proxy)
 [I2P project >>](i2p-project)
