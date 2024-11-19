@@ -328,5 +328,5 @@ Follow the next steps to uninstall nginx:
 ---
 
 {: .d-flex .flex-justify-between}
-[<< Project setup](project-setup)
+[<< Project backup](project-backup)
 [Tor project >>](tor-project)
