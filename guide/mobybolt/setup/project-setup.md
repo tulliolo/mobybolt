@@ -52,6 +52,8 @@ NETWORK_FRONTEND_GATEWAY=172.16.21.129
 
 ```
 
+In this file, we define the `frontend` and `backend` network parameters, as defined [here](../../mobybolt#network-isolation).
+
 ### Create the docker compose file
 
 Create the base [docker compose file](https://docs.docker.com/compose/compose-file/compose-file-v3/){:target="_blank"} and populate it as follows:
@@ -80,65 +82,83 @@ networks:
 
 ```
 
-- The `docker compose` command will automatically load all the environment variables contained in the `.env` file.
+In this file, we prepare the creation of the `frontend` and `backend` networks, as defined [here](../../mobybolt#network-isolation).
 
-- The `docker compose` command will operate on the `docker-compose.yml` file located in the same directory where it is run. The `include` directive in the file `docker-compose.yml` will allow us to include the [YAML](https://yaml.org/){:target="_blank"} files of the Docker services that we will deploy later.
+The `docker compose` command will automatically load all the environment variables contained in the `.env` file.
+
+The `docker compose` command will operate on the `docker-compose.yml` file located in the same directory where it is run. The `include` directive in the file `docker-compose.yml` will allow us to include the [YAML](https://yaml.org/){:target="_blank"} files of the Docker services that we will deploy later.
 
 ---
 
-## Networking details
+## Uninstall
 
-The `docker compose` command will create two project networks with the following values:
+You can follow the next steps to uninstall the whole suite:
 
-**Name** | **Type** | **Addressing** | **Subnet** | **Gateway** |
-:---:|:---:|:---:|:---:|:---:
-**backend** | internal | static | 172.16.21.0-127 | |
-**frontend** | external | dynamic | 172.16.21.128-255 | 172.16.21.129 |
+{:.important}
+If you have an active Lightning node, make sure you have a backup of all the data you need to recover the funds.
 
-- Docker relies on networks for internal container communication.
+1. Log in to your node as `admin` user via Secure Shell (SSH) and access the project's home:
 
-- Containers that reside on the same network will be able to reach each other using either the IP address or the name of the service (e.g. `172.16.21.2` or `nginx`).
+   ```sh
+   $ cd apps/mobybolt
+   ```
 
-- Containers attached to an `internal` network won't directly have external visibility, they can reach (or be reached from) the outside through another container, e.g. tor, attached to an `external` network.
+2. Remove all the running services:
 
-- Containers that need to reach the outside shall be in an `external` network and, if they need to be reached from the outside, they must publish a port via the `docker-compose.yml` file (Docker will automatically handle NAT, firewall, and port forwarding).
+   ```sh
+   $ docker compose down
+   > [+] Running n/m
+   > ✔ Container mobybolt_nginx   Removed 
+   > ✔ Container mobybolt_tor     Removed
+   > ...
+   > ✔ Network mobybolt_frontend  Removed 
+   > ✔ Network mobybolt_backend   Removed 
+   ```
 
-- Containers will automatically receive a **dynamic IP address** for each network the are attached to, or they can specify a **static IP address** in the `docker-compose.yml` file.
+3. Remove all the images:
 
-### Addressing policies
+   ```sh
+   $ docker image rm $(docker images | grep 'mobybolt\|nginx\|i2pd' | awk '{print $3}')
+   > ...
+   > Untagged: mobybolt/tor:0.4.8.13
+   > Deleted: sha256:ee5c4a10bdd0653c0482192a97d5e16c570c7389f323f3008b9c76cab7a8eaf9
+   > Untagged: nginx:latest
+   > Deleted: sha256:2c250073ded2286f819a9c025bfe9d87250d1f7a37ab236a7b61aec31e4c63d8
+   > ...
+   ```
 
-A **dynamic addressing** will be used for the **frontend external network**.
+4. Clear the build cache:
 
-A **static addressing** (generally not necessary, since services can be invoked by name) will be used for the **backend internal network**. In fact:
-- if you wanted to implement the (optional) configuration in Bitcoin Knots/Core to reject non-private networks, name resolution would be disabled and you could only reach the other containers via the IP address (which will therefore have to be static);
-- with a dynamic addressing, we could have problems with nginx and tor, which will be the only access points from the outside to all the services. If we wanted to temporarily disable a non-mandatory service (e.g. BTC RPC Explorer) nginx and tor would no longer be able to resolve its name and would fail.
+   ```sh
+   $ docker buildx prune
+   > WARNING! This will remove all dangling build cache. Are you sure you want to continue? [y/N] y
+   > ID                                              RECLAIMABLE     SIZE            LAST ACCESSED
+   > r4y2gpo6s0x0kjysuktg38z8y                       true            398B            6 hours ago
+   > in97ma2g57e956xc84k8mu0hv                       true            15.38kB         44 hours ago
+   > ...
+   ``` 
 
-### Connecting services to networks
+5. Remove all the volumes (optional):
 
-Below, a brief outline of how the services we will implement will be connected to the networks:
+   {:.warning}
+   This will remove all the persistent data (e.g. the blockchain). Don't do this if you plan to reinstall.
 
-| | **frontend** | **backend** |
-:---:|:---:|:---:
-| **nginx** | &#10004; | &#10004; |
-| **tor** | &#10004; | &#10004; |
-| **i2p** | &#10004; | &#10004; |
-| **bitcoin** | x | &#10004; |
-| **lightning** | x | &#10004; |
+   ```sh
+   $ docker volume rm $(docker volume ls | grep mobybolt | awk '{print $2}')
+   > ...
+   > mobybolt_tor-data
+   > ...
+   ```
 
-With this configuration we will ensure that:
-- only nginx, tor and i2p will reach (and be reached from) the outside;
-- all the other services:
-  - will reach the outside only through tor or i2p
-  - will be reached from the outside only through nginx, tor or i2p
+6. Remove files and directories (optional):
 
-<br/>
-
-{: .text-center}
-**This is great for privacy!**
-{: .fs-6}
+   ```sh
+   $ cd
+   $ rm -rf apps/mobybolt
+   ```
 
 ---
 
 {: .d-flex .flex-justify-between}
 [<< Docker](../../system/docker)
-[Reverse proxy (nginx) >>](reverse-proxy)
+[Project backup >>](project-backup)

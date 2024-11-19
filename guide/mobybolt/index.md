@@ -88,11 +88,15 @@ In addition, each container will run as a different **non-root user**, which is 
 
 The isolation of containers is also in terms of **network**: two containers will not be able to communicate with each other unless they are part of the same network.
 
+{:.note}
+For each defined network, Docker will automatically manage NAT, firewall and port forwarding.
+
 Docker allows you to create networks of the following types:
 
 - **external**: 
   - for services that require external visibility
-  - these services will be able to reach or be reached from the outside
+  - these services will be able to reach from the outside
+  - these services will be able to be reached from the outside exposing a port
 
 - **internal**:
   - for services that do not require external connectivity
@@ -101,3 +105,46 @@ Docker allows you to create networks of the following types:
 
 {:.more}
 [Networking in Docker](https://docs.docker.com/engine/network/){:.target="_blank"}
+
+MobyBolt will create the following networks:
+
+**Name**|**Type**|**Addressing**|**Subnet**|**Gateway**|
+:---:|:---:|:---:|:---:|:---:
+**backend**|internal|static|172.16.21.0-127||
+**frontend**|external|dynamic|172.16.21.128-255|172.16.21.129|
+
+{:.note}
+>A **static addressing** (generally not necessary, since services can be invoked by name) will be used for the **backend internal network**. In fact:
+>- if you wanted to implement the (optional) configuration in Bitcoin Knots/Core to reject non-private networks, name resolution would be disabled and you could only reach the other containers via the IP address (which will therefore have to be static);
+>- with a dynamic addressing, we could have problems with nginx and tor, which will be the only access points from the outside to all the services. If we wanted to temporarily disable a non-mandatory service (e.g. BTC RPC Explorer) nginx and tor would no longer be able to resolve its name and would fail.
+
+MobyBolt applications will be attested to networks as follows:
+
+||**frontend**|**backend**|
+:---:|:---:|:---:
+| **nginx**|&#10004;|&#10004;|
+| **tor**|&#10004;|&#10004;|
+| **i2p**|&#10004;|&#10004;|
+|**bitcoin client**||&#10004;|
+|**electrum server**||&#10004;|
+|**blockchain explorer**||&#10004;|
+|**lightning client**||&#10004;|
+|**lightning webapp**||&#10004;|
+
+With this configuration we will ensure that:
+- only nginx, tor and i2p will reach (and be reached from) the outside;
+- all the other services:
+  - will reach the outside only through tor or i2p
+  - will be reached from the outside only through nginx, tor or i2p
+
+<br/>
+
+{: .text-center}
+**This is great for privacy!**
+{: .fs-6}
+
+---
+
+{: .d-flex .flex-justify-between}
+[<< Docker](../system/docker)
+[Project setup >>](./setup/project-setup)

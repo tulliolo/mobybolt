@@ -179,4 +179,4 @@ In this guide, all operations will be performed from the command line. If you pr
 
 {: .d-flex .flex-justify-between}
 [<< Configuration](configuration)
-[Project setup >>](../mobybolt/setup/project-setup)
+[MobyBolt >>](../mobybolt)
