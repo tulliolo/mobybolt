@@ -25,7 +25,7 @@ We schedule a daily backup, either local and remote, for the MobyBolt apps.
 
 ## Create the directory structure
 
-Log in to your node as `admin` user via Secure Shell (SSH) and create the directory structure:
+Log in to your node as `satoshi` user via Secure Shell (SSH) and create the directory structure:
 
 ```sh
 $ mkdir -p $HOME/apps/tools/backup
@@ -234,27 +234,27 @@ The path should be:
 
 ##### Transfer the Rclone config file in Windows
 
-Install a sftp client like [FileZilla](https://filezilla-project.org/){:target="_blank"} and follow the [instructions](https://wiki.filezilla-project.org/FileZilla_Client_Tutorial_(en)){:target="_blank"} to copy the Rclone config file in the MobyBolt PC at `/home/admin/apps/tools/backup/`
+Install a sftp client like [FileZilla](https://filezilla-project.org/){:target="_blank"} and follow the [instructions](https://wiki.filezilla-project.org/FileZilla_Client_Tutorial_(en)){:target="_blank"} to copy the Rclone config file in the MobyBolt PC at `/home/satoshi/apps/tools/backup/`
 
 ##### Transfer the Rclone config file in Linux/MacOs
 
 Open a terminal and follow the next steps:
 ```sh
 $ cd .config/rclone
-$ sftp admin@mobybolt.local
+$ sftp satoshi@mobybolt.local
 Connected to mobybolt.local.
 sftp> cd apps/tools/backup/config
 sftp> pwd
-Remote working directory: /home/admin/apps/tools/backup
+Remote working directory: /home/satoshi/apps/tools/backup
 sftp> put rclone.config
-Uploading rclone.config to /home/admin/apps/tools/backup/rclone.config
+Uploading rclone.config to /home/satoshi/apps/tools/backup/rclone.config
 rclone.config
 sftp> exit
 ```
 
 ### Create the systemd unit file
 
-Log in to your node as `admin` user via Secure Shell (SSH) and access the backup directory:
+Log in to your node as `satoshi` user via Secure Shell (SSH) and access the backup directory:
 
 ```sh
 $ cd $HOME/apps/tools/backup
@@ -282,14 +282,14 @@ Requires=docker.service
 
 [Service]
 Type=oneshot
-User=admin
-Group=admin
+User=satoshi
+Group=satoshi
 ExecStart=docker run --pull always --rm \
-    --volume /home/admin/apps/tools/backup/rclone.conf:/config/rclone/rclone.conf:ro \
-    --volume /home/admin/apps/:/data/:ro \
+    --volume /home/satoshi/apps/tools/backup/rclone.conf:/config/rclone/rclone.conf:ro \
+    --volume /home/satoshi/apps/:/data/:ro \
     --user 1000:1000 \
     rclone/rclone \
-    sync -lv --exclude **/.git/** --delete-excluded /data/ gDriveCrypt:mobybolt/home/admin/apps/
+    sync -lv --exclude **/.git/** --delete-excluded /data/ gDriveCrypt:mobybolt/home/satoshi/apps/
 ExecStop=docker image prune -f
 
 [Install]
@@ -324,8 +324,8 @@ WantedBy=timers.target
 Install the systemd files by typing:
 
 ```sh
-$ sudo ln -s /home/admin/apps/tools/backup/backup-remote.service /etc/systemd/system/backup-remote.service
-$ sudo ln -s /home/admin/apps/tools/backup/backup-remote.timer /etc/systemd/system/backup-remote.timer
+$ sudo ln -s /home/satoshi/apps/tools/backup/backup-remote.service /etc/systemd/system/backup-remote.service
+$ sudo ln -s /home/satoshi/apps/tools/backup/backup-remote.timer /etc/systemd/system/backup-remote.timer
 ```
 
 Test the backup service:

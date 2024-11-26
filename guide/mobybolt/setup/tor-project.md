@@ -30,7 +30,7 @@ It is called "Tor" for "The Onion Router": information is routed through many ho
 
 The Tor network also hosts hidden services, which can be reached via an "onion" address.
 
-To follow this section, log in to your node as `admin` user via Secure Shell (SSH) and access the project's home:
+To follow this section, log in to your node as `satoshi` user via Secure Shell (SSH) and access the project's home:
 
 ```sh
 $ cd $HOME/apps/mobybolt
@@ -489,11 +489,11 @@ A few examples:
   Both work similarly; just use whatever you have available:
 
   ```sh
-  $ torify ssh admin@abcdefg..............xyz.onion
+  $ torify ssh satoshi@abcdefg..............xyz.onion
   ```
 
   ```sh
-  $ torsocks ssh admin@abcdefg..............xyz.onion
+  $ torsocks ssh satoshi@abcdefg..............xyz.onion
   ```
 
 - **macOS**: Using `torify` or `torsocks` may not work due to Apple's *System Integrity Protection (SIP)* which will deny access to `/usr/bin/ssh`.
@@ -507,7 +507,7 @@ A few examples:
   You can SSH to your MobyBolt PC "out of the box" with the following proxy command:
 
   ```sh
-  $ ssh -o "ProxyCommand nc -X 5 -x 127.0.0.1:9050 %h %p" admin@abcdefg..............xyz.onion
+  $ ssh -o "ProxyCommand nc -X 5 -x 127.0.0.1:9050 %h %p" satoshi@abcdefg..............xyz.onion
   ```
 
   For a more permanent solution, add these six lines below to your local SSH config file. Choose any HOSTNICKNAME you want, save and exit.
@@ -519,7 +519,7 @@ A few examples:
   ```sh
   Host HOSTNICKNAME
     Hostname abcdefg..............xyz.onion
-    User admin
+    User satoshi
     Port 22
     CheckHostIP no
     ProxyCommand /usr/bin/nc -x localhost:9050 %h %p

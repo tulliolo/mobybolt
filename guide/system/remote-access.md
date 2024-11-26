@@ -52,7 +52,7 @@ Now it's time to connect to the MobyBolt via Secure Shell (SSH) and get to work.
 
 | hostname | mobybolt.local (or IP address) |
 | port | 22 |
-| username | admin |
+| username | satoshi |
 | password | Password [ A ] |
 
 ### Access with Secure Shell in Linux/MacOS
@@ -60,14 +60,14 @@ Now it's time to connect to the MobyBolt via Secure Shell (SSH) and get to work.
 Open a terminal and type:
 
 ```sh
-$ ssh admin@mobybolt.local
+$ ssh satoshi@mobybolt.local
 
 > The authenticity of host 'mobybolt.local (192.168.122.58)' can't be established.
 > ED25519 key fingerprint is SHA256:RbaJtfc7Xl0OM7VIDZj8WfvT8HhzRyRWK1pbs5BJp+M.
 > This key is not known by any other names.
 > Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 > Warning: Permanently added 'mobybolt.local' (ED25519) to the list of known hosts.
-> admin@mobybolt.local's password: 
+> satoshi@mobybolt.local's password: 
 > ...
 ```
 
@@ -76,7 +76,7 @@ Type `yes` when the security banner appears (only the first time) and then inser
 :bulb: if you have problems logging in, you can try using the IP address in the form `192.168.X.Y`, instead of `mobybolt.local`, for example:
 
 ```sh
-$ ssh admin@192.168.122.58
+$ ssh satoshi@192.168.122.58
 
 > The authenticity of host '192.168.122.58 (192.168.122.58)' can't be established.
 > ED25519 key fingerprint is SHA256:RbaJtfc7Xl0OM7VIDZj8WfvT8HhzRyRWK1pbs5BJp+M.
@@ -84,7 +84,7 @@ $ ssh admin@192.168.122.58
 >     ~/.ssh/known_hosts:8: mobybolt.local
 > Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 > Warning: Permanently added '192.168.122.58' (ED25519) to the list of known hosts.
-> admin@192.168.122.58's password: 
+> satoshi@192.168.122.58's password: 
 > ...
 ```
 
@@ -95,7 +95,7 @@ Download and install [Putty](https://www.putty.org/){: target="_blank"}.
 Start Putty. 
 
 To the left tree, select `Session` and type the following values in the boxes to the right:
-- `Hostname (or IP Address)`: `admin@mobybolt.local` (or the IP Address in the form `admin@192.168.X.Y`)
+- `Hostname (or IP Address)`: `satoshi@mobybolt.local` (or the IP Address in the form `satoshi@192.168.X.Y`)
 - `Port`: 22
 
 Press the button `OPEN`. When a `PuTTy security alert` banner appears, press the `Accept` button and finally type your `Password [ A ]`
@@ -138,8 +138,8 @@ $ ls -la
 - **Common Linux commands**:
   For a very selective reference list of Linux commands, please refer to this [guide](https://www.geeksforgeeks.org/linux-commands-cheat-sheet/){: target="_blank"}.
 
-- **Use admin privileges**:
-  Our regular user has no direct admin privileges.
+- **Use satoshi privileges**:
+  Our regular user has no direct satoshi privileges.
   If a command needs to edit the system configuration, we must use the `sudo` ("superuser do") command as a prefix.
   Instead of editing a system file with `nano /etc/fstab`, we use `sudo nano /etc/fstab`.
 

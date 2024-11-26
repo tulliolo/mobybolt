@@ -24,7 +24,7 @@ We create the base directory structure and files.
 
 ## Create the base files and directories
 
-Log in to your node as `admin` user via Secure Shell (SSH).
+Log in to your node as `satoshi` user via Secure Shell (SSH).
 
 Create the base directory structure and access it:
 
@@ -97,7 +97,7 @@ You can follow the next steps to uninstall the whole suite:
 {:.important}
 If you have an active Lightning node, make sure you have a backup of all the data you need to recover the funds.
 
-1. Log in to your node as `admin` user via Secure Shell (SSH) and access the project's home:
+1. Log in to your node as `satoshi` user via Secure Shell (SSH) and access the project's home:
 
    ```sh
    $ cd apps/mobybolt

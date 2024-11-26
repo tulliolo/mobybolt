@@ -23,12 +23,12 @@ You are now on the command line of your own Bitcoin node. Let's start with the c
 
 ## Create a new connection
 
-We will use the primary user `admin` which we already configured in the MobyBolt PC (see [Configure the admin user](operating-system#configure-the-admin-user) section).
+We will use the primary user `satoshi` which we already configured in the MobyBolt PC (see [Configure the satoshi user](operating-system#configure-the-satoshi-user) section).
 
-- Log in again using SSH (see [Access with Secure Shell](remote-access#access-with-secure-shell) section), with user `admin` and your `password [A]`
+- Log in again using SSH (see [Access with Secure Shell](remote-access#access-with-secure-shell) section), with user `satoshi` and your `password [A]`
 
   ```sh
-  $ ssh admin@mobybolt.local
+  $ ssh satoshi@mobybolt.local
   ```
 
 - You can exit your session any time with
@@ -40,7 +40,7 @@ We will use the primary user `admin` which we already configured in the MobyBolt
 <br/>
 
 {: .note}
-To change the system configuration and files that don't belong to user `admin`, you have to prefix commands with `sudo`.
+To change the system configuration and files that don't belong to user `satoshi`, you have to prefix commands with `sudo`.
 You will be prompted to enter your `Password [ A ]` from time to time for increased security.
 
 ---
@@ -165,7 +165,7 @@ After specifying your private key file in the PuTTY configuration, you’re all 
 - The public key now needs to be copied to the MobyBolt PC. Use the command `ssh-copy-id`, which stores your public key on the remote machine (and creates files and directories, if needed). You will be prompted for your SSH login password once.
 
   ```sh
-  $ ssh-copy-id admin@mobybolt.local
+  $ ssh-copy-id satoshi@mobybolt.local
   ```
 
   {: .hint}
@@ -177,7 +177,7 @@ After specifying your private key file in the PuTTY configuration, you’re all 
 
 ### Disable password login
 
-- Log in to the MobyBolt PC as `admin` using SSH with your SSH key. You shouldn't be prompted for the admin's password anymore.
+- Log in to the MobyBolt PC as `satoshi` using SSH with your SSH key. You shouldn't be prompted for the satoshi's password anymore.
 
 - Edit the ssh configuration file `/etc/ssh/sshd_config` to harden our security:
 
@@ -205,9 +205,9 @@ After specifying your private key file in the PuTTY configuration, you’re all 
   $ exit
   ```
 
-- Log in again with user `admin`
+- Log in again with user `satoshi`
 
-You can no longer log in with a password. User `admin` is the only user that has the necessary SSH keys, no other user can log in remotely.
+You can no longer log in with a password. User `satoshi` is the only user that has the necessary SSH keys, no other user can log in remotely.
 
 {: .important}
 Backup your SSH keys! You will need to attach a screen and keyboard to your MobyBolt PC if you lose them.
@@ -261,10 +261,10 @@ We will disable root access for security reasons.
 
   ```sh
   $ sudo su -
-  > [sudo] password for admin:
+  > [sudo] password for satoshi:
   ```
 
-- Type `exit`, to return to the admin shell:
+- Type `exit`, to return to the satoshi shell:
 
   ```sh
   $ exit
@@ -292,7 +292,7 @@ For now, only SSH and Avahi should be reachable from the outside.
 >
 >For more information, see: [Docker and UFW](https://docs.docker.com/engine/network/packet-filtering-firewalls/#docker-and-ufw){:target="_blank"}
 
-- With user `admin`, configure and enable the firewall rules:
+- With user `satoshi`, configure and enable the firewall rules:
 
   {: .hint}
   If you are seeing: `ERROR: Couldn't determine iptables version` you may need to reboot after installing `UFW`.

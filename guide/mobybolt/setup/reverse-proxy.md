@@ -20,7 +20,7 @@ We use nginx to encrypt the communication with SSL/TLS (Transport Layer Security
 {: .note}
 Even if some services, such as Fulcrum, natively support encrypted communication, for simplicity and architectural cleanliness, we will still use nginx as a single point of access to all services.
 
-To follow this section, log in to your node as `admin` user via Secure Shell (SSH) and access the project's home:
+To follow this section, log in to your node as `satoshi` user via Secure Shell (SSH) and access the project's home:
 
 ```sh
 $ cd $HOME/apps/mobybolt

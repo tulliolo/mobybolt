@@ -103,13 +103,13 @@ Now we can install Docker and Docker Compose by following the next steps:
    > Processing triggers for libc-bin (2.36-9+deb12u4) ...
    ```
 
-3. Add the `admin` user to the `docker` group:
+3. Add the `satoshi` user to the `docker` group:
 
    ```sh
-   $ sudo usermod -a -G docker admin
+   $ sudo usermod -a -G docker satoshi
    $ su - $USER
    $ groups
-   > admin adm cdrom floppy sudo audio dip video plugdev users netdev docker
+   > satoshi adm cdrom floppy sudo audio dip video plugdev users netdev docker
    ```
 
 4. Verify that the installation is successful by running the `hello-world` image:
