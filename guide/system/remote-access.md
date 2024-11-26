@@ -73,20 +73,21 @@ $ ssh satoshi@mobybolt.local
 
 Type `yes` when the security banner appears (only the first time) and then insert `Password [ A ]` when prompted. 
 
-:bulb: if you have problems logging in, you can try using the IP address in the form `192.168.X.Y`, instead of `mobybolt.local`, for example:
-
-```sh
-$ ssh satoshi@192.168.122.58
-
-> The authenticity of host '192.168.122.58 (192.168.122.58)' can't be established.
-> ED25519 key fingerprint is SHA256:RbaJtfc7Xl0OM7VIDZj8WfvT8HhzRyRWK1pbs5BJp+M.
-> This host key is known by the following other names/addresses:
->     ~/.ssh/known_hosts:8: mobybolt.local
-> Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-> Warning: Permanently added '192.168.122.58' (ED25519) to the list of known hosts.
-> satoshi@192.168.122.58's password: 
-> ...
-```
+{:.hint}
+>If you have problems logging in, you can try using the IP address in the form `192.168.X.Y`, instead of `mobybolt.local`, for example:
+>
+>```sh
+>$ ssh satoshi@192.168.122.58
+>
+>> The authenticity of host '192.168.122.58 (192.168.122.58)' can't be established.
+>> ED25519 key fingerprint is SHA256:RbaJtfc7Xl0OM7VIDZj8WfvT8HhzRyRWK1pbs5BJp+M.
+>> This host key is known by the following other names/addresses:
+>>     ~/.ssh/known_hosts:8: mobybolt.local
+>> Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+>> Warning: Permanently added '192.168.122.58' (ED25519) to the list of known hosts.
+>> satoshi@192.168.122.58's password: 
+>> ...
+>```
 
 ### Access with Secure Shell in Windows
 
@@ -96,7 +97,7 @@ Start Putty.
 
 To the left tree, select `Session` and type the following values in the boxes to the right:
 - `Hostname (or IP Address)`: `satoshi@mobybolt.local` (or the IP Address in the form `satoshi@192.168.X.Y`)
-- `Port`: 22
+- `Port`: `22`
 
 Press the button `OPEN`. When a `PuTTy security alert` banner appears, press the `Accept` button and finally type your `Password [ A ]`
 
