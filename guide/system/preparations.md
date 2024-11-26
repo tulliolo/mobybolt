@@ -29,14 +29,14 @@ Although using orchestrators such as [Docker Swarm](https://docs.docker.com/engi
 
 You need the following **minimal hardware**:
 
-- **Personal Computer** with x86_64 CPU and 4+ GB RAM
+- **Personal Computer** with x86_64 CPU and 8+ GB RAM
 - **Internal storage**: 2+ TB, an SSD is recommended
 - **Pen drive**: 4+ GB
 - **Temporary monitor** screen or television
 - **Temporary keyboard** USB/PS2
 
 {: .hint}
-If you want to start with a single storage, and then install the secondary storage later, you can follow this [bonus guide](../bonus/system/migrate-docker-data).
+If you don't have secondary storage for your data, you can get it later and install it by following this [bonus guide](../bonus/system/migrate-docker-data).
 
 You should get the following **recommended hardware**:
 
@@ -48,7 +48,7 @@ You should get the following **recommended hardware**:
 - **Temporary keyboard** USB/PS2
 
 {: .important}
-It is **highly recommended** to have the **secondary storage for data** ([Docker objects](docker#overview) such as images, containers, networks and volumes with all the related data - e.g. timechain, Fulcrum database, etc...). This configuration will simplify portability and restore of all the Docker services in the event of a migration to a new PC, or operating system / primary disk issues.
+It is **highly recommended** to have the **secondary storage for data** ([Docker objects](docker#overview) such as images, containers, networks and volumes with all the related data - e.g. timechain, Fulcrum database, etc...). This configuration will simplify the portability and restore of all the Docker services in the event of a migration to a new PC, or operating system / primary disk issues.
 
 You might also want to get this **optional hardware**:
 
