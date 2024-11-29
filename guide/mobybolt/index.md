@@ -72,7 +72,7 @@ Below is a map of the direct/strong dependencies of each service:
 |**bitcoin client**||D|D||||||
 |**electrum server**||||D|||||
 |**blockchain explorer**||||D|D||||
-|**lightning client**||D||D|||||
+|**lightning client**||||D|||||
 |**lightning webapp**|||||||D||
 
 ---
@@ -129,19 +129,7 @@ MobyBolt applications will be attested to networks as follows:
 |**electrum server**||&#10004;|
 |**blockchain explorer**||&#10004;|
 |**lightning client**||&#10004;|
-|**lightning webapp**||&#10004;|
-
-With this configuration we will ensure that:
-- only nginx, tor and i2p will reach (and be reached from) the outside;
-- all the other services:
-  - will reach the outside only through tor or i2p
-  - will be reached from the outside only through nginx, tor or i2p
-
-<br/>
-
-{: .text-center}
-**This is great for privacy!**
-{: .fs-6}
+|**lightning webapp**|&#10004;|&#10004;|
 
 ---
 
