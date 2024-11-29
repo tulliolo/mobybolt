@@ -160,5 +160,5 @@ If you have an active Lightning node, make sure you have a backup of all the dat
 ---
 
 {: .d-flex .flex-justify-between}
-[<< Docker](../../system/docker)
+[<< MobyBolt](../)
 [Project backup >>](project-backup)
