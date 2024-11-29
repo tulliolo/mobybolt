@@ -9,7 +9,7 @@ parent: System
 # Configuration
 {: .no_toc}
 
-You are now on the command line of your own Bitcoin node. Let's start with the configuration.
+You are now on the command line of your own MobyBolt node. Let's start with the configuration.
 
 ---
 
@@ -23,7 +23,7 @@ You are now on the command line of your own Bitcoin node. Let's start with the c
 
 ## Create a new connection
 
-We will use the primary user `satoshi` which we already configured in the MobyBolt PC (see [Configure the satoshi user](operating-system#configure-the-satoshi-user) section).
+We will use the primary user `satoshi` which we already configured in the MobyBolt PC.
 
 - Log in again using SSH (see [Access with Secure Shell](remote-access#access-with-secure-shell) section), with user `satoshi` and your `password [A]`
 
@@ -214,11 +214,7 @@ Backup your SSH keys! You will need to attach a screen and keyboard to your Moby
 
 ---
 
-## Disable root access
-
-We will disable root access for security reasons.
-
-### Disable SSH root access
+## Disable SSH root access
 
 - Type the following command:
 
@@ -239,41 +235,6 @@ We will disable root access for security reasons.
   ```sh
   $ sudo systemctl restart sshd
   ```
-
-### Disable root password
-
-- Type the following command:
-
-  ```sh
-  $ sudo passwd -l root
-  > passwd: password changed.
-  ```
-
-- Try to become root using the root password defined during [installation](operating-system#install-debian) (you shouldn't be able to do this):
-  
-  ```sh
-  $ su -
-  > Password: 
-  > su: Authentication failure
-  ```
-  
-- Try to become root using `sudo` and `Password [ A ]` :
-
-  ```sh
-  $ sudo su -
-  > [sudo] password for satoshi:
-  ```
-
-- Type `exit`, to return to the satoshi shell:
-
-  ```sh
-  $ exit
-  ```
-
-<br/>
-
-{: .note}
-From now on you will only have root access using `sudo` and `Password [ A ]`:
 
 ---
 
@@ -340,13 +301,29 @@ The SSH login to the MobyBolt PC must be specially protected.
 An additional measure is to install "fail2ban", which prevents an attacker from gaining access via brute force.
 It simply cuts off any remote system with five failed login attempts for ten minutes.
 
-- Install "fail2ban", which activates automatically
+- Install fail2ban, which activates automatically
 
   ```sh
   $ sudo apt install -y fail2ban
   ```
 
-The initial configuration is fine, as it protects SSH by default.
+- Edit the fail2ban configuration file, which should look like this:
+
+  ```sh
+  $ sudo nano /etc/fail2ban/jail.d/defaults-debian.conf
+  ```
+  
+  ```config
+  [sshd]
+  backend = systemd
+  enabled = true
+  ```
+
+- Restart fail2ban:
+
+  ```sh
+  $ sudo systemctl restart fail2ban
+  ```
 
 {: .more}
 For more information, see: [customize fail2ban configuration](https://linode.com/docs/security/using-fail2ban-for-security/){:target="_blank"}
