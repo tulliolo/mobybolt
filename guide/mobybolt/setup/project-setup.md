@@ -29,7 +29,7 @@ Log in to your node as `satoshi` user via Secure Shell (SSH).
 Create the base directory structure and access it:
 
    ```sh
-   $ mkdir -m 700 -p apps/mobybolt
+   $ mkdir -p apps/mobybolt
    $ cd apps/mobybolt
    ```
 
@@ -49,7 +49,6 @@ NETWORK_BACKEND_SUBNET=172.16.21.0/25
 
 NETWORK_FRONTEND_SUBNET=172.16.21.128/25
 NETWORK_FRONTEND_GATEWAY=172.16.21.129
-
 ```
 
 In this file, we define the `frontend` and `backend` network parameters, as defined [here](../../mobybolt#network-isolation).
@@ -79,7 +78,6 @@ networks:
     ipam:
       config:
         - subnet: ${NETWORK_BACKEND_SUBNET}
-
 ```
 
 In this file, we prepare the creation of the `frontend` and `backend` networks, as defined [here](../../mobybolt#network-isolation).
@@ -87,6 +85,18 @@ In this file, we prepare the creation of the `frontend` and `backend` networks, 
 The `docker compose` command will automatically load all the environment variables contained in the `.env` file.
 
 The `docker compose` command will operate on the `docker-compose.yml` file located in the same directory where it is run. The `include` directive in the file `docker-compose.yml` will allow us to include the [YAML](https://yaml.org/){:target="_blank"} files of the Docker services that we will deploy later.
+
+### Test the docker compose file
+
+Run the following command and check the output:
+
+```sh
+$ docker compose config --quiet && printf "OK\n" || printf "ERROR\n"
+> OK
+```
+
+{: .hint}
+If the output is `ERROR`, check the error reported... Maybe some wrong indentation in the yaml files?
 
 ---
 
@@ -141,7 +151,7 @@ If you have an active Lightning node, make sure you have a backup of all the dat
 5. Remove all the volumes (optional):
 
    {:.warning}
-   This will remove all the persistent data (e.g. the blockchain). Don't do this if you plan to reinstall.
+   This will remove all the persistent data (e.g. the blockchain, the lnd data ecc...). Don't do this if you plan to reinstall.
 
    ```sh
    $ docker volume rm $(docker volume ls | grep mobybolt | awk '{print $2}')
