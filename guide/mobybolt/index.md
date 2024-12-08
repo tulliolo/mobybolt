@@ -41,18 +41,18 @@ The MobyBolt guide is divided into three main categories:
 2. **[Bitcoin](bitcoin)**: setup of Bitcoin-related services (Layer 1)
 3. **[Lightning](lightning)**, setup of Lightning-related services (Layer 2)
 
-Below is the map of the services that we are going to install in the various categories:
+Below is the map of the default services that we are going to install in the various categories (you can find additional or alternative services for each category in our [bonus section](../bonus)):
 
-|**Service**|**Category**|
-|:---|:---|
-|**[nginx](setup/reverse-proxy)**|setup|
-|**[tor](setup/tor-project)**|setup|
-|**[i2p](setup/i2p-project)**|setup|
-|**[bitcoin client](bitcoin/bitcoin-knots)**|bitcoin|
-|**[electrum server](bitcoin/fulcrum)**|bitcoin|
-|**[blockchain explorer](bitcoin/btcrpcexplorer)**|bitcoin|
-|**[lightning client](lightning/lnd)**|lightning|
-|**[lightning webapp](lightning/thunderhub)**|lightning|
+|**Service**|**Default**|**Category**|
+|:---|:---|:---|
+|**[reverse proxy](setup/reverse-proxy)**|nginx|setup|
+|**[tor](setup/tor-project)**|tor|setup|
+|**[i2p](setup/i2p-project)**|i2p|setup|
+|**[bitcoin client](bitcoin/bitcoin-knots)**|bitcoin knots|bitcoin|
+|**[electrum server](bitcoin/fulcrum)**|fulcrum|bitcoin|
+|**[blockchain explorer](bitcoin/btcrpcexplorer)**|btc rpc explorer|bitcoin|
+|**[lightning client](lightning/lnd)**|lnd|lightning|
+|**[lightning webapp](lightning/thunderhub)**|ride the lightning|lightning|
 
 For each service, we will explain the installation and upgrade procedures.
 
@@ -129,7 +129,11 @@ MobyBolt applications will be attested to networks as follows:
 |**electrum server**||&#10004;|
 |**blockchain explorer**||&#10004;|
 |**lightning client**||&#10004;|
-|**lightning webapp**|&#10004;|&#10004;|
+|**lightning webapp**||&#10004;|
+
+With this configuration we will ensure that all the services implemented can communicate with the outside world only through `nginx`, `tor` or `i2p`, avoiding any leaks and improving our privacy.
+
+This guide is intended to have a privacy-oriented slant. Any trade-offs on the privacy of the default or bonus services will be reported. You are always in charge and you decide which compromises to accept in exchange for which advantages.
 
 ---
 
