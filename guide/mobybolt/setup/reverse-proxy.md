@@ -314,9 +314,9 @@ Follow the next steps to uninstall nginx:
    > ...
    ```
 
-2. Unlink the docker compose file
+2. Unlink the docker-compose file
 
-   Remove the nginx line in the `include` section of the main docker compose file:
+   Remove the nginx line in the `include` section of the main docker-compose file:
 
    ```sh
    $ sed -i '/- nginx\/docker-compose.yml/d' docker-compose.yml

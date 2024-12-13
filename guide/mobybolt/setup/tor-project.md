@@ -580,9 +580,9 @@ Follow the next steps to uninstall tor:
    > ...
    ```
 
-2. Unlink the docker compose file
+2. Unlink the docker-compose file
 
-   Remove the tor line in the `include` section of the main docker compose file:
+   Remove the tor line in the `include` section of the main docker-compose file:
 
    ```sh
    $ sed -i '/- tor\/docker-compose.yml/d' docker-compose.yml
