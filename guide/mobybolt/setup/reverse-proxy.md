@@ -306,6 +306,7 @@ $ docker image prune
 Follow the next steps to uninstall nginx:
 
 1. Remove the container:
+
    ```
    $ docker compose down nginx
    > [+] Running 3/1
@@ -313,7 +314,16 @@ Follow the next steps to uninstall nginx:
    > ...
    ```
 
-2. Remove the image:
+2. Unlink the docker compose file
+
+   Remove the nginx line in the `include` section of the main docker compose file:
+
+   ```sh
+   $ sed -i '/- nginx\/docker-compose.yml/d' docker-compose.yml
+   ```
+
+3. Remove the image:
+
    ```
    > $ docker image rm nginx
    > Untagged: nginx:latest
@@ -321,6 +331,7 @@ Follow the next steps to uninstall nginx:
    ```
 
 4. Remove files and directories (optional):
+
    ```
    $ rm -rf nginx
    ```
