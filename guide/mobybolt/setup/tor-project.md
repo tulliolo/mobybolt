@@ -66,15 +66,13 @@ $ nano .env
 # tor
 TOR_VERSION=0.4.8.13
 TOR_ADDRESS=172.16.21.3
-TOR_GID=102
-TOR_UID=102
-
+TOR_GUID=102
 ```
 
 In this file:
 1. we define the `TOR_VERSION` (check the latest available version [here](https://www.torproject.org/download/tor/){:target="_blank"});
 2. we define a static address for the container's backend network;
-3. we define the `uid` (user id) and `gid` (group id) of the tor user.
+3. we define the `guid` (group and user id) of the tor user.
 
 ### Prepare the entrypoint
 
@@ -113,7 +111,6 @@ if [[ $# -eq 0 ]]; then
 fi
 
 exec $CMD
-
 ```
 
 In this file:
@@ -199,12 +196,11 @@ RUN set -eux && \
     rm -rf /var/lib/apt/lists/*
 
 # setup tor user and dirs
-ARG TOR_GID=102
-ARG TOR_UID=102
+ARG TOR_GUID=102
 
 RUN set -eux && \
-    addgroup --gid $TOR_GID tor && \
-    adduser --system --comment "" --gid $TOR_GID --home /var/lib/tor/ --uid $TOR_UID tor && \
+    addgroup --gid $TOR_GUID tor && \
+    adduser --system --comment "" --gid $TOR_GUID --home /var/lib/tor/ --uid $TOR_GUID tor && \
     mkdir /etc/tor/ && \
     mkdir -m 0700 /run/tor/ && \
     chown -R tor:tor /etc/tor/ /run/tor/
@@ -218,7 +214,6 @@ COPY --chmod=0755 docker-entrypoint.sh /usr/local/bin/
 # set user and entrypoint
 USER tor
 ENTRYPOINT ["docker-entrypoint.sh"]
-
 ```
 
 In this file:
@@ -276,8 +271,7 @@ services:
       context: .
       args:
         TOR_VERSION: ${TOR_VERSION}
-        TOR_GID: ${TOR_GID}
-        TOR_UID: ${TOR_UID}
+        TOR_GUID: ${TOR_GUID}
     container_name: ${COMPOSE_PROJECT_NAME}_tor
     expose:
       - "9050"
@@ -303,7 +297,6 @@ services:
   
 volumes:
   tor-data:
-
 ```
 
 {:.warning}
@@ -482,7 +475,7 @@ A few examples:
 
 - **Windows**: configure PuTTY as described in this guide [Torifying PuTTY](https://gitlab.torproject.org/legacy/trac/-/wikis/doc/TorifyHOWTO/Putty){:target="_blank"} by the Tor Project.
 
-  {:.note}
+  {:.hint}
   If you are using PuTTy and fail to connect to your MobyBolt PC by setting port 9050 in the PuTTy proxy settings, try setting port 9150 instead. When Tor runs as an installed application instead of a background process it uses port 9150.
 
 - **Linux**: use `torify` or `torsocks`.
@@ -587,7 +580,15 @@ Follow the next steps to uninstall tor:
    > ...
    ```
 
-2. Remove the image:
+2. Unlink the docker compose file
+
+   Remove the tor line in the `include` section of the main docker compose file:
+
+   ```sh
+   $ sed -i '/- tor\/docker-compose.yml/d' docker-compose.yml
+   ```
+
+3. Remove the image:
 
    ```sh
    $ docker image rm $(docker images | grep mobybolt/tor | awk '{print $3}')
@@ -595,7 +596,7 @@ Follow the next steps to uninstall tor:
    > Deleted: sha256:13afebf08e29c6b9a526a6e54ab1f93e745b25080add4e37af8f08bdf6cfbcc6
    ```
 
-3. Clean the build cache:
+4. Clean the build cache:
 
    ```sh
    $ docker buildx prune
@@ -606,7 +607,7 @@ Follow the next steps to uninstall tor:
    > ...
    ```
 
-4. Remove the volume (optional):
+5. Remove the volume (optional):
 
    ```sh
    $ docker volume rm mobybolt_tor-data
@@ -616,7 +617,7 @@ Follow the next steps to uninstall tor:
    {:.warning}
    This will delete all tor data, including hidden services that have already been configured.
 
-5. Remove files and directories (optional):
+6. Remove files and directories (optional):
 
    ```sh
    $ rm -rf tor
