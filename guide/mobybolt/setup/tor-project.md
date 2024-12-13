@@ -22,13 +22,13 @@ We need to make sure that you keep your privacy.
 
 We'll also make it easy to connect to your node from outside your home network as an added benefit.
 
----
-
 We use Tor, a free software built by the [Tor Project](https://www.torproject.org/){:target="_blank"}. It allows you to anonymize internet traffic by routing it through a network of nodes, hiding your location and usage profile.
 
 It is called "Tor" for "The Onion Router": information is routed through many hops and encrypted multiple times. Each node decrypts only the layer of information addressed to it, learning only the previous and the next hop of the whole route. The data package is peeled like an onion until it reaches the final destination.
 
 The Tor network also hosts hidden services, which can be reached via an "onion" address.
+
+---
 
 To follow this section, log in to your node as `satoshi` user via Secure Shell (SSH) and access the project's home:
 
