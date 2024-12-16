@@ -66,7 +66,6 @@ Be very careful to respect the indentation below, since yaml is very sensitive t
 
 ```yaml
 include:
-
 networks:
   frontend:
     ipam:

@@ -174,13 +174,17 @@ In this file:
 
 ### Link the docker-compose file
 
-Edit the main docker-compose file and link the nginx-specific one to the `include` section:
+Link the nginx-specific docker-compose file in the main one by running:
 
 ```sh
-$ nano docker-compose.yml
+$ sed -i '/^networks:/i \ \ - nginx/docker-compose.yml' docker-compose.yml
 ```
 
 The file should look like this:
+
+```sh
+$ cat docker-compose.yml
+```
 
 ```yaml
 include:

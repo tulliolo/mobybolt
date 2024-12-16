@@ -253,7 +253,6 @@ PidFile /run/tor/tor.pid
 ##
 ## HiddenServicePort x y:z says to redirect requests on port x to the
 ## address y:z.
-
 ```
 
 ### Prepare the docker-compose file
@@ -320,13 +319,17 @@ In this file:
 
 ### Link the docker-compose File
 
-Edit the main docker-compose file and link the tor-specific one in the `include` section:
+Link the tor-specific docker-compose file in the main one by running:
 
 ```sh
-$ nano docker-compose.yml
+$ sed -i '/^networks:/i \ \ - tor/docker-compose.yml' docker-compose.yml
 ```
 
 The file should look like this:
+
+```sh
+$ cat docker-compose.yml
+```
 
 ```yaml
 include:

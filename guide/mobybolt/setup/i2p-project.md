@@ -105,13 +105,17 @@ In this file:
 
 ### Link the docker-compose File
 
-Edit the main docker-compose file and link the i2p-specific one in the `include` section:
+Link the i2p-specific docker-compose file in the main one by running:
 
 ```sh
-$ nano docker-compose.yml
+$ sed -i '/^networks:/i \ \ - i2p/docker-compose.yml' docker-compose.yml
 ```
 
 The file should look like this:
+
+```sh
+$ cat docker-compose.yml
+```
 
 ```yaml
 include:
