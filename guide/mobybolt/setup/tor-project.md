@@ -255,9 +255,9 @@ PidFile /run/tor/tor.pid
 ## address y:z.
 ```
 
-### Prepare the docker-compose file
+### Prepare the docker compose file
 
-Create a tor-specific docker-compose file and populate it with the following contents:
+Create a tor-specific docker compose file and populate it with the following contents:
 
 ```sh
 $ nano tor/docker-compose.yml
@@ -317,9 +317,9 @@ In this file:
 
 5. we provide the container with the previously defined configuration ([bind mount](https://docs.docker.com/storage/bind-mounts/){:target="_blank"}) and with a [volume](https://docs.docker.com/storage/volumes/){:target="_blank"} named `mobybolt_tor-data` to store persistent data.
 
-### Link the docker-compose File
+### Link the docker compose file
 
-Link the tor-specific docker-compose file in the main one by running:
+Link the tor-specific docker compose file in the main one by running:
 
 ```sh
 $ sed -i '/^networks:/i \ \ - tor/docker-compose.yml' docker-compose.yml
@@ -340,7 +340,7 @@ include:
 {:.warning}
 Be very careful to respect the indentation above, since yaml is very sensitive to this!
 
-### Test the docker-compose File
+### Test the docker compose file
 
 Run the following command and check the output:
 
@@ -440,7 +440,6 @@ Save and exit
   HiddenServiceVersion 3
   HiddenServicePoWDefensesEnabled 1
   HiddenServicePort 22 host.docker.internal:22
-
   ```
 
 - Check the new configuration:
@@ -583,9 +582,7 @@ Follow the next steps to uninstall tor:
    > ...
    ```
 
-2. Unlink the docker-compose file
-
-   Remove the tor line in the `include` section of the main docker-compose file:
+2. Unlink the docker compose file:
 
    ```sh
    $ sed -i '/- tor\/docker-compose.yml/d' docker-compose.yml

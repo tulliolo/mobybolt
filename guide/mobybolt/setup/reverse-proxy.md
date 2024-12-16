@@ -128,9 +128,9 @@ stream {
 }
 ```
 
-### Prepare the docker-compose file
+### Prepare the docker compose file
 
-Create a nginx-specific docker-compose file and paste the following contents:
+Create a nginx-specific docker compose file and paste the following contents:
 
 ```sh
 $ nano nginx/docker-compose.yml
@@ -172,9 +172,9 @@ In this file:
 
 - we define some read-only [bind-mount](https://docs.docker.com/engine/storage/bind-mounts/){: target="_blank"} `volumes` to provide the container with certificates and configuration files;
 
-### Link the docker-compose file
+### Link the docker compose file
 
-Link the nginx-specific docker-compose file in the main one by running:
+Link the nginx-specific docker compose file in the main one by running:
 
 ```sh
 $ sed -i '/^networks:/i \ \ - nginx/docker-compose.yml' docker-compose.yml
@@ -198,7 +198,7 @@ Be very careful to respect the indentation above, since yaml is very sensitive t
 
 ## Test
 
-### Test the docker-compose file
+### Test the docker compose file
 
 Run the following command and check the output:
 
@@ -318,9 +318,9 @@ Follow the next steps to uninstall nginx:
    > ...
    ```
 
-2. Unlink the docker-compose file
+2. Unlink the docker compose file
 
-   Remove the nginx line in the `include` section of the main docker-compose file:
+   Remove the nginx line in the `include` section of the main docker compose file:
 
    ```sh
    $ sed -i '/- nginx\/docker-compose.yml/d' docker-compose.yml
