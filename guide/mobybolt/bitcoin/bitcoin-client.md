@@ -44,7 +44,7 @@ $ cd $HOME/apps/mobybolt
 Let's create the directory structure for Bitcoin Knots:
 
 ```sh
-$ mkdir -p bitcoin-knots/patches
+$ mkdir -p bitcoin-knots
 ```
 
 ### Prepare the environment
@@ -125,9 +125,6 @@ RUN set -eux && \
             gpg --import; \
         done
 
-# copy patches
-COPY patches/ /patches/
-
 WORKDIR bitcoin
 
 RUN set -xe && \
@@ -135,10 +132,6 @@ RUN set -xe && \
     git verify-tag $BITCOIN_VERSION && \
     # build bdb 4.8 (for legacy wallet)
     make -C depends NO_BOOST=1 NO_LIBEVENT=1 NO_QT=1 NO_SQLITE=1 NO_NATPMP=1 NO_UPNP=1 NO_ZMQ=1 NO_USDT=1 && \
-    # apply patches (if any)
-    for patch in $( find /patches -type f ); do \
-        git apply $patch; \
-    done && \
     # configure
     ./autogen.sh && \
     export BDB_PREFIX="$PWD/depends/$( ls depends | grep linux-gnu )" && \
