@@ -623,6 +623,12 @@ Follow the next steps to uninstall tor:
    $ rm -rf tor
    ```
 
+7. Cleanup the env (optional)
+
+   ```sh
+   $ sed -i '/^TOR_/d' .env
+   ```
+
 ---
 
 {:.d-flex .flex-justify-between}

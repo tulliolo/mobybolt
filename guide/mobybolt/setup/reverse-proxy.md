@@ -340,6 +340,12 @@ Follow the next steps to uninstall nginx:
    $ rm -rf nginx
    ```
 
+5. Cleanup the env (optional)
+
+   ```sh
+   $ sed -i '/^NGINX_/d' .env
+   ```
+
 ---
 
 {: .d-flex .flex-justify-between}

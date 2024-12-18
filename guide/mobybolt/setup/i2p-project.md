@@ -234,6 +234,12 @@ Follow the next steps to uninstall i2p:
    $ rm -rf i2p
    ```
 
+6. Cleanup the env (optional)
+
+   ```sh
+   $ sed -i '/^I2P_/d' .env
+   ```
+
 ---
 
 {:.d-flex .flex-justify-between}
