@@ -1,25 +1,24 @@
 ---
 layout: default
-title: Bitcoin client
-nav_order: 10
+title: Bitcoin Core
 parent: + Bitcoin
-grand_parent: MobyBolt
+grand_parent: Bonus Section
+nav_exclude: true
+has_toc: false
 ---
+
 <!-- markdownlint-disable MD014 MD022 MD025 MD033 MD040 -->
 
-# Bitcoin client
+# Bonus guide: Bitcoin Core
 {:.no_toc}
 
 {: .text-center}
-![bitcoin knots logo](../../../images/mobybolt-bitcoin-bitcoin-client_logo.png){: width="20%"}
+![bitcoin knots logo](../../../images/bonus-bitcoin-bitcoin-core_logo.png){: width="20%"}
 
-
-We install [Bitcoin Knots](https://bitcoinknots.org/){:target="_blank"}, an alternative client implementation of the Bitcoin network. If you prefer to use [Bitcoin Core](https://bitcoincore.org/){:target="_blank"}, please refer to this [bonus guide](../../bonus/bitcoin/bitcoin-core){:target="_blank"}.
-
-**In Bitcoin Knots >25.1 all spam filters are up to date**.
+We install [Bitcoin Core](https://bitcoincore.org/){:target="_blank"}, the reference client implementation of the Bitcoin network. If you prefer to use [Bitcoin Knots](https://bitcoinknots.org/){:target="_blank"}, please refer to this [guide](../../mobybolt/bitcoin/bitcoin-client.md).
 
 {:.important}
-You can't install Bitcoin Knots and Bitcoin Core together. If you have already installed Bitcoin Core, please [uninstall](../../bonus/bitcoin/bitcoin-core#uninstall) it before to proceed (you can safely keep volume data).
+You can't install Bitcoin Knots and Bitcoin Core together. If you have already installed Bitcoin Knots, please [uninstall](../../mobybolt/bitcoin/bitcoin-client#uninstall) it before to proceed (you can safely keep volume data).
 
 ---
 
@@ -41,10 +40,10 @@ $ cd $HOME/apps/mobybolt
 
 ## Prepare
 
-Let's create the directory structure for Bitcoin Knots:
+Let's create the directory structure for Bitcoin Core:
 
 ```sh
-$ mkdir -p bitcoin-knots
+$ mkdir -p bitcoin-core
 ```
 
 ### Prepare the environment
@@ -57,13 +56,13 @@ $ nano .env
 
 ```ini
 # bitcoin
-BITCOIN_VERSION=v27.1.knots20240801
+BITCOIN_VERSION=v28.0
 BITCOIN_ADDRESS=172.16.21.10
 BITCOIN_GUID=1100
 ```
 
 In this file:
-1. we define the `BITCOIN_VERSION` (check the latest available version [here](https://github.com/bitcoinknots/bitcoin/releases){:target="_blank"});
+1. we define the `BITCOIN_VERSION` (check the latest available version [here](https://github.com/bitcoin/bitcoin/releases){:target="_blank"});
 2. we define a static address for the container;
 3. we define the `guid` (group and user id) of the bitcoin user.
 
@@ -72,7 +71,7 @@ In this file:
 Create the [Dockerfile](https://docs.docker.com/reference/dockerfile/){:target="_blank"} and populate it with the following content:
 
 ```sh
-$ nano bitcoin-knots/Dockerfile
+$ nano bitcoin-core/Dockerfile
 ```
 
 ```Dockerfile
@@ -91,8 +90,6 @@ RUN set -eux && \
         ccache \
         curl \
         git \
-        imagemagick \
-        librsvg2-bin \
         libtool \
         pkg-config \
         python3 \
@@ -109,7 +106,7 @@ FROM base AS builder
 
 ARG BITCOIN_VERSION
 
-ENV BITCOIN_URL="https://github.com/bitcoinknots/bitcoin.git" \
+ENV BITCOIN_URL="https://github.com/bitcoin/bitcoin.git" \
     BITCOIN_KEYS_URL="https://api.github.com/repositories/355107265/contents/builder-keys"
 
 RUN set -eux && \
@@ -130,7 +127,7 @@ WORKDIR bitcoin
 RUN set -xe && \
     # verify signature
     git verify-tag $BITCOIN_VERSION && \
-    # build bdb 4.8 (for legacy wallet)
+    # build bdb 4.8
     make -C depends NO_BOOST=1 NO_LIBEVENT=1 NO_QT=1 NO_SQLITE=1 NO_NATPMP=1 NO_UPNP=1 NO_ZMQ=1 NO_USDT=1 && \
     # configure
     ./autogen.sh && \
@@ -152,7 +149,7 @@ RUN set -xe && \
     make install
 
 
-# result image
+# base image
 FROM debian:stable-slim
 
 # copy bitcoin binaries and libraries
@@ -205,7 +202,7 @@ In this file:
 Create the [entrypoint](https://docs.docker.com/reference/dockerfile/#entrypoint){:target="_blank"} file and populate it with the following content:
 
 ```sh
-$ nano bitcoin-knots/docker-entrypoint.sh
+$ nano bitcoin-core/docker-entrypoint.sh
 ```
 
 ```sh
@@ -254,7 +251,7 @@ In this file:
 Create the bitcoin configuration file and populate it with the following content:
 
 ```sh
-$ nano bitcoin-knots/bitcoin.conf
+$ nano bitcoin-core/bitcoin.conf
 ```
 
 ```ini
@@ -288,9 +285,6 @@ peerbloomfilters=1
 peerblockfilters=1
 # Maintain coinstats index used by the gettxoutsetinfo RPC
 coinstatsindex=1
-
-# Enable anti-spam filters
-rejecttokens=1
 
 # Network
 bind=172.16.21.10:8333
@@ -345,7 +339,7 @@ onlynet=i2p
 Create a bitcoin-specific docker compose file and populate it with the following contents:
 
 ```sh
-$ nano bitcoin-knots/docker-compose.yml
+$ nano bitcoin-core/docker-compose.yml
 ```
 
 ```yaml
@@ -389,7 +383,7 @@ volumes:
 Be very careful to respect the indentation above, since yaml is very sensitive to this!
 
 In this file:
-1. we `build` the Dockerfile and create an image named `mobybolt/bitcoin:v27.1.knots20240801`;
+1. we `build` the Dockerfile and create an image named `mobybolt/bitcoin:v28.0`;
 2. we define a `healthcheck` that will check every minute that the bitcoin client is connected to at least one peer; 
 3. we define the `restart` policy of the container in case of failures;
 4. we provide the container with the `BITCOIN_ADDRESS` static address;
@@ -400,7 +394,7 @@ In this file:
 Link the bitcoin-specific docker compose file in the main one by running:
 
 ```sh
-$ sed -i '/^networks:/i \ \ - bitcoin-knots/docker-compose.yml' docker-compose.yml
+$ sed -i '/^networks:/i \ \ - bitcoin-core/docker-compose.yml' docker-compose.yml
 ```
 
 The file should look like this:
@@ -412,7 +406,7 @@ $ cat docker-compose.yml
 ```yaml
 include:
   - ...
-  - bitcoin-knots/docker-compose.yml
+  - bitcoin-core/docker-compose.yml
 ```
 
 {:.warning}
@@ -443,12 +437,12 @@ $ docker compose build bitcoin
 {:.warning}
 This may take a long time
 
-Check for a new image called `mobybolt/bitcoin:v27.1.knots20240801`:
+Check for a new image called `mobybolt/bitcoin:v28.0`:
 
 ```sh
 $ docker images | grep "bitcoin\|TAG"
-> REPOSITORY         TAG                   IMAGE ID       CREATED              SIZE
-> mobybolt/bitcoin   v27.1.knots20240801   30adc7959c8e   About a minute ago   795MB
+> REPOSITORY         TAG     IMAGE ID       CREATED              SIZE
+> mobybolt/bitcoin   v28.0   30adc7959c8e   About a minute ago   795MB
 ```
 
 ## Run
@@ -466,7 +460,7 @@ Check the container logs:
 
 ```sh
 $ docker compose logs bitcoin
-> 2024-05-25T11:55:44Z Bitcoin Knots version v27.1.knots20240801 (release build)
+> 2024-05-25T11:55:44Z Bitcoin Core version v28.0 (release build)
 > ...
 > 2024-05-25T11:55:44Z Default data directory /home/bitcoin/.bitcoin
 > 2024-05-25T11:55:44Z Using data directory /home/bitcoin/.bitcoin
@@ -486,7 +480,7 @@ Check the container status:
 ```sh
 $ docker compose ps | grep "bitcoin\|NAME"
 > NAME                      IMAGE                                  COMMAND                  SERVICE          CREATED      STATUS                PORTS
-> mobybolt_bitcoin          mobybolt/bitcoin:v27.1.knots20240801   "docker-entrypoint.sh"   bitcoin          4 days ago   Up 3 days (healthy)   
+> mobybolt_bitcoin          mobybolt/bitcoin:v28.0   "docker-entrypoint.sh"   bitcoin          4 days ago   Up 3 days (healthy)   
 ```
 
 {:.warning}
@@ -516,7 +510,7 @@ $ docker compose exec bitcoin bitcoin-cli -getinfo
 > ...
 ```
 
-Bitcoin Knots will be fully syncronized when the verification progress reaches 100% (or 99.xxx%).
+Bitcoin Core will be fully syncronized when the verification progress reaches 100% (or 99.xxx%).
 
 ### Check bitcoin networking status
 
@@ -539,13 +533,13 @@ You should see some out connections and your onion/i2p local addresses.
 
 ---
 
-## Bitcoin Knots is syncing
+## Bitcoin Core is syncing
 
 This can take between one day and a week, depending mostly on your PC and network performance. It's best to wait until the synchronization is complete before going ahead.
 
 ### Explore bitcoin-cli
 
-If everything is running smoothly, this is the perfect time to familiarize yourself with Bitcoin, the technical aspects of Bitcoin Knots, and play around with bitcoin-cli until the blockchain is up-to-date.
+If everything is running smoothly, this is the perfect time to familiarize yourself with Bitcoin, the technical aspects of Bitcoin Core, and play around with bitcoin-cli until the blockchain is up-to-date.
 
 - [The Little Bitcoin Book](https://littlebitcoinbook.com/){:target="_blank"} is a fantastic introduction to Bitcoin, focusing on the "why" and less on the "how"
 - [Mastering Bitcoin](https://bitcoinbook.info/){:target="_blank"} by Andreas Antonopoulos is a great point to start, especially chapter 3:
@@ -556,12 +550,12 @@ If everything is running smoothly, this is the perfect time to familiarize yours
 
 ### Activate mempool & reduce dbcache after a full sync
 
-Once Bitcoin Knots is **fully synched**, we can reduce the size of the database cache. A bigger cache speeds up the initial block download, now we want to reduce memory consumption to allow the Lightning client and Electrum server to run in parallel. We also now want to enable the node to listen to and relay transactions.
+Once Bitcoin Core is **fully synched**, we can reduce the size of the database cache. A bigger cache speeds up the initial block download, now we want to reduce memory consumption to allow the Lightning client and Electrum server to run in parallel. We also now want to enable the node to listen to and relay transactions.
 
 Edit the bitcoin configuration file and comment (prepending a `#`) the following lines:
 
 ```sh
-$ nano bitcoin-knots/bitcoin.conf
+$ nano bitcoin-core/bitcoin.conf
 ```
 
 ```ini
@@ -570,7 +564,7 @@ $ nano bitcoin-knots/bitcoin.conf
 #assumevalid=0
 ```
 
-Restart Bitcoin Knots:
+Restart Bitcoin Core:
 
 ```sh
 $ docker compose restart bitcoin
@@ -582,7 +576,7 @@ $ docker compose restart bitcoin
 
 ## Upgrade
 
-Check the [Bitcoin Knots release page](https://github.com/bitcoinknots/bitcoin/releases){:target="_blank"} for a new version and change the `BITCOIN_VERSION` value in the `.env` file.
+Check the [Bitcoin Core release page](https://github.com/bitcoin/bitcoin/releases){:target="_blank"} for a new version and change the `BITCOIN_VERSION` value in the `.env` file.
 Then, redo the steps described in:
 
 1. [Build](#build)
@@ -593,13 +587,13 @@ If everything is ok, you can clear the old image and build cache, like in the fo
 ```sh
 $ docker image ls | grep "bitcoin\|TAG"
 > REPOSITORY         TAG                   IMAGE ID       CREATED          SIZE
-> mobybolt/bitcoin   v27.1.knots20240801   30adc7959c8e   46 minutes ago   795MB
-> mobybolt/bitcoin   v26.1.knots20240513   56f39c90e8ac   4 weeks ago      795MB
+> mobybolt/bitcoin   v28.0   30adc7959c8e   46 minutes ago   795MB
+> mobybolt/bitcoin   v27.2   56f39c90e8ac   4 weeks ago      795MB
 ```
 
 ```sh
-$ docker image rm mobybolt/bitcoin:v26.1.knots20240513
-> Untagged: mobybolt/bitcoin:v26.1.knots20240513
+$ docker image rm mobybolt/bitcoin:v27.2
+> Untagged: mobybolt/bitcoin:v27.2
 > Deleted: sha256:56f39c90e8accbfae77a3c8ed9e6e5794d67c62d1944c2c0ce4c7bc3dd233f07
 ```
 
@@ -630,14 +624,14 @@ Follow the next steps to uninstall bitcoin:
 2. Unlink the docker compose file:
 
    ```sh
-   $ sed -i '/- bitcoin-knots\/docker-compose.yml/d' docker-compose.yml
+   $ sed -i '/- bitcoin-core\/docker-compose.yml/d' docker-compose.yml
    ```
 
 3. Remove the image:
 
    ```sh
    $ docker image rm $(docker images | grep bitcoin | awk '{print $3}')
-   > Untagged: mobybolt/bitcoin:v27.1.knots20240801
+   > Untagged: mobybolt/bitcoin:v28.0
    > Deleted: sha256:13afebf08e29c6b9a526a6e54ab1f93e745b25080add4e37af8f08bdf6cfbcc6
    ```
 
@@ -665,7 +659,7 @@ Follow the next steps to uninstall bitcoin:
 6. Remove files and directories (optional):
 
    ```sh
-   $ rm -rf bitcoin-knots
+   $ rm -rf bitcoin-core
    ```
 
 7. Cleanup the env (optional)
@@ -676,6 +670,4 @@ Follow the next steps to uninstall bitcoin:
 
 ---
 
-{:.d-flex .flex-justify-between}
-[<< I2P project](../setup/i2p-project)
-[Electrum server >>](electrum-server)
+[<< Bonus Section](../)
