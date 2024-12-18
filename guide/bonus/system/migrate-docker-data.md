@@ -3,11 +3,12 @@ layout: default
 title: Migrate Docker data
 parent: + System
 grand_parent: Bonus Section
+nav_exclude: true
 ---
 
 <!-- markdownlint-disable MD014 MD022 MD025 MD033 MD040 -->
 
-# Migrate Docker data
+# Bonus Guide: Migrate Docker data
 {: .no_toc}
 
 You can take advantage of this guide in the following situations:
@@ -183,3 +184,7 @@ If you are replacing the disk, remove the line for the old disk in fstab (the on
 ```sh
 $ sudo reboot
 ```
+
+---
+
+[<< Bonus Section](../)

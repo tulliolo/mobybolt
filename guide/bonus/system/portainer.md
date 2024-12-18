@@ -3,11 +3,12 @@ layout: default
 title: Portainer
 parent: + System
 grand_parent: Bonus Section
+nav_exclude: true
 ---
 
 <!-- markdownlint-disable MD014 MD022 MD025 MD033 MD040 -->
 
-# Portainer
+# Bonus Guide: Portainer
 {: .no_toc}
 
 {: .text-center}
@@ -24,3 +25,5 @@ Portainer CE is a powerful, open source toolset that allows you to easily build 
 {:toc}
 
 ---
+
+[<< Bonus Section](../)
