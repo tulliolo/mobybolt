@@ -537,11 +537,13 @@ $ docker compose exec bitcoin bitcoin-cli -netinfo
 
 You should see some out connections and your onion/i2p local addresses.
 
-### Bitcoin Knots is syncing
+---
+
+## Bitcoin Knots is syncing
 
 This can take between one day and a week, depending mostly on your PC and network performance. It's best to wait until the synchronization is complete before going ahead.
 
-#### Explore bitcoin-cli
+### Explore bitcoin-cli
 
 If everything is running smoothly, this is the perfect time to familiarize yourself with Bitcoin, the technical aspects of Bitcoin Knots, and play around with bitcoin-cli until the blockchain is up-to-date.
 
@@ -552,7 +554,7 @@ If everything is running smoothly, this is the perfect time to familiarize yours
 - [Learning Bitcoin from the Command Line](https://github.com/ChristopherA/Learning-Bitcoin-from-the-Command-Line/blob/master/README.md){:target="_blank"} by Christopher Allen gives a thorough deep dive into understanding the technical aspects of Bitcoin
 - Also, check out the [bitcoin-cli reference](https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_calls_list){:target="_blank"}
 
-#### Activate mempool & reduce dbcache after a full sync
+### Activate mempool & reduce dbcache after a full sync
 
 Once Bitcoin Knots is **fully synched**, we can reduce the size of the database cache. A bigger cache speeds up the initial block download, now we want to reduce memory consumption to allow the Lightning client and Electrum server to run in parallel. We also now want to enable the node to listen to and relay transactions.
 
