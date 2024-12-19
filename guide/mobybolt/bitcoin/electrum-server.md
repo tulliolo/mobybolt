@@ -745,20 +745,20 @@ Follow the next steps to uninstall fulcrum:
    > ...
    ```
 
-6. Remove the volume (optional):
+7. Remove the volume (optional):
 
    ```sh
    $ docker volume rm mobybolt_fulcrum-data
    > mobybolt_fulcrum-data
    ```
 
-7. Remove files and directories (optional):
+8. Remove files and directories (optional):
 
    ```sh
    $ rm -rf fulcrum
    ```
 
-8. Cleanup the env (optional)
+9. Cleanup the env (optional)
 
    ```sh
    $ sed -i '/^FULCRUM_/d' .env
