@@ -50,7 +50,7 @@ One possibility to use the Bitcoin client with your Bitcoin wallets is to use an
 
 Create the fulcrum directory:
 
-```
+```sh
 $ mkdir fulcrum
 ```
 
@@ -484,11 +484,11 @@ To perform this configuration:
 - create the fulcrum-reverse-proxy configuration file with the following contents:
 
   ```sh
-  $ nano nginx/config/streams-enabled/fulcrum-reverse-proxy.conf
+  $ nano nginx/streams-enabled/fulcrum-reverse-proxy.conf
   ```
 
   ```nginx
-    upstream fulcrum {
+  upstream fulcrum {
     server 172.16.21.11:50001;
   }
   server {
@@ -515,7 +515,7 @@ To perform this configuration:
   The file should now look like this:
 
   ```sh
-  $ nano nginx/docker-compose.yml
+  $ cat nginx/docker-compose.yml
   > ...
   > image: ${COMPOSE_PROJECT_NAME}/nginx:${NGINX_VERSION}
   > ports:
