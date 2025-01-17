@@ -56,7 +56,7 @@ $ nano .env
 
 ```ini
 # bitcoin
-BITCOIN_VERSION=v28.0
+BITCOIN_VERSION=v28.1
 BITCOIN_ADDRESS=172.16.21.10
 BITCOIN_GUID=1100
 ```
@@ -383,7 +383,7 @@ volumes:
 Be very careful to respect the indentation above, since yaml is very sensitive to this!
 
 In this file:
-1. we `build` the Dockerfile and create an image named `mobybolt/bitcoin:v28.0`;
+1. we `build` the Dockerfile and create an image named `mobybolt/bitcoin:v28.1`;
 2. we define a `healthcheck` that will check every minute that the bitcoin client is connected to at least one peer; 
 3. we define the `restart` policy of the container in case of failures;
 4. we provide the container with the `BITCOIN_ADDRESS` static address;
@@ -437,12 +437,12 @@ $ docker compose build bitcoin
 {:.warning}
 This may take a long time
 
-Check for a new image called `mobybolt/bitcoin:v28.0`:
+Check for a new image called `mobybolt/bitcoin:v28.1`:
 
 ```sh
 $ docker images | grep "bitcoin\|TAG"
 > REPOSITORY         TAG     IMAGE ID       CREATED              SIZE
-> mobybolt/bitcoin   v28.0   30adc7959c8e   About a minute ago   795MB
+> mobybolt/bitcoin   v28.1   30adc7959c8e   About a minute ago   795MB
 ```
 
 ## Run
@@ -460,7 +460,7 @@ Check the container logs:
 
 ```sh
 $ docker compose logs bitcoin
-> 2024-05-25T11:55:44Z Bitcoin Core version v28.0 (release build)
+> 2024-05-25T11:55:44Z Bitcoin Core version v28.1 (release build)
 > ...
 > 2024-05-25T11:55:44Z Default data directory /home/bitcoin/.bitcoin
 > 2024-05-25T11:55:44Z Using data directory /home/bitcoin/.bitcoin
@@ -480,7 +480,7 @@ Check the container status:
 ```sh
 $ docker compose ps | grep "bitcoin\|NAME"
 > NAME                      IMAGE                                  COMMAND                  SERVICE          CREATED      STATUS                PORTS
-> mobybolt_bitcoin          mobybolt/bitcoin:v28.0   "docker-entrypoint.sh"   bitcoin          4 days ago   Up 3 days (healthy)   
+> mobybolt_bitcoin          mobybolt/bitcoin:v28.1   "docker-entrypoint.sh"   bitcoin          4 days ago   Up 3 days (healthy)   
 ```
 
 {:.warning}
@@ -587,13 +587,13 @@ If everything is ok, you can clear the old image and build cache, like in the fo
 ```sh
 $ docker image ls | grep "bitcoin\|TAG"
 > REPOSITORY         TAG                   IMAGE ID       CREATED          SIZE
-> mobybolt/bitcoin   v28.0   30adc7959c8e   46 minutes ago   795MB
-> mobybolt/bitcoin   v27.2   56f39c90e8ac   4 weeks ago      795MB
+> mobybolt/bitcoin   v28.1   30adc7959c8e   46 minutes ago   795MB
+> mobybolt/bitcoin   v28.0   56f39c90e8ac   4 weeks ago      795MB
 ```
 
 ```sh
-$ docker image rm mobybolt/bitcoin:v27.2
-> Untagged: mobybolt/bitcoin:v27.2
+$ docker image rm mobybolt/bitcoin:v28.0
+> Untagged: mobybolt/bitcoin:v28.0
 > Deleted: sha256:56f39c90e8accbfae77a3c8ed9e6e5794d67c62d1944c2c0ce4c7bc3dd233f07
 ```
 
@@ -631,7 +631,7 @@ Follow the next steps to uninstall bitcoin:
 
    ```sh
    $ docker image rm $(docker images | grep bitcoin | awk '{print $3}')
-   > Untagged: mobybolt/bitcoin:v28.0
+   > Untagged: mobybolt/bitcoin:v28.1
    > Deleted: sha256:13afebf08e29c6b9a526a6e54ab1f93e745b25080add4e37af8f08bdf6cfbcc6
    ```
 
