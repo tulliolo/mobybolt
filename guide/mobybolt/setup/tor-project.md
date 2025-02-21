@@ -74,6 +74,73 @@ In this file:
 2. we define a static address for the container's backend network;
 3. we define the `guid` (group and user id) of the tor user.
 
+### Prepare the routing
+
+The tor container can be used in two ways:
+- explicit proxy: for applications that support SOCKS5 Proxy to tor;
+- [transparent proxy (+ DNS)](https://wiki.archlinux.org/title/Tor#Transparent_Torification){:target="_blank"}: for applications that don't support SOCKS5 Proxy to tor;
+
+In the latter case, we'll put the application directly on the same network as tor, instead of associating it with the backend/frontend networks. We'll also initialize the tor container with a set of [nftables](https://wiki.nftables.org/wiki-nftables/index.php/Main_Page){:target="_blank"} rules (a replacement for iptables) to redirect all traffic (including DNS queries) through tor.
+
+Create the nftables configuration file and populate it with the following contents:
+
+```sh
+$ nano tor/nftables.conf
+```
+
+```conf
+define uid = 102
+
+table ip nat {
+    set unrouteables {
+        type ipv4_addr
+        flags interval
+        elements = { 127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 0.0.0.0/8, 100.64.0.0/10, 169.254.0.0/16, 192.0.0.0/24, 192.0.2.0/24, 192.88.99.0/24, 198.18.0.0/15, 198.51.100.0/24, 203.0.113.0/24, 224.0.0.0/4, 240.0.0.0/4 }
+    }
+
+    chain POSTROUTING {
+        type nat hook postrouting priority 100; policy accept;
+    }
+
+    chain OUTPUT {
+        type nat hook output priority -100; policy accept;
+        meta l4proto tcp ip daddr 10.192.0.0/10 redirect to :9040
+        meta l4proto udp ip daddr 127.0.0.1 udp dport 53 redirect to :9053
+        skuid $uid return
+        oifname "lo" return
+        ip daddr @unrouteables return
+        meta l4proto tcp redirect to :9040
+    }
+}
+
+table ip filter {
+    set private {
+        type ipv4_addr
+        flags interval
+        elements = { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 127.0.0.0/8 }
+    }
+
+    chain INPUT {
+        type filter hook input priority 0; policy drop;
+        ct state established accept
+        iifname "lo" accept
+        ip saddr @private accept
+    }
+
+    chain FORWARD {
+        type filter hook forward priority 0; policy drop;
+    }
+
+    chain OUTPUT {
+        type filter hook output priority 0; policy drop;
+        ct state established accept
+        meta l4proto tcp skuid $uid ct state new accept
+        oifname "lo" accept
+        ip daddr @private accept
+    }
+}
+```
+
 ### Prepare the entrypoint
 
 Create the [entrypoint](https://docs.docker.com/reference/dockerfile/#entrypoint){:target="_blank"} (the script to run when the container starts) and populate it with the following contents:
@@ -84,39 +151,75 @@ $ nano tor/docker-entrypoint.sh
 
 ```bash
 #!/bin/bash
-set -eu
+set -euo pipefail
 
 CONF_FILE=/etc/tor/torrc
 DATA_DIR=/var/lib/tor/
 PID_FILE=/run/tor/tor.pid
 
-init_config () { 
-  cat > $CONF_FILE <<EOF
-SocksPort 0.0.0.0:9050
+# set tor command
+set -- gosu tor:tor tor -f $CONF_FILE
+
+init_config () {
+  if ! [[ -f $CONF_FILE ]]; then
+    echo "$(date) [WARNING] - missing $CONF_FILE... creating default"
+  
+    cat > $CONF_FILE <<EOF
 DataDirectory $DATA_DIR
 PidFile $PID_FILE
+
+SocksPort 0.0.0.0:9050
+
+VirtualAddrNetworkIPv4 10.192.0.0/10
+AutomapHostsOnResolve 1
+TransPort 9040 IsolateClientAddr IsolateClientProtocol IsolateDestAddr IsolateDestPort
+DNSPort 9053
 EOF
+  fi
+  
+  echo "$(date) [INFO] - testing $CONF_FILE"
+  gosu tor:tor tor --verify-config -f $CONF_FILE | sed 's/^/--> /'
 }
 
-if ! [[ -f $CONF_FILE ]]; then
-  init_config
-fi
+init_network () {
+  echo "$(date) [INFO] - setting firewall"
+  sed -i "s/^define uid.*/define uid = $(id -u tor)/" /etc/nftables.conf
+  /usr/sbin/nft -f /etc/nftables.conf
+  nft list tables | sed 's/^/--> /'
+}
 
-CMD=$@
-if [[ $# -eq 0 ]]; then
-  # missing parameters, run tor
-  CMD=tor
-  CMD="$CMD -f $CONF_FILE"
-  $CMD --verify-config
-fi
+init_user () {
+  if [[ $( id -u tor ) -ne $TOR_GUID || $( id -g tor ) -ne $TOR_GUID ]]; then
+    echo "$(date) [INFO] - setting tor user"
+  
+    groupmod -g $TOR_GUID tor
+    usermod -u $TOR_GUID tor
+  fi
 
-exec $CMD
+  if [[ $( stat -c "%u %g" /var/lib/tor ) != "$TOR_GUID $TOR_GUID" ]]; then
+    echo "$(date) [INFO] - setting tor data dir ownwership"
+    chown -R tor:tor /var/lib/tor
+  fi
+  if [[ $( stat -c "%u %g" /run/tor ) != "$TOR_GUID $TOR_GUID" ]]; then
+    echo "$(date) [INFO] - setting tor run dir ownwership"
+    chown -R tor:tor /run/tor
+  fi
+}
+
+init_user
+init_network
+init_config
+
+echo "$(date) [INFO] - running tor"
+echo
+exec "$@"
 ```
 
 In this file:
 1. we create a default configuration for tor;
-2. we define the default files and directories;
-3. we run tor.
+2. we define the default user, files and directories;
+3. we apply the nftables rules [previously](#prepare-the-routing) defined;
+4. we run tor.
 
 ### Prepare the Dockerfile
 
@@ -176,7 +279,6 @@ RUN set -eux && \
     # build tor
     ./configure --disable-asciidoc --disable-html-manual --disable-manpage --enable-gpl --enable-lzma --enable-zstd --datadir=/var/lib --sysconfdir=/etc && \
     make -j$(nproc) && \
-    make -j$(nproc) check && \
     make install
 
 
@@ -188,31 +290,35 @@ RUN set -eux && \
     apt update && \
     apt install -y \
         curl \
+        dnsutils \
+        gosu \
         libevent-dev \
         liblzma5 \
         libzstd1 \
+        nftables \
         openssl \
         zlib1g && \
     rm -rf /var/lib/apt/lists/*
 
 # setup tor user and dirs
 ARG TOR_GUID=102
+ENV TOR_GUID=$TOR_GUID
 
 RUN set -eux && \
-    addgroup --gid $TOR_GUID tor && \
-    adduser --system --comment "" --gid $TOR_GUID --home /var/lib/tor/ --uid $TOR_GUID tor && \
-    mkdir /etc/tor/ && \
-    mkdir -m 0700 /run/tor/ && \
-    chown -R tor:tor /etc/tor/ /run/tor/
+    addgroup --system --gid $TOR_GUID tor && \
+    adduser --system --comment "" --gid $TOR_GUID --uid $TOR_GUID tor && \
+    mkdir /etc/tor /run/tor && \
+    chown tor:tor /run/tor
 
 # copy tor files
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 COPY --from=builder --chown=tor:tor /var/lib/tor/ /var/lib/tor/
 
-COPY --chmod=0755 docker-entrypoint.sh /usr/local/bin/
+# copy firewall rules
+COPY ./nftables.conf /etc/nftables.conf
 
-# set user and entrypoint
-USER tor
+# set entrypoint
+COPY --chmod=0755 docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
 ```
 
@@ -233,17 +339,22 @@ $ nano tor/torrc
 ```
 
 ```conf
-SocksPort 0.0.0.0:9050
-
 DataDirectory /var/lib/tor/
 DataDirectoryGroupReadable 1
+
+PidFile /run/tor/tor.pid
+
+SocksPort 0.0.0.0:9050
 
 ControlPort 0.0.0.0:9051
 CookieAuthentication 1
 CookieAuthFile /var/lib/tor/control_auth_cookie
 CookieAuthFileGroupReadable 1
 
-PidFile /run/tor/tor.pid
+VirtualAddrNetworkIPv4 10.192.0.0/10
+AutomapHostsOnResolve 1
+TransPort 9040 IsolateClientAddr IsolateClientProtocol IsolateDestAddr IsolateDestPort
+DNSPort 9053
 
 ############### This section is just for location-hidden services ###
 
@@ -271,14 +382,19 @@ services:
       args:
         TOR_VERSION: ${TOR_VERSION}
         TOR_GUID: ${TOR_GUID}
+    cap_add:
+      - NET_ADMIN
     container_name: ${COMPOSE_PROJECT_NAME}_tor
+    dns:
+      - "127.0.0.1"
+    dns_search: internal.namespace
     expose:
       - "9050"
       - "9051"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     healthcheck:
-      test: ["CMD-SHELL", "curl -f -x socks5h://localhost:9050 -s https://check.torproject.org/api/ip || exit 1"]
+      test: ["CMD-SHELL", "curl -f -s https://check.torproject.org/api/ip | grep true || exit 1"]
       interval: 180s
       timeout: 10s
       retries: 3
@@ -302,20 +418,16 @@ volumes:
 Be very careful to respect the indentation above, since yaml is very sensitive to this!
 
 In this file:
-
 1. we `build` the Dockerfile and create an image named `mobybolt/tor:${TOR_VERSION}`;
-
 2. we define a `healthcheck` that will check every 3 minutes that the exit IP address is a tor address; 
    1. after three failed attempts, the container will be marked `unhealthy`;
-
 3. we attach the container to the `backend` and `frontend` `networks`:
    1. we provide the container with the `TOR_ADDRESS` static address in the backend network;
    2. the tor proxy will receive connection requests from the tor network and redirect them to the affected services via the backend network;
    3. the tor proxy will receive connection requests in the backend network and redirect them to tor network;
-
-4. we define the `restart` policy `unless-stopped` for the container: this way, the container will always be automatically restarted, unless it has been stopped explicitly.
-
-5. we provide the container with the previously defined configuration ([bind mount](https://docs.docker.com/storage/bind-mounts/){:target="_blank"}) and with a [volume](https://docs.docker.com/storage/volumes/){:target="_blank"} named `mobybolt_tor-data` to store persistent data.
+4. we set the tor dns resolver; 
+5. we define the `restart` policy `unless-stopped` for the container: this way, the container will always be automatically restarted, unless it has been stopped explicitly;
+6. we provide the container with the previously defined configuration ([bind mount](https://docs.docker.com/storage/bind-mounts/){:target="_blank"}) and with a [volume](https://docs.docker.com/storage/volumes/){:target="_blank"} named `mobybolt_tor-data` to store persistent data.
 
 ### Link the docker compose file
 
