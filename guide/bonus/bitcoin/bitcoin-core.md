@@ -181,12 +181,13 @@ RUN set -eux && \
     mkdir -m 0700 /run/bitcoind && \
     chown bitcoin:bitcoin /home/bitcoin/.bitcoin /run/bitcoind
 
-# setup entrypoint
-COPY --chmod=0755 ./docker-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["docker-entrypoint.sh"]
-
 # switch user
 USER bitcoin
+WORKDIR /home/bitcoin
+
+# setup entrypoint
+ENTRYPOINT ["bitcoind"]
+CMD ["-pid=/run/bitcoind/bitcoind.pid"]
 ```
 
 In this file:
@@ -196,55 +197,6 @@ In this file:
    2. copying libraries and binaries from the builder image;
    3. configuring the `bitcoin` user and the directories to which he will have access;
    4. setting the `entrypoint` (the script to run when the container starts).
-
-### Create the entrypoint
-
-Create the [entrypoint](https://docs.docker.com/reference/dockerfile/#entrypoint){:target="_blank"} file and populate it with the following content:
-
-```sh
-$ nano bitcoin-core/docker-entrypoint.sh
-```
-
-```sh
-#!/bin/bash
-set -eo pipefail
-
-function die_func() {
-  echo "INFO: got SIGTERM... exiting"
-  exit 1
-}
-trap die_func TERM
-
-function wait_for_config () {
-  echo "WARNING: missing configuration file"
-  while ! [[ -f $CONF_FILE ]]; do
-    echo "--> waiting for $CONF_FILE"
-    sleep 30
-  done
-  echo "INFO: found configuration file!"
-}
-
-CMD=$@
-
-DATA_DIR=/home/bitcoin/.bitcoin
-CONF_FILE="$DATA_DIR/bitcoin.conf"
-PID_FILE=/run/bitcoind/bitcoind.pid
-
-if [[ $# -eq 0 ]]; then
-  # missing parameters, run bitcoind
-  CMD="bitcoind -conf=$CONF_FILE -datadir=$DATA_DIR -pid=$PID_FILE"
-  if ! [[ -f $CONF_FILE ]]; then
-    wait_for_config
-  fi
-fi
-
-exec $CMD
-```
-
-In this file:
-1. we define the default files and directories;
-2. we wait for a configuration file;
-3. we run bitcoin.
 
 ### Configure
 
@@ -266,16 +218,8 @@ txindex=1
 debug=tor
 debug=i2p
 
-# Assign read permission to the Bitcoin group users
-startupnotify=chmod g+r /home/bitcoin/.bitcoin/.cookie
-
 # Disable debug.log
 nodebuglogfile=1
-
-# Avoid assuming that a block and its ancestors are valid,
-# and potentially skipping their script verification.
-# We will set it to 0, to verify all.
-assumevalid=0
 
 # Enable all compact filters
 blockfilterindex=1
@@ -286,9 +230,21 @@ peerblockfilters=1
 # Maintain coinstats index used by the gettxoutsetinfo RPC
 coinstatsindex=1
 
+# Avoid assuming that a block and its ancestors are valid,
+# and potentially skipping their script verification.
+# We will set it to 0, to verify all.
+assumevalid=0
+
+# Initial block download optimizations (set dbcache size in megabytes 
+# (4 to 16384, default: 300) according to the available RAM of your device,
+# recommended: dbcache=1/2 x RAM available e.g: 4GB RAM -> dbcache=2048)
+# Remember to comment after IBD!
+dbcache=8192
+blocksonly=1
+
 # Network
-bind=172.16.21.10:8333
-bind=172.16.21.10:8334=onion
+bind=0.0.0.0:8333
+bind=0.0.0.0:8334=onion
 listen=1
 
 # Connect to clearnet using Tor SOCKS5 proxy
@@ -303,19 +259,14 @@ i2psam=172.16.21.4:7656
 
 # RPC
 rpcbind=0.0.0.0
+rpcport=8332
 rpcallowip=172.16.21.0/25
+rpccookieperms=group
 
 # ZMQ
 zmqpubhashblock=tcp://0.0.0.0:8433
 zmqpubrawblock=tcp://0.0.0.0:28332
 zmqpubrawtx=tcp://0.0.0.0:28333
-
-# Initial block download optimizations (set dbcache size in megabytes 
-# (4 to 16384, default: 300) according to the available RAM of your device,
-# recommended: dbcache=1/2 x RAM available e.g: 4GB RAM -> dbcache=2048)
-# Remember to comment after IBD!
-dbcache=4096
-blocksonly=1
 ```
 
 {:.more}
@@ -326,7 +277,7 @@ blocksonly=1
 
 #### Reject non-private networks (optional)
 
-Add these lines to the end of the file if you want to only connect to peers via tor and i2p. Save and exit.
+Add these lines to the end of the file if you want to only connect to onion or i2p peers. Save and exit.
 
 ```ini
 # Reject non-private networks
@@ -467,7 +418,7 @@ $ docker compose logs bitcoin
 > 2024-05-25T11:55:44Z Config file: /home/bitcoin/.bitcoin/bitcoin.conf
 > ...
 > 2024-05-25T11:55:44Z [tor] Successfully connected!
-> 2024-05-25T11:55:44Z [tor] Connected to Tor version 0.4.8.13
+> 2024-05-25T11:55:44Z [tor] Connected to Tor version 0.4.8.15
 > 2024-05-25T11:55:44Z [tor] Supported authentication method: COOKIE
 > 2024-05-25T11:55:44Z [tor] Supported authentication method: SAFECOOKIE
 > 2024-05-25T11:55:44Z [tor] Using SAFECOOKIE authentication, reading cookie authentication from /var/lib/tor/control_auth_cookie
