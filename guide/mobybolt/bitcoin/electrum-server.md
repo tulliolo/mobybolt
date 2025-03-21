@@ -364,7 +364,7 @@ Check the container status:
 ```sh
 $ docker compose ps | grep "fulcrum\|NAME"
 > NAME                IMAGE                      COMMAND                  SERVICE    CREATED          STATUS          PORTS
-> mobybolt_fulcrum    mobybolt/fulcrum:v1.11.1   "docker-entrypoint.sh"   fulcrum    48 minutes ago   Up 48 minutes   0/tcp                                                                                              mobybolt_fulcrum
+> mobybolt_fulcrum    mobybolt/fulcrum:v1.11.1   "Fulcrum /home/fulcr…"   fulcrum    48 minutes ago   Up 48 minutes   0/tcp                                                                                              mobybolt_fulcrum
 ```
 
 {:.note}
@@ -542,7 +542,7 @@ To perform this configuration:
 - Check the tor configuration file:
 
   ```sh
-  $ docker compose exec tor tor -f /etc/tor/torrc --verify-config
+  $ docker compose exec -u tor tor tor -f /etc/tor/torrc --verify-config
   > ...
   > Configuration was valid
   ```
@@ -584,14 +584,14 @@ If everything is ok, you can clear the old image and build cache, like in the fo
 
 ```sh
 $ docker images | grep "fulcrum\|TAG"
-> REPOSITORY           TAG      IMAGE ID       CREATED          SIZE
-> mobybolt/fulcrum     1.11.1   03c38d632c76   3 minutes ago    345MB
-> mobybolt/fulcrum     1.10.0   3613ae3d3613   14 minutes ago   322MB
+> REPOSITORY           TAG       IMAGE ID       CREATED          SIZE
+> mobybolt/fulcrum     v1.11.1   03c38d632c76   3 minutes ago    345MB
+> mobybolt/fulcrum     v1.10.0   3613ae3d3613   14 minutes ago   322MB
 ```
 
 ```sh
-$ docker image rm mobybolt/fulcrum:1.10.0
-> Untagged: mobybolt/fulcrum:0.4.8.10
+$ docker image rm mobybolt/fulcrum:v1.10.0
+> Untagged: mobybolt/fulcrum:v1.10.0
 > Deleted: sha256:3613ae3d36137e9e4dd38e93d40edd21b8e4aa17df5527e934aed2013087537a
 ```
 

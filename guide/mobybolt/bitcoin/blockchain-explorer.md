@@ -674,7 +674,7 @@ Try connecting from a PC browser on your local network at [https://mobybolt.loca
 - Check the tor configuration file:
 
   ```sh
-  $ docker compose exec tor tor -f /etc/tor/torrc --verify-config
+  $ docker compose exec -u tor tor tor -f /etc/tor/torrc --verify-config
   > ...
   > Configuration was valid
   ```
