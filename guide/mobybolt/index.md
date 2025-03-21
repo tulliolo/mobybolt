@@ -104,7 +104,7 @@ Docker allows you to create networks of the following types:
   - these services will still be able to reach and be reached from the outside through another service (e.g. nginx, tor...) attested on an external network and on their own internal network
 
 {:.more}
-[Networking in Docker](https://docs.docker.com/engine/network/){:.target="_blank"}
+[Networking in Docker](https://docs.docker.com/engine/network/){:target="_blank"}
 
 MobyBolt will create the following networks:
 
