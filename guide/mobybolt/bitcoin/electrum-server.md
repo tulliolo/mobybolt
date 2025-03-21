@@ -180,13 +180,13 @@ RUN set -xe && \
     chmod 0700 /home/fulcrum/db/ /run/fulcrum/ && \
     chown fulcrum:fulcrum /home/fulcrum/db/ /run/fulcrum/
 
-# setup entrypoint
-COPY --chmod=0755 docker-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["docker-entrypoint.sh"]
-
 # switch user
 USER fulcrum
 COPY ./fulcrum-banner.txt /home/fulcrum/.fulcrum/
+
+# setup entrypoint
+ENTRYPOINT ["Fulcrum"]
+CMD ["/home/fulcrum/fulcrum.conf"]
 ```
 
 In this file:
@@ -197,40 +197,6 @@ In this file:
    3. configuring the `fulcrum` user and the directories to which he will have access;
    4. adding the `fulcrum` user to the `bitcoin` group for RPC cookie authentication;
    5. setting the `entrypoint` (the script to run when the container starts).
-
-### Create the entrypoint
-
-Create the [entrypoint](https://docs.docker.com/reference/dockerfile/#entrypoint){:target="_blank"} file and populate it with the following content:
-
-```sh
-$ nano fulcrum/docker-entrypoint.sh
-```
-
-```sh
-#!/bin/bash
-set -eo pipefail
-
-function die_func() {
-  echo "INFO: got SIGTERM... exiting"
-  exit 1
-}
-trap die_func TERM
-
-CMD=$@
-
-CONF_FILE="/home/fulcrum/fulcrum.conf"
-
-if [[ $# -eq 0 ]]; then
-  # missing parameters, run fulcrum
-  CMD="/usr/local/bin/Fulcrum $CONF_FILE"
-fi
-
-exec $CMD
-```
-
-In this file:
-1. we define the configuration file;
-2. we run fulcrum.
 
 ### Configure Fulcrum
 
