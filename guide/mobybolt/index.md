@@ -138,7 +138,7 @@ This guide is intended to have a privacy-oriented slant. Any trade-offs on the p
 {:.note}
 >With docker it is also possible to directly [attach one container to another](https://docs.docker.com/engine/network/#container-networks){:target="_blank"}. In this mode, the guest container will inherit the IP of the host container and use the same networks as the host container.
 >
->In this guide, we configure the [tor](setup/tor-project#prepare-the-routing) service in two ways:
+>In this guide, we configure the [tor](./setup/tor-project#prepare-the-routing){:target="_blank"} service in two ways:
 >1. **explicit proxy**: for applications that support SOCKS5 Proxy to tor;
 >2. [**transparent proxy (+DNS)**](https://wiki.archlinux.org/title/Tor#Transparent_Torification){:target="_blank"}: for applications that don’t support SOCKS5 Proxy to tor.
 >
