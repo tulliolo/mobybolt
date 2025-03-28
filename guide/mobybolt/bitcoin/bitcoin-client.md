@@ -424,7 +424,7 @@ $ docker compose logs bitcoin
 > 2024-05-25T11:55:44Z Config file: /home/bitcoin/.bitcoin/bitcoin.conf
 > ...
 > 2024-05-25T11:55:44Z [tor] Successfully connected!
-> 2024-05-25T11:55:44Z [tor] Connected to Tor version 0.4.8.15
+> 2024-05-25T11:55:44Z [tor] Connected to Tor version 0.4.8.16
 > 2024-05-25T11:55:44Z [tor] Supported authentication method: COOKIE
 > 2024-05-25T11:55:44Z [tor] Supported authentication method: SAFECOOKIE
 > 2024-05-25T11:55:44Z [tor] Using SAFECOOKIE authentication, reading cookie authentication from /var/lib/tor/control_auth_cookie
