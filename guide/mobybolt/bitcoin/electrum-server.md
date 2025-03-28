@@ -161,6 +161,7 @@ RUN set -eux && \
     apt update && \
     apt install -y \
         libjemalloc-dev \
+        libminiupnpc17 \
         libqt5network5 \
         libzmq3-dev \
         python3 && \
@@ -574,6 +575,9 @@ To perform this configuration:
 ---
 
 ## Upgrade
+
+{:.warning}
+If your current version is less than v1.12.0, replace the Dockerfile with the one in this [section](#prepare-the-dockerfile).
 
 Check the [Fulcrum release page](https://github.com/cculianu/Fulcrum/releases){:target="_blank"} for a new version and change the `FULCRUM_VERSION` value in the `.env` file.
 Then, redo the steps described in:
