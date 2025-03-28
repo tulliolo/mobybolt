@@ -586,12 +586,12 @@ If everything is ok, you can clear the old image and build cache, like in the fo
 $ docker images | grep "fulcrum\|TAG"
 > REPOSITORY           TAG       IMAGE ID       CREATED          SIZE
 > mobybolt/fulcrum     v1.12.0   03c38d632c76   3 minutes ago    345MB
-> mobybolt/fulcrum     v1.10.0   3613ae3d3613   14 minutes ago   322MB
+> mobybolt/fulcrum     v1.11.1   3613ae3d3613   14 minutes ago   322MB
 ```
 
 ```sh
-$ docker image rm mobybolt/fulcrum:v1.10.0
-> Untagged: mobybolt/fulcrum:v1.10.0
+$ docker image rm mobybolt/fulcrum:v1.11.1
+> Untagged: mobybolt/fulcrum:v1.11.1
 > Deleted: sha256:3613ae3d36137e9e4dd38e93d40edd21b8e4aa17df5527e934aed2013087537a
 ```
 
