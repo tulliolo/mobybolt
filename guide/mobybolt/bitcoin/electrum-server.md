@@ -117,6 +117,7 @@ RUN set -eux && \
         git \
         libbz2-dev \
         libjemalloc-dev \
+        libminiupnpc-dev \
         libzmq3-dev \
         pkg-config \
         qt5-qmake \
