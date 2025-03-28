@@ -64,7 +64,7 @@ $ nano .env
 
 ```ini
 # fulcrum
-FULCRUM_VERSION=v1.11.1
+FULCRUM_VERSION=v1.12.0
 FULCRUM_ADDRESS=172.16.21.11
 FULCRUM_GUID=1101
 ```
@@ -273,7 +273,7 @@ volumes:
 ```
 
 In this file:
-1. we `build` the Dockerfile and create an image named `mobybolt/fulcrum:v1.11.1`;
+1. we `build` the Dockerfile and create an image named `mobybolt/fulcrum:v1.12.0`;
 2. we define the `restart` policy of the container in case of failures;
 3. we declare the bitcoin service as a dependency (Fulcrum will not run if bitcoin is not active);
 4. we provide the container:
@@ -327,12 +327,12 @@ Let's build the fulcrum image by typing:
 $ docker compose build fulcrum
 ```
 
-Check for a new image called `mobybolt/fulcrum:v1.11.1`:
+Check for a new image called `mobybolt/fulcrum:v1.12.0`:
 
 ```sh
 $ docker images | grep "fulcrum\|TAG"
 > REPOSITORY          TAG        IMAGE ID       CREATED              SIZE
-> mobybolt/fulcrum    v1.11.1    03c38d632c76   About a minute ago   345MB
+> mobybolt/fulcrum    v1.12.0    03c38d632c76   About a minute ago   345MB
 ```
 
 ---
@@ -364,7 +364,7 @@ Check the container status:
 ```sh
 $ docker compose ps | grep "fulcrum\|NAME"
 > NAME                IMAGE                      COMMAND                  SERVICE    CREATED          STATUS          PORTS
-> mobybolt_fulcrum    mobybolt/fulcrum:v1.11.1   "Fulcrum /home/fulcr…"   fulcrum    48 minutes ago   Up 48 minutes   0/tcp                                                                                              mobybolt_fulcrum
+> mobybolt_fulcrum    mobybolt/fulcrum:v1.12.0   "Fulcrum /home/fulcr…"   fulcrum    48 minutes ago   Up 48 minutes   0/tcp                                                                                              mobybolt_fulcrum
 ```
 
 {:.note}
@@ -585,7 +585,7 @@ If everything is ok, you can clear the old image and build cache, like in the fo
 ```sh
 $ docker images | grep "fulcrum\|TAG"
 > REPOSITORY           TAG       IMAGE ID       CREATED          SIZE
-> mobybolt/fulcrum     v1.11.1   03c38d632c76   3 minutes ago    345MB
+> mobybolt/fulcrum     v1.12.0   03c38d632c76   3 minutes ago    345MB
 > mobybolt/fulcrum     v1.10.0   3613ae3d3613   14 minutes ago   322MB
 ```
 
@@ -696,7 +696,7 @@ Follow the next steps to uninstall fulcrum:
 
    ```sh
    $ docker image rm $(docker images | grep fulcrum | awk '{print $3}')
-   > Untagged: mobybolt/fulcrum:v1.11.1
+   > Untagged: mobybolt/fulcrum:v1.12.0
    > Deleted: sha256:13afebf08e29c6b9a526a6e54ab1f93e745b25080add4e37af8f08bdf6cfbcc6
    ```
 
