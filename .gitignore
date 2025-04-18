@@ -4,3 +4,4 @@ Gemfile*
 .sass-cache
 _site
 *.xcf
+start_server.sh
