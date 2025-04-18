@@ -56,7 +56,7 @@ $ nano .env
 
 ```ini
 # bitcoin
-BITCOIN_VERSION=v28.1
+BITCOIN_VERSION=v29.0
 BITCOIN_ADDRESS=172.16.21.10
 BITCOIN_GUID=1100
 ```
@@ -83,15 +83,11 @@ RUN set -eux && \
     apt update && \
     apt install -y \
         # build requirements
-        automake \
-        autotools-dev \
-        bsdmainutils \
         build-essential \
-        ccache \
+        cmake \
         curl \
         git \
-        libtool \
-        pkg-config \
+        pkgconf \
         python3 \
         # dependencies
         libboost-dev \
@@ -107,7 +103,8 @@ FROM base AS builder
 ARG BITCOIN_VERSION
 
 ENV BITCOIN_URL="https://github.com/bitcoin/bitcoin.git" \
-    BITCOIN_KEYS_URL="https://api.github.com/repositories/355107265/contents/builder-keys"
+    BITCOIN_KEYS_URL="https://api.github.com/repositories/355107265/contents/builder-keys" \
+    BITCOIN_KEYS_EXTRA="F19F5FF2B0589EC341220045BA03F4DBE0C63FB4"
 
 RUN set -eux && \
     # clone repository
@@ -120,7 +117,8 @@ RUN set -eux && \
         while read url; do \
             curl -s "$url" |\
             gpg --import; \
-        done
+        done && \
+    gpg --recv-keys "${BITCOIN_KEYS_EXTRA}"
 
 WORKDIR bitcoin
 
@@ -128,25 +126,13 @@ RUN set -xe && \
     # verify signature
     git verify-tag $BITCOIN_VERSION && \
     # build bdb 4.8
-    make -C depends NO_BOOST=1 NO_LIBEVENT=1 NO_QT=1 NO_SQLITE=1 NO_NATPMP=1 NO_UPNP=1 NO_ZMQ=1 NO_USDT=1 && \
-    # configure
-    ./autogen.sh && \
-    export BDB_PREFIX="$PWD/depends/$( ls depends | grep linux-gnu )" && \
-    ./configure \
-        BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" \
-        --disable-bench \
-        --disable-gui-tests \
-        --disable-maintainer-mode \
-        --disable-man \
-        --disable-tests \
-        --with-daemon=yes \
-        --with-gui=no \
-        --with-qrencode=no \
-        --with-utils=yes && \
+    make -C depends NO_BOOST=1 NO_LIBEVENT=1 NO_QT=1 NO_SQLITE=1 NO_ZMQ=1 NO_USDT=1 && \
     # build
-    make -j$(nproc) && \
+    export BDB_PREFIX="$PWD/depends/$( ls depends | grep linux-gnu )" && \
+    cmake -B build -DBerkeleyDB_INCLUDE_DIR:PATH="${BDB_PREFIX}/include" -DWITH_BDB=ON && \
+    cmake --build build -j$(nproc) && \
     # install
-    make install
+    cmake --install build
 
 
 # base image
@@ -334,7 +320,7 @@ volumes:
 Be very careful to respect the indentation above, since yaml is very sensitive to this!
 
 In this file:
-1. we `build` the Dockerfile and create an image named `mobybolt/bitcoin:v28.1`;
+1. we `build` the Dockerfile and create an image named `mobybolt/bitcoin:v29.0`;
 2. we define a `healthcheck` that will check every minute that the bitcoin client is connected to at least one peer; 
 3. we define the `restart` policy of the container in case of failures;
 4. we provide the container with the `BITCOIN_ADDRESS` static address;
@@ -388,12 +374,12 @@ $ docker compose build bitcoin
 {:.warning}
 This may take a long time
 
-Check for a new image called `mobybolt/bitcoin:v28.1`:
+Check for a new image called `mobybolt/bitcoin:v29.0`:
 
 ```sh
 $ docker images | grep "bitcoin\|TAG"
 > REPOSITORY         TAG     IMAGE ID       CREATED              SIZE
-> mobybolt/bitcoin   v28.1   30adc7959c8e   About a minute ago   795MB
+> mobybolt/bitcoin   v29.0   30adc7959c8e   About a minute ago   795MB
 ```
 
 ## Run
@@ -411,7 +397,7 @@ Check the container logs:
 
 ```sh
 $ docker compose logs bitcoin
-> 2024-05-25T11:55:44Z Bitcoin Core version v28.1 (release build)
+> 2024-05-25T11:55:44Z Bitcoin Core version v29.0 (release build)
 > ...
 > 2024-05-25T11:55:44Z Default data directory /home/bitcoin/.bitcoin
 > 2024-05-25T11:55:44Z Using data directory /home/bitcoin/.bitcoin
@@ -431,7 +417,7 @@ Check the container status:
 ```sh
 $ docker compose ps | grep "bitcoin\|NAME"
 > NAME                      IMAGE                                  COMMAND                  SERVICE          CREATED      STATUS                PORTS
-> mobybolt_bitcoin          mobybolt/bitcoin:v28.1   "docker-entrypoint.sh"   bitcoin          4 days ago   Up 3 days (healthy)   
+> mobybolt_bitcoin          mobybolt/bitcoin:v29.0   "docker-entrypoint.sh"   bitcoin          4 days ago   Up 3 days (healthy)   
 ```
 
 {:.warning}
@@ -527,6 +513,9 @@ $ docker compose restart bitcoin
 
 ## Upgrade
 
+{:.important}
+If your current version is lower than v29.0, you need to update the Dockerfile as in the [Prepare](#prepare-the-dockerfile) section.
+
 Check the [Bitcoin Core release page](https://github.com/bitcoin/bitcoin/releases){:target="_blank"} for a new version and change the `BITCOIN_VERSION` value in the `.env` file.
 Then, redo the steps described in:
 
@@ -538,13 +527,13 @@ If everything is ok, you can clear the old image and build cache, like in the fo
 ```sh
 $ docker image ls | grep "bitcoin\|TAG"
 > REPOSITORY         TAG                   IMAGE ID       CREATED          SIZE
-> mobybolt/bitcoin   v28.1   30adc7959c8e   46 minutes ago   795MB
-> mobybolt/bitcoin   v28.0   56f39c90e8ac   4 weeks ago      795MB
+> mobybolt/bitcoin   v29.0   30adc7959c8e   46 minutes ago   795MB
+> mobybolt/bitcoin   v28.1   56f39c90e8ac   4 weeks ago      795MB
 ```
 
 ```sh
-$ docker image rm mobybolt/bitcoin:v28.0
-> Untagged: mobybolt/bitcoin:v28.0
+$ docker image rm mobybolt/bitcoin:v28.1
+> Untagged: mobybolt/bitcoin:v28.1
 > Deleted: sha256:56f39c90e8accbfae77a3c8ed9e6e5794d67c62d1944c2c0ce4c7bc3dd233f07
 ```
 
@@ -582,7 +571,7 @@ Follow the next steps to uninstall bitcoin:
 
    ```sh
    $ docker image rm $(docker images | grep bitcoin | awk '{print $3}')
-   > Untagged: mobybolt/bitcoin:v28.1
+   > Untagged: mobybolt/bitcoin:v29.0
    > Deleted: sha256:13afebf08e29c6b9a526a6e54ab1f93e745b25080add4e37af8f08bdf6cfbcc6
    ```
 
