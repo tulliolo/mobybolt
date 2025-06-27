@@ -59,7 +59,7 @@ $ nano .env
 
 ```ini
 # BTC RPC Explorer
-BTCEXP_VERSION=v3.4.0
+BTCEXP_VERSION=v3.5.0
 BTCEXP_ADDRESS=172.16.21.12
 BTCEXP_GUID=1102
 ```
@@ -79,7 +79,7 @@ $ nano btcrpcexplorer/Dockerfile
 
 ```Dockerfile
 # base image
-ARG NODE_VERSION=20
+ARG NODE_VERSION=24
 FROM node:$NODE_VERSION AS base
 
 # install dependencies
@@ -461,7 +461,7 @@ volumes:
 ```
 
 In this file:
-1. we `build` the Dockerfile and create an image named `mobybolt/btcrpcexplorer:v3.4.0`;
+1. we `build` the Dockerfile and create an image named `mobybolt/btcrpcexplorer:v3.5.0`;
 2. we define the `restart` policy of the container in case of failures;
 3. we define a HealthCheck task that polls the server every minute;
 4. we declare the bitcoin service as a dependency (BTC RPC Explorer will not run if bitcoin is not active);
@@ -521,12 +521,12 @@ Let's build the BTC RPC Explorer image by typing:
 $ docker compose build btcrpcexplorer
 ```
 
-Check for a new image called `mobybolt/btcrpcexplorer:v3.4.0`:
+Check for a new image called `mobybolt/btcrpcexplorer:v3.5.0`:
 
 ```sh
 $ docker images | grep "btcrpcexplorer\|TAG"
-> REPOSITORY                TAG     IMAGE ID       CREATED        SIZE
-> mobybolt/btcrpcexplorer   3.4.0   fe31f5c849c2   5 months ago   1.26GB
+> REPOSITORY                TAG      IMAGE ID       CREATED        SIZE
+> mobybolt/btcrpcexplorer   v3.4.0   fe31f5c849c2   5 months ago   1.26GB
 ```
 
 ---
@@ -559,8 +559,8 @@ Check the container status:
 
 ```sh
 $ docker compose ps | grep "btcrpcexplorer\|NAME"
-> NAME                      IMAGE                           COMMAND       SERVICE         CREATED         STATUS                   PORTS
-> mobybolt_btcrpcexplorer   mobybolt/btcrpcexplorer:3.4.0   "npm start"   btcrpcexplore   3 minutes ago   Up 3 minutes (healthy)   3002/tcp                                                                                           mobybolt_btcrpcexplorer
+> NAME                      IMAGE                            COMMAND       SERVICE         CREATED         STATUS                   PORTS
+> mobybolt_btcrpcexplorer   mobybolt/btcrpcexplorer:v3.4.0   "npm start"   btcrpcexplore   3 minutes ago   Up 3 minutes (healthy)   3002/tcp                                                                                           mobybolt_btcrpcexplorer
 ```
 
 {:.warning}
@@ -708,7 +708,9 @@ Try connecting from Tor Browser (using your onion address above) at http://abcde
   
 ## Upgrade
 
-Check the [BTC RPC Explorer release page](https://github.com/janoside/btc-rpc-explorer/releases){:target="_blank"} for a new version and change the `BTCEXP_VERSION` value in the `.env` file.
+- Check the [BTC RPC Explorer release page](https://github.com/janoside/btc-rpc-explorer/releases){:target="_blank"} for a new version and change the `BTCEXP_VERSION` value in the `.env` file.
+- Open the `btprpcexplorer/Dockerfile` and change the NODE_VERSION to 24: `ARG NODE_VERSION=24`.
+
 Then, redo the steps described in:
 
 1. [Build](#build)
@@ -718,14 +720,14 @@ If everything is ok, you can clear the old image and build cache, like in the fo
 
 ```sh
 $ docker images | grep "btcrpcexplorer\|TAG"
-> REPOSITORY                TAG     IMAGE ID       CREATED          SIZE
-> mobybolt/btcrpcexplorer   3.4.0   03c38d632c76   3 minutes ago    1.26GB
-> mobybolt/btcrpcexplorer   3.3.0   3613ae3d3613   14 minutes ago   1.24GB
+> REPOSITORY                TAG      IMAGE ID       CREATED          SIZE
+> mobybolt/btcrpcexplorer   v3.5.0   03c38d632c76   3 minutes ago    1.26GB
+> mobybolt/btcrpcexplorer   v3.4.0   3613ae3d3613   14 minutes ago   1.24GB
 ```
 
 ```sh
-$ docker image rm mobybolt/btcrpcexplorer:3.3.0
-> Untagged: mobybolt/btcrpcexplorer:3.3.0
+$ docker image rm mobybolt/btcrpcexplorer:v3.3.0
+> Untagged: mobybolt/btcrpcexplorer:v3.4.0
 > Deleted: sha256:3613ae3d36137e9e4dd38e93d40edd21b8e4aa17df5527e934aed2013087537a
 ```
 
@@ -830,7 +832,7 @@ Follow the next steps to uninstall BTC RPC Explorer:
 
    ```sh
    $ docker image rm $(docker images | grep btcrpcexplorer | awk '{print $3}')
-   > Untagged: mobybolt/btcrpcexplorer:v3.4.0
+   > Untagged: mobybolt/btcrpcexplorer:v3.5.0
    > Deleted: sha256:13afebf08e29c6b9a526a6e54ab1f93e745b25080add4e37af8f08bdf6cfbcc6
    ```
 
