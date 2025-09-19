@@ -64,7 +64,7 @@ $ nano .env
 
 ```conf
 # tor
-TOR_VERSION=0.4.8.17
+TOR_VERSION=0.4.8.18
 TOR_ADDRESS=172.16.21.3
 TOR_GUID=102
 ```
@@ -289,6 +289,7 @@ RUN set -eux && \
     # install dependencies
     apt update && \
     apt install -y \
+        adduser \
         curl \
         dnsutils \
         gosu \
@@ -477,12 +478,12 @@ $ docker compose build tor
 {:.warning}
 This may take a long time.
 
-Check for a new image called `mobybolt/tor:0.4.8.17`:
+Check for a new image called `mobybolt/tor:0.4.8.18`:
 
 ```sh
 $ docker images | grep "tor\|TAG"
 > REPOSITORY       TAG        IMAGE ID       CREATED              SIZE
-> mobybolt/tor     0.4.8.17   dc4f7683b05f   About a minute ago   130MB
+> mobybolt/tor     0.4.8.18   dc4f7683b05f   About a minute ago   130MB
 ```
 
 ---
@@ -513,7 +514,7 @@ Check the container status:
 ```sh
 $ docker compose ps | grep "tor\|NAME"
 > NAME           IMAGE                   COMMAND                  SERVICE   CREATED              STATUS                                 PORTS
-> mobybolt_tor   mobybolt/tor:0.4.8.17   "docker-entrypoint.sh"   tor       About a minute ago   Up About a minute (health: starting)   9050-9051/tcp
+> mobybolt_tor   mobybolt/tor:0.4.8.18   "docker-entrypoint.sh"   tor       About a minute ago   Up About a minute (health: starting)   9050-9051/tcp
 ```
 
 {:.warning}
@@ -651,21 +652,22 @@ A few examples:
 Check the [Tor Project](https://www.torproject.org/download/tor/){:target="_blank"} for a new version and change the `TOR_VERSION` value in the `.env` file.
 Then, redo the steps described in:
 
-1. [Build](#build)
-2. [Run](#run)
+1. [Prepare the Dockerfile](#prepare-the-dockerfile)
+2. [Build](#build)
+3. [Run](#run)
 
 If everything is ok, you can clear the old image and build cache, like in the following example:
 
 ```sh
 $ docker images | grep "mobybolt/tor\|TAG"
 > REPOSITORY       TAG        IMAGE ID       CREATED          SIZE
-> mobybolt/tor     0.4.8.17   ee5c4a10bdd0   3 minutes ago    130MB
-> mobybolt/tor     0.4.8.16   3613ae3d3613   14 minutes ago   128MB
+> mobybolt/tor     0.4.8.18   ee5c4a10bdd0   3 minutes ago    130MB
+> mobybolt/tor     0.4.8.17   3613ae3d3613   14 minutes ago   128MB
 ```
 
 ```sh
-$ docker image rm mobybolt/tor:0.4.8.16
-> Untagged: mobybolt/tor:0.4.8.16
+$ docker image rm mobybolt/tor:0.4.8.17
+> Untagged: mobybolt/tor:0.4.8.17
 > Deleted: sha256:3613ae3d36137e9e4dd38e93d40edd21b8e4aa17df5527e934aed2013087537a
 ```
 
@@ -704,7 +706,7 @@ Follow the next steps to uninstall tor:
 
    ```sh
    $ docker image rm $(docker images | grep mobybolt/tor | awk '{print $3}')
-   > Untagged: mobybolt/tor:0.4.8.17
+   > Untagged: mobybolt/tor:0.4.8.18
    > Deleted: sha256:13afebf08e29c6b9a526a6e54ab1f93e745b25080add4e37af8f08bdf6cfbcc6
    ```
 
