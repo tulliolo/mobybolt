@@ -64,7 +64,7 @@ $ nano .env
 
 ```ini
 # fulcrum
-FULCRUM_VERSION=v1.12.0
+FULCRUM_VERSION=v2.0.0
 FULCRUM_ADDRESS=172.16.21.11
 FULCRUM_GUID=1101
 ```
@@ -161,7 +161,7 @@ RUN set -eux && \
     apt update && \
     apt install -y \
         libjemalloc-dev \
-        libminiupnpc17 \
+        libminiupnpc-dev \
         libqt5network5 \
         libzmq3-dev \
         python3 && \
@@ -225,16 +225,16 @@ pidfile = /run/fulcrum/fulcrum.pid
 tcp = 0.0.0.0:50001
 peering = false
 
-# Set utxo-cache according to your device,
-# recommended: utxo-cache=1/2 x RAM available e.g: 4GB RAM -> dbcache=2048
-utxo-cache = 4096
+# Set db_mem according to your device,
+# recommended: db_mem=1/2 x RAM available e.g: 4GB RAM -> db_mem=2048
+db_mem = 4096
 
 # Banner
 banner = /home/fulcrum/.fulcrum/fulcrum-banner.txt
 ```
 
 {:.warning}
-Adjust the `utxo-cache` value according to your hardware.
+Adjust the `db_mem` value according to your hardware.
 
 ### Prepare the docker compose file
 
@@ -275,7 +275,7 @@ volumes:
 ```
 
 In this file:
-1. we `build` the Dockerfile and create an image named `mobybolt/fulcrum:v1.12.0`;
+1. we `build` the Dockerfile and create an image named `mobybolt/fulcrum:v2.0.0`;
 2. we define the `restart` policy of the container in case of failures;
 3. we declare the bitcoin service as a dependency (Fulcrum will not run if bitcoin is not active);
 4. we provide the container:
@@ -329,12 +329,12 @@ Let's build the fulcrum image by typing:
 $ docker compose build fulcrum
 ```
 
-Check for a new image called `mobybolt/fulcrum:v1.12.0`:
+Check for a new image called `mobybolt/fulcrum:v2.0.0`:
 
 ```sh
 $ docker images | grep "fulcrum\|TAG"
 > REPOSITORY          TAG        IMAGE ID       CREATED              SIZE
-> mobybolt/fulcrum    v1.12.0    03c38d632c76   About a minute ago   345MB
+> mobybolt/fulcrum    v2.0.0    03c38d632c76   About a minute ago   345MB
 ```
 
 ---
@@ -366,7 +366,7 @@ Check the container status:
 ```sh
 $ docker compose ps | grep "fulcrum\|NAME"
 > NAME                IMAGE                      COMMAND                  SERVICE    CREATED          STATUS          PORTS
-> mobybolt_fulcrum    mobybolt/fulcrum:v1.12.0   "Fulcrum /home/fulcr…"   fulcrum    48 minutes ago   Up 48 minutes   0/tcp                                                                                              mobybolt_fulcrum
+> mobybolt_fulcrum    mobybolt/fulcrum:v2.0.0   "Fulcrum /home/fulcr…"   fulcrum    48 minutes ago   Up 48 minutes   0/tcp                                                                                              mobybolt_fulcrum
 ```
 
 {:.note}
@@ -576,27 +576,32 @@ To perform this configuration:
 
 ## Upgrade
 
-{:.warning}
-If your current version is less than v1.12.0, replace the Dockerfile with the one in this [section](#prepare-the-dockerfile).
-
 Check the [Fulcrum release page](https://github.com/cculianu/Fulcrum/releases){:target="_blank"} for a new version and change the `FULCRUM_VERSION` value in the `.env` file.
+
 Then, redo the steps described in:
 
-1. [Build](#build)
-2. [Run](#run)
+1. [Prepare the Dockerfile](#prepare-the-dockerfile)
+2. [Build](#build)
+3. [Upgrade the database](#upgrading-the-database)
+
+   {:.important}
+   Follow this step only if your current version is less than v2.0.0.
+
+4. [Run](#run)
+   
 
 If everything is ok, you can clear the old image and build cache, like in the following example:
 
 ```sh
 $ docker images | grep "fulcrum\|TAG"
 > REPOSITORY           TAG       IMAGE ID       CREATED          SIZE
-> mobybolt/fulcrum     v1.12.0   03c38d632c76   3 minutes ago    345MB
-> mobybolt/fulcrum     v1.11.1   3613ae3d3613   14 minutes ago   322MB
+> mobybolt/fulcrum     v2.0.0   03c38d632c76   3 minutes ago    345MB
+> mobybolt/fulcrum     v1.12.0   3613ae3d3613   14 minutes ago   322MB
 ```
 
 ```sh
-$ docker image rm mobybolt/fulcrum:v1.11.1
-> Untagged: mobybolt/fulcrum:v1.11.1
+$ docker image rm mobybolt/fulcrum:v1.12.0
+> Untagged: mobybolt/fulcrum:v1.12.0
 > Deleted: sha256:3613ae3d36137e9e4dd38e93d40edd21b8e4aa17df5527e934aed2013087537a
 ```
 
@@ -609,6 +614,88 @@ $ docker buildx prune
 > ...
 > Total:  1.853GB
 ```
+
+### Upgrading the database
+
+{:.important}
+Follow this section only if your current version is less than v2.0.0.
+
+In version 2.x, the database format has been completely redone and now Fulcrum provides reliability guarantees such that Fulcrum's db can no longer get corrupted. In other words, you should never see the dreaded "your database is corrupt, please resynch"-style messages, even if Fulcrum is killed at an inopportune time.
+
+In addiction, the `utxo-cache` option has been completely removed, therefore to upgrade to Fulcrum v2.x, you must edit with `nano` the `fulcrum/fulcrum.conf` file and replace the term `utxo-cache` with `db_mem`.
+
+In order to upgrade the database to the new 2.x format, you have two options (choose only one):
+
+#### 1. Full re-synch
+
+{:.warning}
+This can take up to ~1.5 - 4 days or more, depending on the hardware.
+
+This is the simplest but way-to-slower option, since you will destroy the current database and re-sync the entire database from block 0. To run this option:
+
+1. stop the current container:
+
+   ```sh
+   $ docker compose down fulcrum
+   ```
+
+2. remove the current database:
+
+   ```sh
+   $ docker volume rm mobybolt_fulcrum-data
+   ```
+
+3. restart Fulcrum
+
+   ```sh
+   $ docker compose up -d fulcrum
+   ```
+
+#### 2. DB Upgrade
+
+This option will migrate the current database in the new format. It's the fastest option and it will take about one hour. To run this option:
+
+1. edit with `nano` the `fulcrum/docker-compose.yml` file and add a `command` statement below the `services/fulcrum` hierarchy, to force the database upgrade at the next start:
+
+   ```yaml
+   services:
+     fulcrum:
+       ...
+       command: --db-upgrade /home/fulcrum/fulcrum.conf
+       ...
+   ```
+
+2. check the docker compose file:
+
+   ```sh
+   $ docker compose config --quiet && printf "OK\n" || printf "ERROR\n"
+   > OK
+   ```
+
+   {:.hint}
+   If the output is `ERROR`, check the error reported... Maybe some wrong indentation in the yaml files?
+
+3. restart Fulcrum
+
+   ```sh
+   $ docker compose up -d fulcrum
+   ```
+
+4. check the logs and wait for the database upgrade to complete (you should see a line like the following):
+
+   ```sh
+   $ docker compose logs -f fulcrum
+   > ...
+   > [2025-09-27 10:49:04.788] Deleting directory "/home/fulcrum/db/rpa" ...
+   > [2025-09-27 10:49:09.611] Completed DB upgrade. Imported 10 tables, 4277978769 rows (of which 168260953 were converted), 7766 write batches, 154.6 GB in 4720.0 seconds.
+   > ...
+   ```
+
+{:.warning}
+Please let the upgrade process run to completion and do not kill, stop, molest, or otherwise abuse the Fulcrum process while it's upgrading the DB!!. If you do, the old 1.x database will be lost and your 2.0 database will also be corrupted. To remedy this you can only do a full re-synch as described in [option 1](#1-full-re-synch)
+
+{:.hint}
+After the upgrade, you can safely remove the `command` statement from the `fulcrum/docker-compose.yml`.
 
 ---
 
@@ -701,7 +788,7 @@ Follow the next steps to uninstall fulcrum:
 
    ```sh
    $ docker image rm $(docker images | grep fulcrum | awk '{print $3}')
-   > Untagged: mobybolt/fulcrum:v1.12.0
+   > Untagged: mobybolt/fulcrum:v2.0.0
    > Deleted: sha256:13afebf08e29c6b9a526a6e54ab1f93e745b25080add4e37af8f08bdf6cfbcc6
    ```
 
