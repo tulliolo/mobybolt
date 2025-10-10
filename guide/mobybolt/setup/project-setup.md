@@ -129,7 +129,7 @@ If you have an active Lightning node, make sure you have a backup of all the dat
    ```sh
    $ docker image rm $(docker images | grep 'mobybolt\|nginx\|i2pd' | awk '{print $3}')
    > ...
-   > Untagged: mobybolt/tor:0.4.8.18
+   > Untagged: mobybolt/tor:0.4.8.19
    > Deleted: sha256:ee5c4a10bdd0653c0482192a97d5e16c570c7389f323f3008b9c76cab7a8eaf9
    > Untagged: nginx:latest
    > Deleted: sha256:2c250073ded2286f819a9c025bfe9d87250d1f7a37ab236a7b61aec31e4c63d8
