@@ -64,7 +64,7 @@ $ nano .env
 
 ```conf
 # tor
-TOR_VERSION=0.4.8.19
+TOR_VERSION=0.4.8.22
 TOR_ADDRESS=172.16.21.3
 TOR_GUID=102
 ```
@@ -478,12 +478,12 @@ $ docker compose build tor
 {:.warning}
 This may take a long time.
 
-Check for a new image called `mobybolt/tor:0.4.8.19`:
+Check for a new image called `mobybolt/tor:0.4.8.22`:
 
 ```sh
 $ docker images | grep "tor\|TAG"
 > REPOSITORY       TAG        IMAGE ID       CREATED              SIZE
-> mobybolt/tor     0.4.8.19   dc4f7683b05f   About a minute ago   130MB
+> mobybolt/tor     0.4.8.22   dc4f7683b05f   About a minute ago   130MB
 ```
 
 ---
@@ -514,7 +514,7 @@ Check the container status:
 ```sh
 $ docker compose ps | grep "tor\|NAME"
 > NAME           IMAGE                   COMMAND                  SERVICE   CREATED              STATUS                                 PORTS
-> mobybolt_tor   mobybolt/tor:0.4.8.19   "docker-entrypoint.sh"   tor       About a minute ago   Up About a minute (health: starting)   9050-9051/tcp
+> mobybolt_tor   mobybolt/tor:0.4.8.22   "docker-entrypoint.sh"   tor       About a minute ago   Up About a minute (health: starting)   9050-9051/tcp
 ```
 
 {:.warning}
@@ -661,13 +661,13 @@ If everything is ok, you can clear the old image and build cache, like in the fo
 ```sh
 $ docker images | grep "mobybolt/tor\|TAG"
 > REPOSITORY       TAG        IMAGE ID       CREATED          SIZE
-> mobybolt/tor     0.4.8.19   ee5c4a10bdd0   3 minutes ago    130MB
-> mobybolt/tor     0.4.8.18   3613ae3d3613   14 minutes ago   128MB
+> mobybolt/tor     0.4.8.22   ee5c4a10bdd0   3 minutes ago    130MB
+> mobybolt/tor     0.4.8.21   3613ae3d3613   14 minutes ago   128MB
 ```
 
 ```sh
-$ docker image rm mobybolt/tor:0.4.8.18
-> Untagged: mobybolt/tor:0.4.8.18
+$ docker image rm mobybolt/tor:0.4.8.21
+> Untagged: mobybolt/tor:0.4.8.21
 > Deleted: sha256:3613ae3d36137e9e4dd38e93d40edd21b8e4aa17df5527e934aed2013087537a
 ```
 
@@ -706,7 +706,7 @@ Follow the next steps to uninstall tor:
 
    ```sh
    $ docker image rm $(docker images | grep mobybolt/tor | awk '{print $3}')
-   > Untagged: mobybolt/tor:0.4.8.19
+   > Untagged: mobybolt/tor:0.4.8.22
    > Deleted: sha256:13afebf08e29c6b9a526a6e54ab1f93e745b25080add4e37af8f08bdf6cfbcc6
    ```
 

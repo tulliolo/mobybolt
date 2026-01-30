@@ -692,7 +692,7 @@ Try connecting from a PC browser on your local network at [https://mobybolt.loca
   ```sh
   $ docker compose ps | grep "tor\|NAME"
   > NAME           IMAGE                   COMMAND                  SERVICE    CREATED       STATUS                        PORTS
-  > mobybolt_tor   mobybolt/tor:0.4.8.19   "docker-entrypoint.sh"   tor        3 hours ago   Up About a minute (healthy)   9050-9051/tcp
+  > mobybolt_tor   mobybolt/tor:0.4.8.22   "docker-entrypoint.sh"   tor        3 hours ago   Up About a minute (healthy)   9050-9051/tcp
   ```
 
 - get your onion address:
@@ -810,7 +810,7 @@ Follow the next steps to uninstall BTC RPC Explorer:
      ```sh
      $ docker compose ps | grep "tor\|NAME"
      > NAME           IMAGE                   COMMAND                   SERVICE    CREATED       STATUS                      PORTS
-     > mobybolt_tor   mobybolt/tor:0.4.8.19   "/docker-entrypoint.sh"   tor        2 hours ago   Up 5 minutes (healthy)      9050-9051/tcp
+     > mobybolt_tor   mobybolt/tor:0.4.8.22   "/docker-entrypoint.sh"   tor        2 hours ago   Up 5 minutes (healthy)      9050-9051/tcp
      ```
 
 3. Remove the container:
