@@ -190,7 +190,7 @@ In this file:
 Download the Ordisrespector patch, an Ordinals NFTs spam filter for mempool politics of Bitcoin Core:
 
 ```sh
-$ wget https://raw.githubusercontent.com/tulliolo/mobybolt/master/resources/ordisrespector.patch
+$ wget -P bitcoin-core/patches https://raw.githubusercontent.com/tulliolo/mobybolt/master/resources/ordisrespector.patch
 ```
 
 The downloaded patch will be automatically applied in the [Build](#build) stage.
