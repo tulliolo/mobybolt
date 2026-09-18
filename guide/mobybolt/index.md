@@ -48,17 +48,15 @@ Below is the map of the default services that we are going to install in the var
 |**[reverse proxy](setup/reverse-proxy)**|nginx|setup|
 |**[tor](setup/tor-project)**|tor|setup|
 |**[i2p](setup/i2p-project)**|i2p|setup|
-|**[bitcoin client](bitcoin/bitcoin-knots)**|bitcoin knots|bitcoin|
-|**[electrum server](bitcoin/fulcrum)**|fulcrum|bitcoin|
-|**[blockchain explorer](bitcoin/btcrpcexplorer)**|btc rpc explorer|bitcoin|
-|**[lightning client](lightning/lnd)**|lnd|lightning|
-|**[lightning webapp](lightning/thunderhub)**|ride the lightning|lightning|
+|**[bitcoin client](bitcoin/bitcoin-client)**|bitcoin Core|bitcoin|
+|**[electrum server](bitcoin/electrum-server)**|fulcrum|bitcoin|
+|**[blockchain explorer](bitcoin/blockchain-explorer)**|btc rpc explorer|bitcoin|
 
 For each service, we will explain the installation and upgrade procedures.
 
 For the sake of completeness, we will also present the procedures for uninstalling each service. However, it must be considered that, since many services are strongly interconnected, uninstalling one of them could compromise many others.
 For example, virtually all other applications require a bitcoin client, and uninstalling this would make them unusable.
-However, the procedure for uninstalling the bitcoin client could be used to replace a specific implementation of it (e.g. Bitcoin Core) with another (e.g. Bitcoin Knots).
+However, the procedure for uninstalling the bitcoin client could be used to replace a specific implementation of it (e.g. Bitcoin Core) with another.
 
 Below is a map of the direct/strong dependencies of each service:
 - horizontally you will find out which other services does each service depend on (e.g. `electrum server` depends on `bitcoin client`, which in turn depends on `tor` and `i2p`);
@@ -72,8 +70,6 @@ Below is a map of the direct/strong dependencies of each service:
 |**bitcoin client**||D|D||||||
 |**electrum server**||||D|||||
 |**blockchain explorer**||||D|D||||
-|**lightning client**||||D|||||
-|**lightning webapp**|||||||D||
 
 ---
 
@@ -115,7 +111,7 @@ MobyBolt will create the following networks:
 
 {:.note}
 >A **static addressing** (generally not necessary, since services can be invoked by name) will be used for the **backend internal network**. In fact:
->- if you wanted to implement the (optional) configuration in Bitcoin Knots/Core to reject non-private networks, name resolution would be disabled and you could only reach the other containers via the IP address (which will therefore have to be static);
+>- if you wanted to implement the (optional) configuration in Bitcoin Core/Core to reject non-private networks, name resolution would be disabled and you could only reach the other containers via the IP address (which will therefore have to be static);
 >- with a dynamic addressing, we could have problems with nginx and tor, which will be the only access points from the outside to all the services. If we wanted to temporarily disable a non-mandatory service (e.g. BTC RPC Explorer) nginx and tor would no longer be able to resolve its name and would fail.
 
 MobyBolt applications will be attested to networks as follows:
@@ -128,8 +124,6 @@ MobyBolt applications will be attested to networks as follows:
 |**bitcoin client**||&#10004;|
 |**electrum server**||&#10004;|
 |**blockchain explorer**||&#10004;|
-|**lightning client**||&#10004;|
-|**lightning webapp**||&#10004;|
 
 With this configuration we will ensure that all the services implemented can communicate with the outside world only through `nginx`, `tor` or `i2p`, avoiding any leaks and improving our privacy.
 

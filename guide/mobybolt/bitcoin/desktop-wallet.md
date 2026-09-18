@@ -205,3 +205,8 @@ You're set! Sparrow Wallet is now configured to use the Tor proxy when fetching 
 ## For the future: Sparrow update
 
 Sparrow will automatically notify you when an update is available. Simply install the updates using the usual method for your OS.
+
+---
+
+{:.d-flex .flex-justify-between}
+[<< Electrum server](blockchain-explorer)

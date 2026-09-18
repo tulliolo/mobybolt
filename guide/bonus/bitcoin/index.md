@@ -11,10 +11,6 @@ has_toc: false
 
 ---
 
-## Bitcoin clients
-
-- [Bitcoin Core](bitcoin-core): the original bitcoin client
-
 ## Electrum servers
 
 - [Electrs](electrs): an alternative to Fulcrum
