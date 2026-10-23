@@ -13,7 +13,7 @@ has_toc: false
 {: .no_toc}
 
 {: .text-center}
-![bitcoin Core logo](../../../images/mobybolt-bitcoin-bitcoin-client_logo.png){: width="20%"}
+![bitcoin Core logo](../../../images/bonus-bitcoin-bitcoin-core_logo.png){: width="20%"}
 
 We install [Bitcoin Core](https://bitcoincore.org/){:target="_blank"}, the reference client implementation of the Bitcoin network.
 
