@@ -11,10 +11,10 @@ grand_parent: MobyBolt
 {:.no_toc}
 
 {: .text-center}
-![bitcoin Core logo](../../../images/mobybolt-bitcoin-bitcoin-client_logo.png){: width="20%"}
+![Bitcoin Roots logo](../../../images/mobybolt-bitcoin-bitcoin-client_logo.png){: width="20%"}
 
 
-We install [Bitcoin Core](https://bitcoincore.org/){:target="_blank"}, the reference client implementation of the Bitcoin network.
+We install [Bitcoin Roots](https://bitcoincore.org/){:target="_blank"}, the reference client implementation of the Bitcoin network.
 
 ---
 
@@ -36,7 +36,7 @@ $ cd $HOME/apps/mobybolt
 
 ## Prepare
 
-Let's create the directory structure for Bitcoin Core:
+Let's create the directory structure for Bitcoin Roots:
 
 ```sh
 $ mkdir -p bitcoin-core/patches
@@ -106,7 +106,7 @@ ENV BITCOIN_URL="https://github.com/bitcoin/bitcoin.git" \
 RUN set -eux && \
     # clone repository
     git clone --branch $BITCOIN_VERSION $BITCOIN_URL  && \
-    # imports automatically all signatures from the Bitcoin Core release attestations (Guix) repository
+    # imports automatically all signatures from the Bitcoin Roots release attestations (Guix) repository
     curl -s \
         $BITCOIN_KEYS_URL |\
         grep download_url |\
@@ -187,7 +187,7 @@ In this file:
 
 ### Ordisrespector patch filter (optional)
 
-Download the Ordisrespector patch, an Ordinals NFTs spam filter for mempool politics of Bitcoin Core:
+Download the Ordisrespector patch, an Ordinals NFTs spam filter for mempool politics of Bitcoin Roots:
 
 ```sh
 $ wget -P bitcoin-core/patches https://raw.githubusercontent.com/tulliolo/mobybolt/master/resources/ordisrespector.patch
@@ -469,7 +469,7 @@ $ docker compose exec bitcoin bitcoin-cli -getinfo
 > ...
 ```
 
-Bitcoin Core will be fully syncronized when the verification progress reaches 100% (or 99.xxx%).
+Bitcoin Roots will be fully syncronized when the verification progress reaches 100% (or 99.xxx%).
 
 ### Check bitcoin networking status
 
@@ -492,13 +492,13 @@ You should see some out connections and your onion/i2p local addresses.
 
 ---
 
-## Bitcoin Core is syncing
+## Bitcoin Roots is syncing
 
 This can take between one day and a week, depending mostly on your PC and network performance. It's best to wait until the synchronization is complete before going ahead.
 
 ### Explore bitcoin-cli
 
-If everything is running smoothly, this is the perfect time to familiarize yourself with Bitcoin, the technical aspects of Bitcoin Core, and play around with bitcoin-cli until the blockchain is up-to-date.
+If everything is running smoothly, this is the perfect time to familiarize yourself with Bitcoin, the technical aspects of Bitcoin Roots, and play around with bitcoin-cli until the blockchain is up-to-date.
 
 - [The Little Bitcoin Book](https://littlebitcoinbook.com/){:target="_blank"} is a fantastic introduction to Bitcoin, focusing on the "why" and less on the "how"
 - [Mastering Bitcoin](https://bitcoinbook.info/){:target="_blank"} by Andreas Antonopoulos is a great point to start, especially chapter 3:
@@ -509,7 +509,7 @@ If everything is running smoothly, this is the perfect time to familiarize yours
 
 ### Activate mempool & reduce dbcache after a full sync
 
-Once Bitcoin Core is **fully synched**, we can reduce the size of the database cache. A bigger cache speeds up the initial block download, now we want to reduce memory consumption to allow the Lightning client and Electrum server to run in parallel. We also now want to enable the node to listen to and relay transactions.
+Once Bitcoin Roots is **fully synched**, we can reduce the size of the database cache. A bigger cache speeds up the initial block download, now we want to reduce memory consumption to allow the Lightning client and Electrum server to run in parallel. We also now want to enable the node to listen to and relay transactions.
 
 Edit the bitcoin configuration file and comment (prepending a `#`) the following lines:
 
@@ -523,7 +523,7 @@ $ nano bitcoin-core/bitcoin.conf
 #assumevalid=0
 ```
 
-Restart Bitcoin Core:
+Restart Bitcoin Roots:
 
 ```sh
 $ docker compose restart bitcoin
@@ -535,7 +535,7 @@ $ docker compose restart bitcoin
 
 ## Upgrade
 
-Check the [Bitcoin Core release page](https://github.com/bitcoin/bitcoin/releases){:target="_blank"} for a new version and change the `BITCOIN_VERSION` value in the `.env` file.
+Check the [Bitcoin Roots release page](https://github.com/bitcoin/bitcoin/releases){:target="_blank"} for a new version and change the `BITCOIN_VERSION` value in the `.env` file.
 Then, redo the steps described in:
 
 1. [Prepare the Dockerfile](#prepare-the-dockerfile)
