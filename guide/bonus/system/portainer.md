@@ -25,5 +25,4 @@ Portainer CE is a powerful, open source toolset that allows you to easily build 
 {:toc}
 
 ---
-
-[<< Bonus Section](../)
+[<< System guides](./)

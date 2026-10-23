@@ -631,5 +631,4 @@ Follow the next steps to uninstall electrs:
    ```
 
 ---
-
-[<< Bonus Section](../)
+[<< Bitcoin guides](./)

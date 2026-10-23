@@ -186,5 +186,4 @@ $ sudo reboot
 ```
 
 ---
-
-[<< Bonus Section](../)
+[<< System guides](./)
