@@ -14,7 +14,12 @@ grand_parent: MobyBolt
 ![Bitcoin Roots logo](../../../images/mobybolt-bitcoin-bitcoin-client_logo.svg){: width="20%"}
 
 
-We install [Bitcoin Roots](https://bitcoincore.org/){:target="_blank"}, the reference client implementation of the Bitcoin network.
+We install [Bitcoin Roots](https://plan-b.foundation/bitcoin-roots/){:target="_blank"}, a Bitcoin Core-based full node that preserves selected conservative policy and operator controls from Bitcoin Knots. It follows Bitcoin Core-compatible consensus and does not enforce RDTS/BIP-110.
+
+Bitcoin Roots is the reference client implementation for this guide. However, in the [bonus section](../../bonus/bitcoin) you can find alternative clients.
+
+{: .important}
+**Only one Bitcoin client can be installed at a time.** Before installing Bitcoin Roots, uninstall any other Bitcoin client you may have installed.
 
 ---
 
@@ -39,7 +44,7 @@ $ cd $HOME/apps/mobybolt
 Let's create the directory structure for Bitcoin Roots:
 
 ```sh
-$ mkdir -p bitcoin-core/patches
+mkdir -p bitcoin-roots
 ```
 
 ### Prepare the environment
@@ -52,13 +57,13 @@ $ nano .env
 
 ```ini
 # bitcoin
-BITCOIN_VERSION=v29.4
+BITCOIN_VERSION=v31.1-roots.3
 BITCOIN_ADDRESS=172.16.21.10
 BITCOIN_GUID=1100
 ```
 
 In this file:
-1. we define the `BITCOIN_VERSION` (check the latest available version [here](https://github.com/bitcoin/bitcoin/releases){:target="_blank"});
+1. we define the `BITCOIN_VERSION` (check the latest available version [here](https://github.com/LuganoPlanB/bitcoin-roots/releases){:target="_blank"});
 2. we define a static address for the container;
 3. we define the `guid` (group and user id) of the bitcoin user.
 
@@ -67,7 +72,7 @@ In this file:
 Create the [Dockerfile](https://docs.docker.com/reference/dockerfile/){:target="_blank"} and populate it with the following content:
 
 ```sh
-$ nano bitcoin-core/Dockerfile
+$ nano bitcoin-roots/Dockerfile
 ```
 
 ```Dockerfile
@@ -80,15 +85,15 @@ RUN set -eux && \
     apt install -y \
         # build requirements
         build-essential \
+        capnproto \
         ccache \
         cmake \
         curl \
-        git \
-        gpg \
         pkgconf \
         python3 \
         # dependencies
         libboost-dev \
+        libcapnp-dev \
         libevent-dev \
         libsqlite3-dev \
         libzmq3-dev && \
@@ -98,36 +103,13 @@ RUN set -eux && \
 # builder image
 FROM base AS builder
 
-ARG BITCOIN_VERSION
+ARG BITCOIN_VERSION=main
+ENV BITCOIN_URL="https://github.com/LuganoPlanB/bitcoin-roots.git"
 
-ENV BITCOIN_URL="https://github.com/bitcoin/bitcoin.git" \
-    BITCOIN_KEYS_URL="https://api.github.com/repositories/355107265/contents/builder-keys"
-
-RUN set -eux && \
-    # clone repository
-    git clone --branch $BITCOIN_VERSION $BITCOIN_URL  && \
-    # imports automatically all signatures from the Bitcoin Roots release attestations (Guix) repository
-    curl -s \
-        $BITCOIN_KEYS_URL |\
-        grep download_url |\
-        grep -oE "https://[a-zA-Z0-9./-]+" |\
-        while read url; do \
-            curl -s "$url" |\
-            gpg --import; \
-        done
-
-# copy patches
-COPY patches/ /patches/
-
-WORKDIR bitcoin
+ADD "${BITCOIN_URL}#${BITCOIN_VERSION}" /bitcoin
+WORKDIR /bitcoin
 
 RUN set -xe && \
-    # verify signature
-    git verify-tag $BITCOIN_VERSION && \
-    # apply patches (if any)
-    for patch in $( find /patches -type f ); do \
-        git apply $patch; \
-    done && \
     # build
     cmake -B build -DWITH_ZMQ=ON && \
     cmake --build build -j $(nproc) && \
@@ -146,7 +128,8 @@ COPY --from=builder /usr/local/lib/ /usr/local/lib/
 RUN set -eux && \
     apt update && \
     apt install -y \
-        adduser \
+        capnproto \
+        libcapnp-dev \
         libevent-dev \
         libsqlite3-dev \
         libzmq3-dev && \
@@ -160,9 +143,10 @@ ARG TOR_GUID=102
 
 RUN set -eux && \
     # setup bitcoin user
-    adduser --disabled-password --comment "" --uid $BITCOIN_GUID bitcoin && \
-    addgroup --gid $TOR_GUID tor && \
-    adduser bitcoin tor && \
+    groupadd --gid "$BITCOIN_GUID" bitcoin && \
+    groupadd --gid "$TOR_GUID" tor && \
+    useradd --uid "$BITCOIN_GUID" --gid bitcoin --create-home --shell /usr/sbin/nologin bitcoin && \
+    usermod --append --groups tor bitcoin && \
     # setup dirs and permissions
     mkdir -m 0750 /home/bitcoin/.bitcoin && \
     mkdir -m 0700 /run/bitcoind && \
@@ -178,29 +162,19 @@ CMD ["-pid=/run/bitcoind/bitcoind.pid"]
 ```
 
 In this file:
-1. we define a builder image (`builder`) to buid bitcoin from github sources, verifying version tag signatures;
+1. we define a builder image (`builder`) to build bitcoin from github sources;
 2. we define a result image:
    1. installing the needed dependencies;
    2. copying libraries and binaries from the builder image;
    3. configuring the `bitcoin` user and the directories to which he will have access;
    4. setting the `entrypoint` (the script to run when the container starts).
 
-### Ordisrespector patch filter (optional)
-
-Download the Ordisrespector patch, an Ordinals NFTs spam filter for mempool politics of Bitcoin Roots:
-
-```sh
-$ wget -P bitcoin-core/patches https://raw.githubusercontent.com/tulliolo/mobybolt/master/resources/ordisrespector.patch
-```
-
-The downloaded patch will be automatically applied in the [Build](#build) stage.
-
 ### Configure
 
 Create the bitcoin configuration file and populate it with the following content:
 
 ```sh
-$ nano bitcoin-core/bitcoin.conf
+$ nano bitcoin-roots/bitcoin.conf
 ```
 
 ```ini
@@ -298,7 +272,7 @@ onlynet=i2p
 Create a bitcoin-specific docker compose file and populate it with the following contents:
 
 ```sh
-$ nano bitcoin-core/docker-compose.yml
+$ nano bitcoin-roots/docker-compose.yml
 ```
 
 ```yaml
@@ -342,7 +316,7 @@ volumes:
 Be very careful to respect the indentation above, since yaml is very sensitive to this!
 
 In this file:
-1. we `build` the Dockerfile and create an image named `mobybolt/bitcoin:v29.4`;
+1. we `build` the Dockerfile and create an image named `mobybolt/bitcoin:v31.1-roots.3`;
 2. we define a `healthcheck` that will check every minute that the bitcoin client is connected to at least one peer; 
 3. we define the `restart` policy of the container in case of failures;
 4. we provide the container with the `BITCOIN_ADDRESS` static address;
@@ -353,7 +327,7 @@ In this file:
 Link the bitcoin-specific docker compose file in the main one by running:
 
 ```sh
-$ sed -i '/^networks:/i \ \ - bitcoin-core/docker-compose.yml' docker-compose.yml
+$ sed -i '/^networks:/i \ \ - bitcoin-roots/docker-compose.yml' docker-compose.yml
 ```
 
 The file should look like this:
@@ -365,7 +339,7 @@ $ cat docker-compose.yml
 ```yaml
 include:
   - ...
-  - bitcoin-core/docker-compose.yml
+  - bitcoin-roots/docker-compose.yml
 ```
 
 {:.warning}
@@ -396,12 +370,12 @@ $ docker compose build bitcoin
 {:.warning}
 This may take a long time
 
-Check for a new image called `mobybolt/bitcoin:v29.4`:
+Check for a new image called `mobybolt/bitcoin:v31.1-roots.3`:
 
 ```sh
 $ docker images | grep "bitcoin\|TAG"
-> REPOSITORY         TAG     IMAGE ID       CREATED              SIZE
-> mobybolt/bitcoin   v29.4   30adc7959c8e   About a minute ago   795MB
+> REPOSITORY         TAG             IMAGE ID       CREATED              SIZE
+> mobybolt/bitcoin   v31.1-roots.3   30adc7959c8e   About a minute ago   795MB
 ```
 
 ## Run
@@ -419,7 +393,7 @@ Check the container logs:
 
 ```sh
 $ docker compose logs bitcoin
-> 2024-05-25T11:55:44Z Bitcoin Core version v29.4 (release build)
+> 2024-05-25T11:55:44Z Bitcoin Roots version v31.1-roots.3 (release build)
 > ...
 > 2024-05-25T11:55:44Z Default data directory /home/bitcoin/.bitcoin
 > 2024-05-25T11:55:44Z Using data directory /home/bitcoin/.bitcoin
@@ -438,8 +412,8 @@ Check the container status:
 
 ```sh
 $ docker compose ps | grep "bitcoin\|NAME"
-> NAME                      IMAGE                    COMMAND                  SERVICE          CREATED      STATUS                PORTS
-> mobybolt_bitcoin          mobybolt/bitcoin:v29.4   "docker-entrypoint.sh"   bitcoin          4 days ago   Up 3 days (healthy)   8332/tcp, 8334/tcp  
+> NAME                      IMAGE                            COMMAND                  SERVICE          CREATED      STATUS                PORTS
+> mobybolt_bitcoin          mobybolt/bitcoin:v31.1-roots.3   "docker-entrypoint.sh"   bitcoin          4 days ago   Up 3 days (healthy)   8332/tcp, 8334/tcp  
 ```
 
 {:.warning}
@@ -514,7 +488,7 @@ Once Bitcoin Roots is **fully synched**, we can reduce the size of the database 
 Edit the bitcoin configuration file and comment (prepending a `#`) the following lines:
 
 ```sh
-$ nano bitcoin-core/bitcoin.conf
+$ nano bitcoin-roots/bitcoin.conf
 ```
 
 ```ini
@@ -535,7 +509,7 @@ $ docker compose restart bitcoin
 
 ## Upgrade
 
-Check the [Bitcoin Roots release page](https://github.com/bitcoin/bitcoin/releases){:target="_blank"} for a new version and change the `BITCOIN_VERSION` value in the `.env` file.
+Check the [Bitcoin Roots release page](https://github.com/LuganoPlanB/bitcoin-roots/releases){:target="_blank"} for a new version and change the `BITCOIN_VERSION` value in the `.env` file.
 Then, redo the steps described in:
 
 1. [Prepare the Dockerfile](#prepare-the-dockerfile)
@@ -547,13 +521,13 @@ If everything is ok, you can clear the old image and build cache, like in the fo
 ```sh
 $ docker image ls | grep "bitcoin\|TAG"
 > REPOSITORY         TAG     IMAGE ID       CREATED          SIZE
-> mobybolt/bitcoin   v29.4   30adc7959c8e   46 minutes ago   795MB
-> mobybolt/bitcoin   v29.3   56f39c90e8ac   4 weeks ago      795MB
+> mobybolt/bitcoin   v31.1-roots.3   30adc7959c8e   46 minutes ago   795MB
+> mobybolt/bitcoin   v31.1-roots.2   56f39c90e8ac   4 weeks ago      795MB
 ```
 
 ```sh
-$ docker image rm mobybolt/bitcoin:v29.3
-> Untagged: mobybolt/bitcoin:v29.3
+$ docker image rm mobybolt/bitcoin:v31.1-roots.2
+> Untagged: mobybolt/bitcoin:v31.1-roots.2
 > Deleted: sha256:56f39c90e8accbfae77a3c8ed9e6e5794d67c62d1944c2c0ce4c7bc3dd233f07
 ```
 
@@ -584,14 +558,14 @@ Follow the next steps to uninstall bitcoin:
 2. Unlink the docker compose file:
 
    ```sh
-   $ sed -i '/- bitcoin-core\/docker-compose.yml/d' docker-compose.yml
+   $ sed -i '/- bitcoin-roots\/docker-compose.yml/d' docker-compose.yml
    ```
 
 3. Remove the image:
 
    ```sh
    $ docker image rm $(docker images | grep bitcoin | awk '{print $3}')
-   > Untagged: mobybolt/bitcoin:v29.4
+   > Untagged: mobybolt/bitcoin:v31.1-roots.3
    > Deleted: sha256:13afebf08e29c6b9a526a6e54ab1f93e745b25080add4e37af8f08bdf6cfbcc6
    ```
 
@@ -619,7 +593,7 @@ Follow the next steps to uninstall bitcoin:
 6. Remove files and directories (optional):
 
    ```sh
-   $ rm -rf bitcoin-core
+   $ rm -rf bitcoin-roots
    ```
 
 7. Cleanup the env (optional)
