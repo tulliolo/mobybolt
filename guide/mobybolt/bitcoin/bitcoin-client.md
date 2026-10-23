@@ -11,7 +11,7 @@ grand_parent: MobyBolt
 {:.no_toc}
 
 {: .text-center}
-![Bitcoin Roots logo](../../../images/bitcoin-roots_logo.svg){: width="20%"}
+![Bitcoin Roots logo](../../../images/mobybolt-bitcoin-bitcoin-client_logo.svg){: width="20%"}
 
 
 We install [Bitcoin Roots](https://bitcoincore.org/){:target="_blank"}, the reference client implementation of the Bitcoin network.
