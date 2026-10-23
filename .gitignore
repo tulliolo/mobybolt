@@ -6,3 +6,11 @@ Gemfile*
 _site
 *.xcf
 start_server.sh
+AGENTS.md
+Gemfile*
+.bundle
+.jekyll-cache
+.sass-cache
+_site
+*.xcf
+start_server.sh
