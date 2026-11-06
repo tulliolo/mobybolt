@@ -24,7 +24,7 @@ We configure the personal computer and install the Linux operating system.
 
 ## Which operating system to use?
 
-We use the latest stable [Debian](https://www.debian.org/){: target="_blank"} release (currently **Debian 12 - Bookworm**), without a graphical user interface. This provides the best stability for the PC and makes the initial setup a breeze.
+We use the latest stable [Debian](https://www.debian.org/){: target="_blank"} release (currently **Debian 13 - Trixie**, point‑release **13.7**), without a graphical user interface. This provides the best stability for the PC and makes the initial setup a breeze.
 
 ---
 
@@ -39,11 +39,11 @@ Open a terminal and point it to the directory where you downloaded the image (us
 ```sh
 $ cd $HOME/Downloads
 $ ls | grep debian
-> debian-12.8.0-amd64-netinst.iso
+> debian-13.7.0-amd64-netinst.iso
 ```
 
 {: .note}
-This is the latest version at the time of writing, in general the output will be like this: `debian-12.X.Y-amd64-netinst.iso`
+This is the latest version at the time of writing, in general the output will be like this: `debian-13.X.Y-amd64-netinst.iso`
  
 Identify the USB flash drive by running the `sudo fdisk -l` command before and after inserting it (the output will be in the form `/dev/sdX`, where X may vary):
 
@@ -63,7 +63,7 @@ $ sudo fdisk -l
 Create the USB bootable media:
 
 ```sh
-$ cp debian-12.X.Y-amd64-netinst.iso /dev/sdX
+$ cp debian-13.X.Y-amd64-netinst.iso /dev/sdX
 $ sync
 ```
 
